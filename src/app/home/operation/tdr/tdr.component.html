@@ -1,0 +1,171 @@
+<div class="section-title">
+    <h2>{{'Header.title'|translate}}</h2>
+</div>
+<div class="container">
+    <a routerLink="/home/operations/tdr-list"><i class='bx bx-arrow-back'></i>Back to List</a>
+    <form [formGroup]="tdrForm">
+        <div class="col-md-8 mx-auto mt-5">
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <ng-select (change)="getVoyageList($event)"
+                            [ngClass]="{'invalid': submitted && f.VESSEL_NAME.errors}" formControlName="VESSEL_NAME">
+                            <ng-option value="" selected="true" disabled>
+                                --Select--</ng-option>
+                            <ng-option *ngFor="let item of vesselList" value="{{item.CODE}}">
+                                {{item.CODE_DESC}}
+                            </ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">{{'Header.VesselName'|translate}}<span class="text-danger">
+                                *</span></label>
+                        <div *ngIf="submitted && f.VESSEL_NAME.errors" class="invalid-feedback">Vessel Name is required
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group"> <ng-select [ngClass]="{'invalid': submitted && f.VOYAGE_NO.errors}"
+                            formControlName="VOYAGE_NO">
+                            <ng-option value="" selected="true" disabled>
+                                --Select--</ng-option>
+                            <ng-option *ngFor="let item of voyageList" value="{{item.CODE}}">
+                                {{item.CODE_DESC}}
+                            </ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">{{'Header.VoyageNo'|translate}}<span class="text-danger">
+                                *</span></label>
+                        <div *ngIf="submitted && f.VOYAGE_NO.errors" class="invalid-feedback">Voyage No is required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <ng-select (change)="getTerminalList($event)" [ngClass]="{'invalid': submitted && f.POL.errors}"
+                            formControlName="POL">
+                            <ng-option value="" selected="true" disabled>--Select--</ng-option>
+                            <ng-option *ngFor="let item of portList" value="{{item.CODE}}">{{item.CODE_DESC}}
+                                ({{item.CODE}})
+                            </ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">{{'Header.POL'|translate}}<span class="text-danger">
+                                *</span></label>
+                        <div *ngIf="submitted && f.POL.errors" class="invalid-feedback">Please Enter POL </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <ng-select [ngClass]="{'invalid': submitted && f.TERMINAL.errors}" formControlName="TERMINAL">
+                            <ng-option value="" selected="true" disabled>--Select--</ng-option>
+                            <ng-option *ngFor="let item of terminalList" value="{{item.CODE}}">{{item.CODE_DESC}}
+                                ({{item.CODE}})
+                            </ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">{{'Header.terminal'|translate}}<span class="text-danger">
+                                *</span></label>
+                        <div *ngIf="submitted && f.TERMINAL.errors" class="invalid-feedback">Please Enter Terminal
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <input type="date" onkeypress="return false"
+                                [ngClass]="{'invalid':submitted && f.ETA.errors}" formControlName="ETA"
+                                class="form-control">
+                            <label class="form-label">{{'Header.eta'|translate}}<span class="text-danger">
+                                    *</span></label>
+                            <div *ngIf="submitted && f.ETA.errors" class="invalid-feedback">Please Enter ETA</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="date" onkeypress="return false"
+                            [ngClass]="{'invalid':submitted && f.POB_BERTHING.errors}" formControlName="POB_BERTHING"
+                            class="form-control">
+                        <label class="form-label">{{'Header.pobBerthing'|translate}}<span class="text-danger">
+                                *</span></label>
+                        <div *ngIf="submitted && f.POB_BERTHING.errors" class="invalid-feedback">Please Enter Pob
+                            Berthing</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="date" onkeypress="return false"
+                            [ngClass]="{'invalid':submitted && f.BERTHED.errors}" formControlName="BERTHED"
+                            class="form-control">
+                        <label class="form-label">{{'Header.berthed'|translate}}<span class="text-danger">
+                                *</span></label>
+                        <div *ngIf="submitted && f.BERTHED.errors" class="invalid-feedback">Please Enter BERTHED</div>
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="date" onkeypress="return false"
+                            [ngClass]="{'invalid':submitted && f.OPERATION_COMMMENCED.errors}"
+                            formControlName="OPERATION_COMMMENCED" class="form-control">
+                        <label class="form-label">{{'Header.operationCommenced'|translate}} <span
+                                class="text-danger">*</span></label>
+                        <div *ngIf="submitted && f.OPERATION_COMMMENCED.errors" class="invalid-feedback">Please Enter
+                            Operation Commenced</div>
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="date" onkeypress="return false"
+                            [ngClass]="{'invalid':submitted && f.POB_SAILING.errors}" formControlName="POB_SAILING"
+                            class="form-control">
+                        <label class="form-label">{{'Header.pobSailing'|translate}}<span class="text-danger">
+                                *</span></label>
+                        <div *ngIf="submitted && f.POB_SAILING.errors" class="invalid-feedback">Please Enter POb Sailing
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="date" onkeypress="return false"
+                            [ngClass]="{'invalid':submitted && f.SAILED.errors}" formControlName="SAILED"
+                            class="form-control">
+                        <label class="form-label">{{'Header.sailed'|translate}} <span
+                                class="text-danger">*</span></label>
+                        <div *ngIf="submitted && f.SAILED.errors" class="invalid-feedback">Please Enter sailed</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="date" onkeypress="return false" [ngClass]="{'invalid':submitted && f.ETD.errors}"
+                            formControlName="ETD" class="form-control">
+                        <label class="form-label">{{'Header.etd'|translate}} <span class="text-danger">*</span></label>
+                        <div *ngIf="submitted && f.ETD.errors" class="invalid-feedback">Please Enter ETD</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="date" onkeypress="return false"
+                            [ngClass]="{'invalid':submitted && f.ETA_NEXTPORT.errors}" formControlName="ETA_NEXTPORT"
+                            class="form-control">
+                        <label class="form-label">{{'Header.etaNextport'|translate}} <span
+                                class="text-danger">*</span></label>
+                        <div *ngIf="submitted && f.ETA_NEXTPORT.errors" class="invalid-feedback">Please Enter ETA
+                            NextPort</div>
+                    </div>
+                </div>
+                <div class="col-md-4 offset-md-8 text-end">
+                    <button type="button" (click)="ClearForm()" class="form-btn me-2"
+                        class="form-btn-light me-2">{{'Button.clear'|translate}}</button>
+                    <button [disabled]="isLoading" (click)="InsertTdr()" class="form-btn me-2"
+                        class="form-btn">{{'Button.Save'|translate}}
+                        <span *ngIf="isLoading" class="fa fa-spinner fa-spin"></span></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

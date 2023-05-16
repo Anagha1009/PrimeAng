@@ -1,0 +1,215 @@
+<nav class="layout-navbar navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+    id="layout-navbar">
+    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+            <i class="bx bx-menu bx-sm"></i>
+        </a>
+    </div>
+
+    <div class="navbar-nav-right align-items-center" id="navbar-collapse">
+        <div class="navbar-nav align-items-center">
+            <div class="nav-item d-flex align-items-center">
+                <i class="bx bx-search fs-4 lh-0 ms-2"></i>
+                <input type="text" class="form-control2 border-0 shadow-none" placeholder="Search..."
+                    aria-label="Search..." />
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container-p-y">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-10 order-1">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-12 services">
+                            <div class="icon-box text-start icon-box-blue" routerLink="/pm/booking-list">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-center">
+                                        <span
+                                            class="me-2 fs-6 badge rounded-pill bg-gray">{{docCount?.BOOKING_COUNT}}</span>
+                                        <div class="avatar flex-shrink-0">
+                                            <img src="assets/img/calendar.png" height="28px" width="28px" />
+                                        </div>
+                                    </div>
+                                    <h6 class="card-title pt-2 text-center">
+                                        <span class="fw-semibold fs-6 mb-1">Booking(s)</span>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 services">
+                            <div class="icon-box text-start icon-box-blue" routerLink="/pm/cro-list">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-center">
+                                        <span
+                                            class="me-2 fs-6 badge rounded-pill bg-warning">{{docCount?.CRO_COUNT}}</span>
+                                        <div class="avatar flex-shrink-0">
+                                            <img src="assets/img/crane.png" height="28px" width="28px" />
+                                        </div>
+                                    </div>
+                                    <h6 class="card-title pt-2 text-center">
+                                        <span class="fw-semibold fs-6 mb-1">CRO(s)</span>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 services">
+                            <div class="icon-box text-start icon-box-blue" routerLink="/pm/bl-list">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-center">
+                                        <span
+                                            class="me-2 fs-6 badge rounded-pill bg-primary">{{docCount?.BL_COUNT}}</span>
+                                        <div class="avatar flex-shrink-0">
+                                            <img src="assets/img/invoice.png" height="28px" width="28px" />
+                                        </div>
+                                    </div>
+                                    <h6 class="card-title pt-2 text-center">
+                                        <span class="fw-semibold fs-6 mb-1">BL(s)</span>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 services">
+                            <div class="icon-box text-start icon-box-blue" routerLink="/pm/do-list">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-center">
+                                        <span class="me-2 fs-6 badge rounded-pill bg-dark">{{docCount?.DO_COUNT}}</span>
+                                        <div class="avatar flex-shrink-0">
+                                            <img src="assets/img/cargo.png" height="28px" width="28px" />
+                                        </div>
+                                    </div>
+                                    <h6 class="card-title pt-2 text-center">
+                                        <span class="fw-semibold fs-6 mb-1">DO(s)</span>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-lg-12 col-md-12 order-1">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-12 col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-start justify-content-between">
+                                        <div class="avatar flex-shrink-0">
+                                            <img src="assets/img/calendar.png" height="28px" width="28px" />
+                                        </div>
+                                    </div>
+                                    <h4 class="card-title mb-2">{{docCount?.BOOKING_COUNT}}
+                                        <span class="fw-semibold fs-6 mb-1">Booking(s)</span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-start justify-content-between">
+                                        <div class="avatar flex-shrink-0">
+                                            <img src="assets/img/calendar.png" height="28px" width="28px" />
+                                        </div>
+                                    </div>
+                                    <h4 class="card-title mb-2">{{docCount?.BOOKING_COUNT}}
+                                        <span class="fw-semibold fs-6 mb-1">Booking(s)</span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="col-md-2">
+            <img src="assets/pm-assets/img/illustrations/man-with-laptop-light.png" height="140" alt="View Badge User"
+                data-app-dark-img="illustrations/man-with-laptop-dark.png"
+                data-app-light-img="illustrations/man-with-laptop-light.png" />
+        </div>
+    </div>
+    <!-- <div class="col-lg-4 col-md-4 order-1">
+            <div class="row">
+                <div class="col-lg-6 col-md-12 col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title d-flex align-items-start justify-content-between">
+                                <div class="avatar flex-shrink-0">
+                                    <img src="assets/img/invoice.png" height="28px" width="28px" />
+                                </div>
+                            </div>
+                            <h4 class="card-title mb-2">{{docCount?.BL_COUNT}}
+                                <span class="fw-semibold fs-6 mb-1">BL(s)</span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title d-flex align-items-start justify-content-between">
+                                <div class="avatar flex-shrink-0">
+                                    <img src="assets/img/cargo.png" height="28px" width="28px" />
+                                </div>
+                            </div>
+                            <h4 class="card-title mb-2">{{docCount?.DO_COUNT}}
+                                <span class="fw-semibold fs-6 mb-1">DO(s)</span>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    <!-- <div class="col-12 col-lg-8 order-2 order-md-3 order-lg-2 mb-4">
+            <app-chart></app-chart>
+        </div> -->
+    <div class="col-md-12 order-2 order-md-3 order-lg-2 mt-4">
+        <h3>Detention List</h3>
+        <table class="ratetable " id="data-table-config">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Container No</th>
+                    <th>BL No</th>
+                    <th>POD Free Days</th>
+                    <th>Vessel Name</th>
+                    <th>DCHF Date</th>
+                    <th>RCCN Date</th>
+                    <th>Export Detention</th>
+                    <th>Import Detention</th>
+                    <th>Month</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of containerDetentionList; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.CONTAINER_NO}}</td>
+                    <td>{{item.BL_NO}}</td>
+                    <td>{{item.POD_FREE_DAYS}}</td>
+                    <td>{{item.VESSEL_NAME}}</td>
+                    <td>{{item.DCHF_DATE}}</td>
+                    <td>{{item.RCCN_DATE}}</td>
+                    <td>{{item.POL_DETENTION}}</td>
+                    <td>{{item.POD_DETENTION}}</td>
+                    <td>{{item.RCCN_DATE}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <!-- <div class="row">
+        <canvasjs-chart [options]="chartOptions2" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
+    </div> -->
+    <!-- <div class="row mt-5">
+        <canvasjs-chart [options]="chartOptionsMain" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
+    </div> -->
+    <!-- <div class="row mt-5">
+        <canvasjs-chart [options]="chartOptions3" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-6">
+            <canvasjs-chart [options]="chartOptions3" [styles]="{width: '100%', height:'360px'}"></canvasjs-chart>
+        </div>
+    </div> -->
+</div>
+<!-- <div class="content-backdrop fade"></div> -->

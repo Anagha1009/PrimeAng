@@ -1,0 +1,25 @@
+<div class="section-title pt-3">
+    <h2>Exchange Rates</h2>
+</div>
+<div class="container">
+    <table class="ratetable" id="data-table-config" style="font-size: 12px;">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Currency</th>
+                <th>Rate</th>
+                <th>Created By</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of exclist;let i =index">
+                <td>{{i+1}}</td>
+                <td>{{item.CURRENCY}}</td>
+                <td>{{item.RATE}}</td>
+                <td>{{item.CREATED_BY}}</td>
+                <td>{{item.CREATED_DATE | date:'mediumDate'}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

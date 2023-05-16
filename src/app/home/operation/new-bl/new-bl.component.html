@@ -1,0 +1,788 @@
+<div class="section-title">
+    <h2>{{'Header.title'|translate}}</h2>
+</div>
+<div class="col-md-10 mx-auto">
+    <div class="col-md-6 mx-auto">
+        <div class="row">
+            <div class="col-md-6 text-end">
+                <button class="form-btn-primary mb-3" (click)="switchBL()"><i class="fa fa-repeat me-2"></i>Switch
+                    BL</button>
+                <button #openBtn data-bs-toggle="modal" href="#mailModal" class="form-btn d-none">Submit</button>
+            </div>
+            <div class="col-md-6">
+                <button class="form-btn-primary mb-3" (click)="manualBL()"><i class="fa fa-plus me-2"></i>Manual
+                    BL</button>
+            </div>
+        </div>
+        <div class="tabs mb-4" *ngIf="!isBLForm">
+            <input type="radio" (click)="tabs = '1'" class="d-none" id="radio-1" name="tabs" checked />
+            <label class="tab" for="radio-1">{{'Header.NewBL'|translate}}</label>
+            <input type="radio" (click)="tabs = '2'" class="d-none" id="radio-2" name="tabs" />
+            <label class="tab" for="radio-2">{{'Header.SplitBL'|translate}}</label>
+            <span class="glider"></span>
+        </div>
+        <div *ngIf="!isBLForm && tabs=='1'">
+            <div class="formbold-mb-5 formbold-file-input" *ngIf="!onUpload">
+                <input type="file" (change)="onFileChange($event)" name="file" id="file" />
+                <label for="file">
+                    <div>
+                        <h3><i class="fa fa-file-pdf-o"></i></h3>
+                        <span class="formbold-drop-file">Upload</span>
+                        <span class="formbold-file-item">SI File</span>
+                    </div>
+                </label>
+            </div>
+            <div class="formbold-file-list formbold-mb-5" *ngIf="onUpload">
+                <div class="formbold-file-item">
+                    <span class="formbold-file-name">SI File</span>
+                    <button (click)="onUpload = false"><span class="bx bx-x-circle"></span></button>
+                </div>
+            </div>
+            <div class="col-md-5 mx-auto text-end">
+                <button class="form-btn w-100" (click)="getBLForm()">{{'Button.Upload'|translate}}</button>
+            </div>
+        </div>
+        <div *ngIf="!isBLForm && tabs=='2'">
+            <div class="col-md-6 mx-md-auto">
+                <div class="form-group">
+                    <label class="form-label2">BL No</label>
+                    <input type="text" class="form-control2" [(ngModel)]="blNo" />
+                </div>
+            </div>
+            <div class="col-md-6 mx-auto">
+                <button class="form-btn-primary w-100" (click)="getBLDetails()">Submit</button>
+            </div>
+        </div>
+    </div>
+    <button #openBtnSurrender data-bs-toggle="modal" href="#surrenderModal" class="form-btn d-none">surrender</button>
+    <div *ngIf="isBLForm">
+        <a (click)="tabs='1';isBLForm = false;hideHistory=false;" class="pointer text-primary"><i
+                class='bx bx-arrow-back'></i>Back to List</a>
+        <!-- <div class="text-end">
+            <button (click)="tabs='1';isBLForm = false;hideHistory=false;" class="form-btn-primary">Re-Upload</button>
+        </div> -->
+        <form [formGroup]="blForm">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Shipper Name<span class="text-danger">*</span></label>
+                        <textarea type="text" formControlName="SHIPPER" class="form-control2 addressbox"
+                            [ngClass]="{'invalid': submitted && blf.SHIPPER.errors}"></textarea>
+                        <div *ngIf="submitted && blf.SHIPPER.errors" class="invalid-feedback">Please
+                            Enter Shipper Name </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Shipper Address<span class="text-danger">*</span></label>
+                        <textarea type="text" formControlName="SHIPPER_ADDRESS" class="form-control2 addressbox"
+                            [ngClass]="{'invalid': submitted && blf.SHIPPER_ADDRESS.errors}"></textarea>
+                        <div *ngIf="submitted && blf.SHIPPER_ADDRESS.errors" class="invalid-feedback">Please
+                            Enter Shipper Address </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Consignee Name<span class="text-danger">*</span></label>
+                        <textarea type="text" formControlName="CONSIGNEE" class="form-control2 addressbox"
+                            [ngClass]="{'invalid': submitted && blf.CONSIGNEE.errors}"></textarea>
+                        <div *ngIf="submitted && blf.CONSIGNEE.errors" class="invalid-feedback">Please
+                            Enter Consignee Name </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Consignee Address<span class="text-danger">*</span></label>
+                        <textarea type="text" formControlName="CONSIGNEE_ADDRESS" class="form-control2 addressbox"
+                            [ngClass]="{'invalid': submitted && blf.CONSIGNEE_ADDRESS.errors}"></textarea>
+                        <div *ngIf="submitted && blf.CONSIGNEE_ADDRESS.errors" class="invalid-feedback">Please
+                            Enter Consignee Address </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Notify Party<span class="text-danger">*</span></label>
+                        <textarea type="text" formControlName="NOTIFY_PARTY" class="form-control2 addressbox"
+                            [ngClass]="{'invalid': submitted && blf.NOTIFY_PARTY.errors}"></textarea>
+                        <div *ngIf="submitted && blf.NOTIFY_PARTY.errors" class="invalid-feedback">Please
+                            Enter Notify Party</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Notify Party Address<span class="text-danger">*</span></label>
+                        <textarea type="text" formControlName="NOTIFY_PARTY_ADDRESS" class="form-control2 addressbox"
+                            [ngClass]="{'invalid': submitted && blf.NOTIFY_PARTY_ADDRESS.errors}"></textarea>
+                        <div *ngIf="submitted && blf.NOTIFY_PARTY_ADDRESS.errors" class="invalid-feedback">
+                            Please
+                            Enter Notify Party Address</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Pre Carriage by<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" formControlName="PRE_CARRIAGE_BY" type="text" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.PRE_CARRIAGE_BY.errors}" />
+                        <div *ngIf="submitted && blf.PRE_CARRIAGE_BY.errors" class="invalid-feedback">Please
+                            Enter Pre Carriage By</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Place of Receipt<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" formControlName="PLACE_OF_RECEIPT" type="text"
+                            class="form-control2" [ngClass]="{'invalid': submitted && blf.PLACE_OF_RECEIPT.errors}" />
+                        <div *ngIf="submitted && blf.PLACE_OF_RECEIPT.errors" class="invalid-feedback">Please
+                            Enter Place of Receipt</div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Vessel Name<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" formControlName="VESSEL_NAME" type="text" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.VESSEL_NAME.errors}" />
+                        <div *ngIf="submitted && blf.VESSEL_NAME.errors" class="invalid-feedback">Please
+                            Enter Vessel Name</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Voyage No<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" formControlName="VOYAGE_NO" type="text" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.VOYAGE_NO.errors}" />
+                        <div *ngIf="submitted && blf.VOYAGE_NO.errors" class="invalid-feedback">Please
+                            Enter Voyage No</div>
+                    </div>
+                </div>
+                <div class="col-md-3" *ngIf="!isManual">
+                    <div class="form-group">
+                        <label class="form-label2">Port of Loading<span class="text-danger">*</span></label>
+                        <input readonly formControlName="PORT_OF_LOADING" type="text" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.PORT_OF_LOADING.errors}" />
+                        <div *ngIf="submitted && blf.PORT_OF_LOADING.errors" class="invalid-feedback">Please
+                            Enter Port of Loading</div>
+                    </div>
+                </div>
+                <div class="col-md-3" *ngIf="!isManual">
+                    <div class="form-group">
+                        <label class="form-label2">Port of Discharge<span class="text-danger">*</span></label>
+                        <input readonly formControlName="PORT_OF_DISCHARGE" type="text" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.PORT_OF_DISCHARGE.errors}" />
+                        <div *ngIf="submitted && blf.PORT_OF_DISCHARGE.errors" class="invalid-feedback">Please
+                            Enter Port of Discharge</div>
+                    </div>
+                </div>
+                <!-- manualfields for POL and POD -->
+                <div class="col-md-3 mt-3" *ngIf="isManual">
+                    <div class="form-group">
+                        <ng-select [ngClass]="{'invalid': submitted && blf.PORT_OF_LOADING.errors}"
+                            formControlName="PORT_OF_LOADING">
+                            <ng-option value="" selected="true" disabled>--Select--</ng-option>
+                            <ng-option *ngFor="let item of portList" value="{{item.CODE_DESC}} ({{item.CODE}})">
+                                {{item.CODE_DESC}} ({{item.CODE}})
+                            </ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">Port of Loading <span class="text-danger">
+                                *</span></label>
+                        <div *ngIf="submitted && blf.PORT_OF_LOADING.errors" class="invalid-feedback">Please select
+                            Port of Loading</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mt-3" *ngIf="isManual">
+                    <div class="form-group">
+                        <ng-select [ngClass]="{'invalid': submitted && blf.PORT_OF_DISCHARGE.errors}"
+                            formControlName="PORT_OF_DISCHARGE">
+                            <ng-option value="" selected="true" disabled>--Select--</ng-option>
+                            <ng-option *ngFor="let item of portList;" value="{{item.CODE_DESC}} ({{item.CODE}})">
+                                {{item.CODE_DESC}} ({{item.CODE}})
+                            </ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">Port of Discharge<span class="text-danger">
+                                *</span></label>
+                        <div *ngIf="submitted && blf.PORT_OF_DISCHARGE.errors" class="invalid-feedback">Please select
+                            Port of Discharge</div>
+                    </div>
+                </div>
+                <!-- --- -->
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Place of Delivery<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" formControlName="PLACE_OF_DELIVERY" type="text"
+                            class="form-control2" [ngClass]="{'invalid': submitted && blf.PLACE_OF_DELIVERY.errors}" />
+                        <div *ngIf="submitted && blf.PLACE_OF_DELIVERY.errors" class="invalid-feedback">Please
+                            Enter Place of Delivery</div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Final Destination<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" formControlName="FINAL_DESTINATION" type="text"
+                            class="form-control2" [ngClass]="{'invalid': submitted && blf.FINAL_DESTINATION.errors}" />
+                        <div *ngIf="submitted && blf.FINAL_DESTINATION.errors" class="invalid-feedback">Please
+                            Enter Final Destination</div>
+                    </div>
+                </div>
+                <div class="col-md-3" *ngIf="isManual">
+                    <div class="form-group">
+                        <label class="form-label2">Booking No<span class="text-danger">*</span></label>
+                        <input formControlName="BOOKING_NO" type="text" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.BOOKING_NO.errors}" />
+                        <div *ngIf="submitted && blf.BOOKING_NO.errors" class="invalid-feedback">Please
+                            Enter Booking No.</div>
+                    </div>
+                </div>
+                <div class="col-md-3" *ngIf="isManual">
+                    <div class="form-group">
+                        <label class="form-label2">CRO No<span class="text-danger">*</span></label>
+                        <input formControlName="CRO_NO" type="text" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.CRO_NO.errors}" />
+                        <div *ngIf="submitted && blf.CRO_NO.errors" class="invalid-feedback">Please
+                            Enter CRO No.</div>
+                    </div>
+                </div>
+            </div>
+            <h6 class="d-inline mt-3">Container Details</h6>
+            <hr>
+            <div class="row" *ngIf="!editBL && !isSplit">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Marks & Numbers<span class="text-danger">*</span></label>
+                        <textarea [readonly]="isSwitch" class="form-control2 addressbox" formControlName="MARKS_NOS"
+                            [ngClass]="{'invalid': submitted && blf.MARKS_NOS.errors}"></textarea>
+                        <div *ngIf="submitted && blf.MARKS_NOS.errors" class="invalid-feedback">Please
+                            Enter Marks & Numbers</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Description of Goods<span class="text-danger">*</span></label>
+                        <textarea [readonly]="isSwitch" type="text" class="form-control2 addressbox"
+                            formControlName="DESC_OF_GOODS"
+                            [ngClass]="{'invalid': submitted && blf.DESC_OF_GOODS.errors}"></textarea>
+                        <div *ngIf="submitted && blf.DESC_OF_GOODS.errors" class="invalid-feedback">Please
+                            Enter Description of Goods</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="editBL || isSplit">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Marks & Numbers<span class="text-danger">*</span></label>
+                        <textarea [readonly]="isSwitch" class="form-control2 addressbox" formControlName="MARKS_NOS"
+                            [ngClass]="{'invalid': submitted && blf.MARKS_NOS.errors}"></textarea>
+                        <div *ngIf="submitted && blf.MARKS_NOS.errors" class="invalid-feedback">Please
+                            Enter Marks & Numbers</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Description of Goods<span class="text-danger">*</span></label>
+                        <textarea [readonly]="isSwitch" type="text" class="form-control2 addressbox"
+                            formControlName="DESC_OF_GOODS"
+                            [ngClass]="{'invalid': submitted && blf.DESC_OF_GOODS.errors}"></textarea>
+                        <div *ngIf="submitted && blf.DESC_OF_GOODS.errors" class="invalid-feedback">Please
+                            Enter Description of Goods</div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive" *ngIf="isSplit && !isManual">
+                <table class="table" style="font-size: 12px;">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" (change)="getContainerList(1,$event,-1)" /></th>
+                            <th>Sr No</th>
+                            <th>Container No</th>
+                            <th>Container Type</th>
+                            <th>Pkg Cnt</th>
+                            <th>Pkg Desc</th>
+                            <th>Gross Weight</th>
+                            <th>Net Weight</th>
+                            <th>Measurement</th>
+                            <th>Seal No</th>
+                            <th>Agent Seal No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of f;let i = index" [formGroup]="getf1(item)">
+                            <td class="col-md-1"><input id="chck{{i}}" (change)="getContainerList(item,$event,i)"
+                                    type="checkbox" />
+                            </td>
+                            <td class="col-md-1">{{i+1}}</td>
+                            <td class="col-md-1">{{blForm.value.CONTAINER_LIST2[i].CONTAINER_NO}}</td>
+                            <td class="col-md-1">{{blForm.value.CONTAINER_LIST2[i].CONTAINER_TYPE}}</td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="PKG_COUNT"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                                    type="text" class="form-control2 inputheight" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="PKG_DESC" type="text"
+                                    class="form-control2 inputheight" />
+                            </td>
+                            <td class="col-md-1"><input [readonly]="isSwitch" formControlName="GROSS_WEIGHT" type="text"
+                                    class="form-control2 inputheight"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="NET_WEIGHT" type="text"
+                                    class="form-control2 inputheight"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                            </td>
+                            <td class="col-md-1"><input [readonly]="isSwitch" formControlName="MEASUREMENT" type="text"
+                                    class="form-control2 inputheight"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="SEAL_NO" type="text"
+                                    class="form-control2 inputheight" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="AGENT_SEAL_NO" type="text"
+                                    class="form-control2 inputheight" />
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive" *ngIf="!isSplit && !isManual">
+                <table class="table" style="font-size: 12px;">
+                    <thead>
+                        <tr>
+
+                            <th>Sr No</th>
+                            <th>Container No</th>
+                            <th>Container Type</th>
+                            <th>Pkg Cnt</th>
+                            <th>Pkg Desc</th>
+                            <th>Gross Weight</th>
+                            <th>Net Weight</th>
+                            <th>Measurement</th>
+                            <th>Seal No</th>
+                            <th>Agent Seal No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of f;let i = index" [formGroup]="getf1(item)">
+
+                            <td class="col-md-1">{{i+1}}</td>
+                            <td class="col-md-1">{{blForm.value.CONTAINER_LIST2[i].CONTAINER_NO}}</td>
+                            <td class="col-md-1">{{blForm.value.CONTAINER_LIST2[i].CONTAINER_TYPE}}</td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="PKG_COUNT" type="text"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                                    class="form-control2 inputheight" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="PKG_DESC" type="text"
+                                    class="form-control2 inputheight" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="GROSS_WEIGHT" type="text"
+                                    class="form-control2 inputheight"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="NET_WEIGHT" type="text"
+                                    class="form-control2 inputheight"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="MEASUREMENT" type="text"
+                                    class="form-control2 inputheight"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="SEAL_NO" type="text"
+                                    class="form-control2 inputheight" />
+                            </td>
+                            <td class="col-md-1">
+                                <input [readonly]="isSwitch" formControlName="AGENT_SEAL_NO" type="text"
+                                    class="form-control2 inputheight" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive" *ngIf="isManual && !isSplit">
+                <div class="col-md-12 offset-md-12 text-end mb-4">
+                    <button (click)="addContainers()" class="form-btn btn-sm">
+                        <i class="fa fa-plus me-2"></i>Add Containers</button>
+                </div>
+                <table class="table" style="font-size: 12px;">
+                    <thead>
+                        <tr>
+
+                            <th width="1%">No</th>
+                            <th width="15%">Container No</th>
+                            <th width="5%">Type</th>
+                            <th width="10%">Pkg Cnt <i (click)="copyValue('PKG_COUNT')" class="fa fa-copy pointer"></i>
+                            </th>
+                            <th width="14%">Pkg Desc <i (click)="copyValue('PKG_DESC')" class="fa fa-copy pointer"></i>
+                            </th>
+                            <th width="10%">Gross Wt <i (click)="copyValue('GROSS_WEIGHT')"
+                                    class="fa fa-copy pointer"></i>
+                            </th>
+                            <th width="10%">Net Wt <i (click)="copyValue('NET_WEIGHT')" class="fa fa-copy pointer"></i>
+                            </th>
+                            <th width="10%">Mea.mnt <i (click)="copyValue('MEASUREMENT')"
+                                    class="fa fa-copy pointer"></i></th>
+                            <th width="10%">Seal No <i (click)="copyValue('SEAL_NO')" class="fa fa-copy pointer"></i>
+                            </th>
+                            <th width="10%">Agnt S.No <i (click)="copyValue('AGENT_SEAL_NO')"
+                                    class="fa fa-copy pointer"></i></th>
+                            <th width="5%">&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of f;let i = index" [formGroup]="item">
+
+                            <td width="1%">{{i+1}}</td>
+                            <td width="15%">
+                                <input formControlName="CONTAINER_NO" type="text" class="form-control2 inputheight" />
+                            </td>
+                            <td width="5%">
+                                <!-- <select class="form-control2 inputheight" formControlName="CONTAINER_TYPE">
+                                    <option value="" selected disabled>
+                                        --Select--</option>
+                                    <option *ngFor="let ct of latestContTypeList" value="{{ct.CONT_TYPE_CODE}}">
+                                        {{ct.CONT_TYPE_CODE}}</option>
+                                </select> -->
+                                20GP
+
+                            </td>
+                            <td width="10%">
+                                <input formControlName="PKG_COUNT"
+                                    onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                                    type="text" class="form-control2 inputheight" />
+                            </td>
+                            <td width="14%">
+                                <input formControlName="PKG_DESC" type="text" class="form-control2 inputheight" />
+                            </td>
+                            <td width="10%">
+                                <input formControlName="GROSS_WEIGHT" type="text" class="form-control2 inputheight" />
+                            </td>
+                            <td width="10%">
+                                <input formControlName="NET_WEIGHT" type="text" class="form-control2 inputheight" />
+                            </td>
+                            <td width="10%">
+                                <input formControlName="MEASUREMENT" type="text" class="form-control2 inputheight" />
+                            </td>
+                            <td width="10%">
+                                <input formControlName="SEAL_NO" type="text" class="form-control2 inputheight" />
+                            </td>
+                            <td width="10%">
+                                <input formControlName="AGENT_SEAL_NO" type="text" class="form-control2 inputheight" />
+                            </td>
+                            <td width="5%" class="text-center">
+                                <a *ngIf="i > 0" (click)="removeItem(i)" class="pointer"><i
+                                        class="fa fa-trash fs-6"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Total No of Containers : {{f?.length}}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Freight Prepaid<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" type="text" formControlName="PREPAID_AT" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.PREPAID_AT.errors}"
+                            (keyup)="validate2P('PREPAID_AT',$event.target.value)" />
+                        <div *ngIf="submitted && blf.PREPAID_AT.errors" class="invalid-feedback">Please
+                            Enter Prepaid At</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Freight Payable<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" type="text" formControlName="PAYABLE_AT" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.PAYABLE_AT.errors}"
+                            (keyup)="validate2P('PAYABLE_AT',$event.target.value)" />
+                        <div *ngIf="submitted && blf.PAYABLE_AT.errors" class="invalid-feedback">Please
+                            Enter Payable At</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Place of Issue<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" type="text" formControlName="BL_ISSUE_PLACE" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.BL_ISSUE_PLACE.errors}" />
+                        <div *ngIf="submitted && blf.BL_ISSUE_PLACE.errors" class="invalid-feedback">Please
+                            Enter BL Issue Place</div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2">Issue Date<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" type="date" onkeypress="return false"
+                            formControlName="BL_ISSUE_DATE" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.BL_ISSUE_DATE.errors}" min="{{minDate}}" />
+                        <div *ngIf="submitted && blf.BL_ISSUE_DATE.errors" class="invalid-feedback">Please
+                            Enter BL Issue Date</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label2"> No. of BL copies<span class="text-danger">*</span></label>
+                        <input [readonly]="isSwitch" type="text"
+                            onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                            formControlName="NO_OF_ORIGINAL_BL" class="form-control2"
+                            [ngClass]="{'invalid': submitted && blf.NO_OF_ORIGINAL_BL.errors}" />
+                        <div *ngIf="submitted && blf.NO_OF_ORIGINAL_BL.errors" class="invalid-feedback">Please
+                            Enter No. of Original BL</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-4">
+
+                <div class="col-md-3 offset-md-9 text-end" *ngIf="editBL">
+                    <button class="form-btn me-2" (click)="selectOgType()">
+                        Finalize
+                    </button>
+                    <button #openOgBtn data-bs-toggle="modal" href="#ogModal" class="form-btn d-none">og</button>
+
+                    <button class="form-btn" (click)="updateBL()">
+                        Save as Draft
+                    </button>
+                </div>
+                <div class="col-md-2 offset-md-10 text-end" *ngIf="!editBL || isManual">
+                    <button class="form-btn" (click)="createBL()">
+                        Save as Draft
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <h6 [hidden]="hideHistory">BL List</h6>
+    <hr [hidden]="hideHistory">
+    <div [hidden]="hideHistory" class="mb-5">
+        <div class="table-responsive">
+            <table class="ratetable table-striped table-bordered" id="data-table-config">
+                <thead>
+                    <tr>
+                        <th width="1%">No</th>
+                        <th width="11%">BL No</th>
+                        <th width="15%">Shipper Name</th>
+                        <th width="10%">BL Date</th>
+                        <th width="15%">Booking No</th>
+                        <th width="15%">Consignee Name</th>
+                        <th width="15%">Status</th>
+                        <th width="18%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of blHistoryList;let i = index">
+                        <td>{{i+1}}</td>
+                        <td width="11%">
+                            {{item.BL_NO}}
+                        </td>
+                        <td width="15%">
+                            {{item.SHIPPER}}
+                        </td>
+                        <td width="10%">
+                            {{item.BL_ISSUE_DATE | date:'mediumDate'}}
+                        </td>
+                        <td width="15%">
+                            {{item.BOOKING_NO}}
+                        </td>
+                        <td width="15%">
+                            {{item.CONSIGNEE}}
+                        </td>
+                        <td width="15%" class="status"><span
+                                [class]="item.BL_STATUS == 'Draft' ? 'waiting' : item.BL_STATUS == 'Finalized' ? 'active' : 'rejected'">{{item.BL_STATUS}}</span>
+
+                        </td>
+                        <td width="18%" *ngIf="item.BL_STATUS=='Draft'">
+                            <div class="pointer"><a (click)="getBLDetailsForEdit(item.BL_NO)"><i
+                                        class='bx bxs-pencil text-success ms-2 me-2'></i></a>
+                                <a (click)="viewBL(item.BL_NO,false)"><i class='fa fa-eye ms-1 me-2'></i></a>
+                                <a tooltip="Container Annexure" placement="top" (click)="annexureBL(item.BL_NO)"><img
+                                        src="assets/img/attachment.png" width="14px" height="14px"></a>
+                            </div>
+                        </td>
+                        <td width="18%" *ngIf="item.BL_STATUS=='Finalized'">
+                            <div class="pointer"><a tooltip="{{item.BL_TYPE}}" placement="top"
+                                    (click)="viewBL(item.BL_NO,false)"><img src="assets/img/approved.png" class="me-3"
+                                        width="18px" height="18px"></a>
+                                <a tooltip="Non-Negotiable" placement="top" (click)="viewBL(item.BL_NO,true)"><img
+                                        src="assets/img/nn.png" width="18px" height="18px" class="me-2"></a>
+                                <a tooltip="Container Annexure" placement="top" (click)="annexureBL(item.BL_NO)"><img
+                                        src="assets/img/attachment.png" class="me-2" width="14px" height="14px"></a>
+                                <a tooltip="Surrender BL" placement="top"
+                                    (click)="openSurrenderBLModal(item.BL_NO)"><img src="assets/img/folder.png"
+                                        width="14px" height="14px"></a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mailModal" aria-labelledby="exampleModalLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Switch BL</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Enter BL No. to switch</p>
+                <div class="form-group col-md-8 mx-auto">
+                    <label class="form-label2">BL No.</label>
+                    <input class="form-control2" [(ngModel)]="swicthBlNo" />
+                    <div *ngIf="!swicthBlNo && swicthBlNo == ''" class="invalid-feedback">Please Enter BL No.</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="form-btn" (click)="getBLDetailsForEdit(swicthBlNo,true)">
+                    Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ogModal" aria-labelledby="exampleModalLabel1" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">How do you want to Finalize it?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeOgBtn></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group col-md-8 mx-auto">
+                    <select class="form-control2 mb-4 inputheight" [(ngModel)]="finalizeType"
+                        (change)="onchangeOgType()">
+                        <option value="" selected disabled>
+                            --Select--</option>
+                        <option value="original">Original</option>
+                        <option value="seaway">Sea-Way</option>
+
+                    </select>
+                    <div *ngIf="showOgOptions">
+                        <p><span class="text-danger">*</span>Choose Original Type</p>
+                        <div class="form-check">
+                            <input class="form-check-input pointer" (change)="oncheck('SOB')" type="radio" value="SOB"
+                                id="flexRadioDefault1" name="ogTypeRadio">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Shipped On Board
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input pointer" (change)="oncheck('RFS')" type="radio" value="RFS"
+                                id="flexRadioDefault2" name="ogTypeRadio">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Received For Shipment
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="form-btn" (click)="submitFinalizeBL()">
+                    Finalize</button>
+                <!-- <span *ngIf="isLoading" class="fa fa-spinner fa-spin"></span></button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="surrenderModal" aria-labelledby="exampleModalLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Surrender BL</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    #closeBtnSurrender></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="emailForm">
+                    <div class="col-md-4" *ngFor="let item of E;let i = index" [formGroup]="item">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label class="form-label2">Email {{i + 1}}
+                                    </label>
+                                    <input [ngClass]="{'invalid':surrendersubmitted && E[i].get('EMAIL')?.errors}"
+                                        formControlName="EMAIL" type="text" class="form-control2" />
+                                    <span *ngIf="surrendersubmitted && E[i].get('EMAIL')?.errors?.required"
+                                        class="invalid-feedback">
+                                        Email is required</span>
+                                    <span *ngIf="surrendersubmitted && E[i].get('EMAIL')?.errors?.email"
+                                        class="invalid-feedback">
+                                        Email is invalid</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-4 p-0" *ngIf="i == 0">
+                                <button (click)="addnewEmail()" class="form-btn-info btn-sm"><i
+                                        class="fa fa-plus"></i></button>
+                            </div>
+                            <div class="col-md-2 mt-4 p-0" *ngIf="i > 0">
+                                <button (click)="removeEmail(i)" class="form-btn-danger btn-sm"><i
+                                        class="fa fa-minus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <h6>Pre Text</h6>
+                            <span [innerHTML]="emailForm.get('EMAIL_BODY')?.value"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button (click)="addNewFile()" class="form-btn-primary">Add New <i
+                                class="fa fa-plus"></i></button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" *ngFor="let item of fileList;let i = index;">
+                            <div class="formbold-mb-5 formbold-file-input" *ngIf="fileList[i].FILE_NAME == ''">
+                                <input (change)="fileUpload($event,i)" type="file" name="{{'file' + i}}"
+                                    id="{{'file' + i}}" />
+                                <label for="{{'file' + i}}">
+                                    <div>
+                                        <h3><i class="fa fa-file-pdf-o"></i></h3>
+                                        <span class="formbold-drop-file">Upload</span>
+                                        <small class="fw-bold">OBL FILE {{i + 1}}</small>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="formbold-file-list formbold-mb-5" *ngIf="fileList[i].FILE_NAME != ''">
+                                <div class="formbold-file-item">
+                                    <span class="formbold-file-name">{{item.FILE_NAME}}</span>
+                                    <small class="formbold-file-size">{{item.FILE_SIZE}} Kb</small>
+                                    <button><span class="bx bx-x-circle" (click)="removeFile(i)"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button (click)="SurrenderBL()" type="button" class="form-btn">
+                    Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
