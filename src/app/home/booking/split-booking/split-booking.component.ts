@@ -36,6 +36,7 @@ export class SplitBookingComponent implements OnInit {
   portList: any[] = [];
   rollOverList: any[] = [];
   // booking:BOOKING=new BOOKING ();
+  slotoperatorList: any[] = [];
 
   @ViewChild('closeBtn3') closeBtn3: ElementRef;
 
@@ -154,6 +155,18 @@ export class SplitBookingComponent implements OnInit {
         this.portList = res.Data;
       }
     });
+
+    this._commonService
+      .getDropdownData(
+        'SLOT_OPERATOR',
+        this.booking?.POL.split('(')[1].split(')')[0],
+        this.booking?.POD.split('(')[1].split(')')[0]
+      )
+      .subscribe((res: any) => {
+        if (res.ResponseCode == 200) {
+          this.slotoperatorList = res.Data;
+        }
+      });
   }
 
   getVoyageList(event: any) {

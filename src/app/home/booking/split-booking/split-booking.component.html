@@ -134,7 +134,8 @@
                                                     <option value="" selected disabled>
                                                         --Slot
                                                         Operator--</option>
-                                                    <option value="xx">test</option>
+                                                    <option *ngFor="let item of slotoperatorList" value="{{item.CODE}}">
+                                                        {{item.CODE_DESC}}</option>
                                                 </select>
                                                 <div *ngIf="submitted && f[j].get('SLOT_OPERATOR').errors"
                                                     class="invalid-feedback">Slot Operator is required
