@@ -126,8 +126,8 @@ export class NewDo2Component implements OnInit {
     });
   }
 
-  getBLDetails(value: any, blNo: any) {
-    if (!value) {
+  getBLDetails(value: any, blNo: any, blType: string) {
+    if (!value && blType != 'seaway') {
       this._commonService.warnMsg(
         blNo +
           ' is not marked as surrendered yet ! Please mark this BL as surrender to create DO'
