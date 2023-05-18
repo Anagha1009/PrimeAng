@@ -310,7 +310,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of f;let i = index" [formGroup]="getf1(item)">
+                        <tr *ngFor="let item of f;let i = index" [formGroup]="item">
                             <td class="col-md-1"><input id="chck{{i}}" (change)="getContainerList(item,$event,i)"
                                     type="checkbox" />
                             </td>
@@ -318,16 +318,20 @@
                             <td class="col-md-1">{{blForm.value.CONTAINER_LIST2[i].CONTAINER_NO}}</td>
                             <td class="col-md-1">{{blForm.value.CONTAINER_LIST2[i].CONTAINER_TYPE}}</td>
                             <td class="col-md-1">
-                                <input [readonly]="isSwitch" formControlName="PKG_COUNT"
+                                <input [readonly]="isSwitch"
+                                    [ngClass]="{'invalid': submitted && f[i].get('PKG_COUNT').errors}"
+                                    formControlName="PKG_COUNT"
                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
                                     type="text" class="form-control2 inputheight" />
                             </td>
                             <td class="col-md-1">
-                                <input [readonly]="isSwitch" formControlName="PKG_DESC" type="text"
-                                    class="form-control2 inputheight" />
+                                <input [readonly]="isSwitch"
+                                    [ngClass]="{'invalid': submitted && f[i].get('PKG_DESC').errors}"
+                                    formControlName="PKG_DESC" type="text" class="form-control2 inputheight" />
                             </td>
-                            <td class="col-md-1"><input [readonly]="isSwitch" formControlName="GROSS_WEIGHT" type="text"
-                                    class="form-control2 inputheight"
+                            <td class="col-md-1"><input [readonly]="isSwitch"
+                                    [ngClass]="{'invalid': submitted && f[i].get('GROSS_WEIGHT').errors}"
+                                    formControlName="GROSS_WEIGHT" type="text" class="form-control2 inputheight"
                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
                             </td>
                             <td class="col-md-1">
@@ -340,8 +344,9 @@
                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
                             </td>
                             <td class="col-md-1">
-                                <input [readonly]="isSwitch" formControlName="SEAL_NO" type="text"
-                                    class="form-control2 inputheight" />
+                                <input [readonly]="isSwitch"
+                                    [ngClass]="{'invalid': submitted && f[i].get('SEAL_NO').errors}"
+                                    formControlName="SEAL_NO" type="text" class="form-control2 inputheight" />
                             </td>
                             <td class="col-md-1">
                                 <input [readonly]="isSwitch" formControlName="AGENT_SEAL_NO" type="text"
@@ -370,23 +375,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of f;let i = index" [formGroup]="getf1(item)">
+                        <tr *ngFor="let item of f;let i = index" [formGroup]="item">
 
                             <td class="col-md-1">{{i+1}}</td>
                             <td class="col-md-1">{{blForm.value.CONTAINER_LIST2[i].CONTAINER_NO}}</td>
                             <td class="col-md-1">{{blForm.value.CONTAINER_LIST2[i].CONTAINER_TYPE}}</td>
                             <td class="col-md-1">
-                                <input [readonly]="isSwitch" formControlName="PKG_COUNT" type="text"
+                                <input [readonly]="isSwitch"
+                                    [ngClass]="{'invalid': submitted && f[i].get('PKG_COUNT').errors}"
+                                    formControlName="PKG_COUNT" type="text"
                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
                                     class="form-control2 inputheight" />
                             </td>
                             <td class="col-md-1">
-                                <input [readonly]="isSwitch" formControlName="PKG_DESC" type="text"
-                                    class="form-control2 inputheight" />
+                                <input [readonly]="isSwitch"
+                                    [ngClass]="{'invalid': submitted && f[i].get('PKG_DESC').errors}"
+                                    formControlName="PKG_DESC" type="text" class="form-control2 inputheight" />
                             </td>
                             <td class="col-md-1">
-                                <input [readonly]="isSwitch" formControlName="GROSS_WEIGHT" type="text"
-                                    class="form-control2 inputheight"
+                                <input [readonly]="isSwitch"
+                                    [ngClass]="{'invalid': submitted && f[i].get('GROSS_WEIGHT').errors}"
+                                    formControlName="GROSS_WEIGHT" type="text" class="form-control2 inputheight"
                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
                             </td>
                             <td class="col-md-1">
@@ -400,8 +409,9 @@
                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57" />
                             </td>
                             <td class="col-md-1">
-                                <input [readonly]="isSwitch" formControlName="SEAL_NO" type="text"
-                                    class="form-control2 inputheight" />
+                                <input [readonly]="isSwitch"
+                                    [ngClass]="{'invalid': submitted && f[i].get('SEAL_NO').errors}"
+                                    formControlName="SEAL_NO" type="text" class="form-control2 inputheight" />
                             </td>
                             <td class="col-md-1">
                                 <input [readonly]="isSwitch" formControlName="AGENT_SEAL_NO" type="text"
@@ -459,15 +469,18 @@
 
                             </td>
                             <td width="10%">
-                                <input formControlName="PKG_COUNT"
+                                <input [ngClass]="{'invalid': submitted && f[i].get('PKG_COUNT').errors}"
+                                    formControlName="PKG_COUNT"
                                     onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
                                     type="text" class="form-control2 inputheight" />
                             </td>
                             <td width="14%">
-                                <input formControlName="PKG_DESC" type="text" class="form-control2 inputheight" />
+                                <input [ngClass]="{'invalid': submitted && f[i].get('PKG_DESC').errors}"
+                                    formControlName="PKG_DESC" type="text" class="form-control2 inputheight" />
                             </td>
                             <td width="10%">
-                                <input formControlName="GROSS_WEIGHT" type="text" class="form-control2 inputheight" />
+                                <input [ngClass]="{'invalid': submitted && f[i].get('GROSS_WEIGHT').errors}"
+                                    formControlName="GROSS_WEIGHT" type="text" class="form-control2 inputheight" />
                             </td>
                             <td width="10%">
                                 <input formControlName="NET_WEIGHT" type="text" class="form-control2 inputheight" />
@@ -476,7 +489,8 @@
                                 <input formControlName="MEASUREMENT" type="text" class="form-control2 inputheight" />
                             </td>
                             <td width="10%">
-                                <input formControlName="SEAL_NO" type="text" class="form-control2 inputheight" />
+                                <input [ngClass]="{'invalid': submitted && f[i].get('SEAL_NO').errors}"
+                                    formControlName="SEAL_NO" type="text" class="form-control2 inputheight" />
                             </td>
                             <td width="10%">
                                 <input formControlName="AGENT_SEAL_NO" type="text" class="form-control2 inputheight" />

@@ -349,7 +349,6 @@ export class NewBlComponent implements OnInit {
     bl.PORT = this._commonService.getUserPort();
     bl.AGENT_CODE = this._commonService.getUserCode();
     this._blService.getBLHistory(bl).subscribe((res: any) => {
-      debugger;
       if (res.ResponseCode == 200) {
         this.blHistoryList = res.Data;
       }
@@ -370,7 +369,6 @@ export class NewBlComponent implements OnInit {
     this.openBtn.nativeElement.click();
   }
 
-  //og type popup
   oncheck(value: any) {
     this.ogType = value;
   }
@@ -385,7 +383,6 @@ export class NewBlComponent implements OnInit {
   }
 
   selectOgType() {
-    //popup
     this.openOgBtn.nativeElement.click();
   }
 
@@ -397,13 +394,6 @@ export class NewBlComponent implements OnInit {
     } else {
       this.makeItFinalize(this.blForm.get('BL_NO').value);
     }
-    //  if(!this.ogType){
-    //     alert('Select Original Type!');
-    //  }
-    //  else{
-    //   this.ogType=this.ogType;
-    //   this.closeOgBtn.nativeElement.click();
-    //  }
   }
 
   //
@@ -553,18 +543,15 @@ export class NewBlComponent implements OnInit {
         this._formBuilder.group({
           CONTAINER_NO: [element.CONTAINER_NO],
           CONTAINER_TYPE: [element.CONTAINER_TYPE],
-          //CONTAINER_SIZE: [element.CONTAINER_SIZE],
-          SEAL_NO: [element.SEAL_NO?.toString()],
-          PKG_COUNT: [element.PKG_COUNT],
-          PKG_DESC: [element.PKG_DESC],
-          GROSS_WEIGHT: [element.GROSS_WEIGHT],
+          SEAL_NO: [element.SEAL_NO?.toString(), Validators.required],
+          PKG_COUNT: [element.PKG_COUNT, Validators.required],
+          PKG_DESC: [element.PKG_DESC, Validators.required],
+          GROSS_WEIGHT: [element.GROSS_WEIGHT, Validators.required],
           NET_WEIGHT: [element.NET_WEIGHT],
           MEASUREMENT: [element.MEASUREMENT?.toString()],
           AGENT_SEAL_NO: [element.AGENT_SEAL_NO?.toString()],
           MARKS_NOS: [this.blForm.get('MARKS_NOS')?.value],
           DESC_OF_GOODS: [this.blForm.get('DESC_OF_GOODS')?.value],
-          // MARKS_NOS: [this.previewTable[0]?.MARKS_NOS],
-          // DESC_OF_GOODS: [this.previewTable[0]?.DESC_OF_GOODS],
         })
       );
     });
@@ -603,19 +590,14 @@ export class NewBlComponent implements OnInit {
         BL.AGENT_CODE = this._commonService.getUserCode();
         BL.BL_NO = BLNO;
         this._blService.getBLDetails(BL).subscribe((res: any) => {
-          //new code
           var mkn = this.blForm.get('MARKS_NOS').value;
           var dog = this.blForm.get('DESC_OF_GOODS').value;
-          //
 
           this.blForm.patchValue(res.Data);
 
-          //new code
           this.blForm.get('MARKS_NOS').setValue(mkn);
           this.blForm.get('DESC_OF_GOODS').setValue(dog);
-          //
 
-          //container
           var contList: any[] = res.Data.CONTAINER_LIST;
 
           const add = this.blForm.get('CONTAINER_LIST2') as FormArray;
@@ -626,12 +608,11 @@ export class NewBlComponent implements OnInit {
               this._formBuilder.group({
                 CONTAINER_NO: [element.CONTAINER_NO],
                 CONTAINER_TYPE: [element.CONTAINER_TYPE],
-                //CONTAINER_SIZE: [element.CONTAINER_SIZE],
-                SEAL_NO: [element.SEAL_NO?.toString()],
+                SEAL_NO: [element.SEAL_NO?.toString(), Validators.required],
                 AGENT_SEAL_NO: [element.AGENT_SEAL_NO?.toString()],
-                PKG_COUNT: [element.PKG_COUNT],
-                PKG_DESC: [element.PKG_DESC],
-                GROSS_WEIGHT: [element.GROSS_WEIGHT],
+                PKG_COUNT: [element.PKG_COUNT, Validators.required],
+                PKG_DESC: [element.PKG_DESC, Validators.required],
+                GROSS_WEIGHT: [element.GROSS_WEIGHT, Validators.required],
                 NET_WEIGHT: [element.NET_WEIGHT],
                 MEASUREMENT: [element.MEASUREMENT?.toString()],
                 MARKS_NOS: [element.MARKS_NOS],
@@ -643,8 +624,7 @@ export class NewBlComponent implements OnInit {
           this.blForm.get('BL_STATUS')?.setValue('Finalized');
           this.blForm.get('BL_TYPE')?.setValue(this.finalizeType);
           this.blForm.get('OG_TYPE')?.setValue(this.ogType);
-          //
-          //update
+
           this._blService
             .updateBL(JSON.stringify(this.blForm.value))
             .subscribe((res: any) => {
@@ -659,26 +639,21 @@ export class NewBlComponent implements OnInit {
                 this.ogType = '';
                 this.getBLHistory();
 
-                //new code
                 this.tabs = '1';
                 this.isBLForm = false;
                 this.hideHistory = false;
 
-                //generate pdf on create / split
-                //this.generateBLPdf();
-
-                //refresh required fields
                 const add = this.blForm.get('CONTAINER_LIST') as FormArray;
                 add.clear();
                 this.blNo = '';
                 this.onUpload = false;
-                //
               }
             });
         });
       }
     });
   }
+
   updateBL() {
     this.submitted = true;
     if (this.blForm.invalid) {
@@ -700,10 +675,6 @@ export class NewBlComponent implements OnInit {
     this.blForm.get('BLType')?.setValue('Draft');
     this.blForm.get('BL_STATUS')?.setValue('Draft');
 
-    // var bltypevalue = this.blForm.get('BLType')?.value;
-    // this.blForm.get('BLType')?.setValue(bltypevalue ? 'Original' : 'Draft');
-    // this.blForm.get('BL_STATUS')?.setValue(bltypevalue ? 'Finalized' : 'Drafted');
-
     var voyageNo = this.blForm.get('VOYAGE_NO')?.value;
     this.blForm.get('VOYAGE_NO')?.setValue(voyageNo?.toString());
 
@@ -717,14 +688,13 @@ export class NewBlComponent implements OnInit {
           this.tabs = '1';
           this.isBLForm = false;
           this.hideHistory = false;
-
-          //generate pdf on create / split
-          //this.generateBLPdf();
         }
       });
   }
+
   createBL() {
     this.submitted = true;
+
     if (this.blForm.invalid) {
       return;
     }
@@ -743,17 +713,6 @@ export class NewBlComponent implements OnInit {
     }
     //
     this.editBL = false;
-    //this.isManual=false;
-
-    // if (this.isSplit) {
-    //   this.blForm.get('BL_NO')?.setValue(this.blNo + '-1');
-    // } else {
-    //   this.blForm.get('BL_NO')?.setValue(this.getRandomNumber());
-    // }
-
-    // var bltypevalue = this.blForm.get('BLType')?.value;
-    // this.blForm.get('BLType')?.setValue(bltypevalue ? 'Original' : 'Draft');
-    // this.blForm.get('BL_STATUS')?.setValue(bltypevalue ? 'Finalized' : 'Drafted');
     var blNo = this.getRandomNumber(
       this.blForm.get('PORT_OF_LOADING').value.split('(')[1].split(')')[0],
       this.blForm.get('PORT_OF_DISCHARGE').value.split('(')[1].split(')')[0]
@@ -867,11 +826,11 @@ export class NewBlComponent implements OnInit {
             CONTAINER_NO: [element.CONTAINER_NO],
             CONTAINER_TYPE: [element.CONTAINER_TYPE],
             //CONTAINER_SIZE: [element.CONTAINER_SIZE],
-            SEAL_NO: [element.SEAL_NO?.toString()],
+            SEAL_NO: [element.SEAL_NO?.toString(), Validators.required],
             AGENT_SEAL_NO: [element.AGENT_SEAL_NO]?.toString(),
-            PKG_COUNT: [element.PKG_COUNT],
-            PKG_DESC: [element.PKG_DESC],
-            GROSS_WEIGHT: [element.GROSS_WEIGHT],
+            PKG_COUNT: [element.PKG_COUNT, Validators.required],
+            PKG_DESC: [element.PKG_DESC, Validators.required],
+            GROSS_WEIGHT: [element.GROSS_WEIGHT, Validators.required],
             NET_WEIGHT: [element.NET_WEIGHT],
             MEASUREMENT: [element.MEASUREMENT?.toString()],
             MARKS_NOS: [element.MARKS_NOS],
@@ -945,11 +904,11 @@ export class NewBlComponent implements OnInit {
               CONTAINER_NO: [element.CONTAINER_NO],
               CONTAINER_TYPE: [element.CONTAINER_TYPE],
               //CONTAINER_SIZE: [element.CONTAINER_SIZE],
-              SEAL_NO: [element.SEAL_NO?.toString()],
+              SEAL_NO: [element.SEAL_NO?.toString(), Validators.required],
               AGENT_SEAL_NO: [element.AGENT_SEAL_NO?.toString()],
-              PKG_COUNT: [element.PKG_COUNT],
-              PKG_DESC: [element.PKG_DESC],
-              GROSS_WEIGHT: [element.GROSS_WEIGHT],
+              PKG_COUNT: [element.PKG_COUNT, Validators.required],
+              PKG_DESC: [element.PKG_DESC, Validators.required],
+              GROSS_WEIGHT: [element.GROSS_WEIGHT, Validators.required],
               NET_WEIGHT: [element.NET_WEIGHT],
               MEASUREMENT: [element.MEASUREMENT?.toString()],
               DESC_OF_GOODS: [element.DESC_OF_GOODS],
@@ -989,10 +948,6 @@ export class NewBlComponent implements OnInit {
   get f() {
     var c = this.blForm.get('CONTAINER_LIST2') as FormArray;
     return c.controls;
-  }
-
-  getf1(i: any) {
-    return i;
   }
 
   getRandomNumber(POL: any, POD: any) {
@@ -1263,27 +1218,15 @@ export class NewBlComponent implements OnInit {
     if (param == 'PREPAID_AT' && e.length > 0) {
       this.blForm.get('PREPAID_AT').enable();
       this.blForm.get('PAYABLE_AT').disable();
-
-      // this.blForm.get("PAYABLE_AT").removeValidators(Validators.required);
-      // this.blForm.get("PAYABLE_AT").updateValueAndValidity();
     } else if (param == 'PREPAID_AT' && e.length == 0) {
       this.blForm.get('PREPAID_AT').disable();
       this.blForm.get('PAYABLE_AT').enable();
-
-      // this.blForm.get("PREPAID_AT").removeValidators(Validators.required);
-      // this.blForm.get("PREPAID_AT").updateValueAndValidity();
     } else if (param == 'PAYABLE_AT' && e.length > 0) {
       this.blForm.get('PREPAID_AT').disable();
       this.blForm.get('PAYABLE_AT').enable();
-
-      // this.blForm.get("PREPAID_AT").removeValidators(Validators.required);
-      // this.blForm.get("PREPAID_AT").updateValueAndValidity();
     } else if (param == 'PAYABLE_AT' && e.length == 0) {
       this.blForm.get('PREPAID_AT').enable();
       this.blForm.get('PAYABLE_AT').disable();
-
-      // this.blForm.get("PAYABLE_AT").removeValidators(Validators.required);
-      // this.blForm.get("PAYABLE_AT").updateValueAndValidity();
     }
   }
 
@@ -1527,12 +1470,12 @@ export class NewBlComponent implements OnInit {
           this._formBuilder.group({
             CONTAINER_NO: [element.CONTAINER_NO],
             CONTAINER_TYPE: [element.CONTAINER_TYPE],
-            SEAL_NO: [element.SEAL_NO?.toString()],
+            SEAL_NO: [element.SEAL_NO?.toString(), Validators.required],
             AGENT_SEAL_NO: [element.AGENT_SEAL_NO?.toString()],
             MARKS_NOS: [''],
-            PKG_COUNT: [element.PKG_COUNT],
-            PKG_DESC: [element.PKG_DESC],
-            GROSS_WEIGHT: [element.GROSS_WEIGHT],
+            PKG_COUNT: [element.PKG_COUNT, Validators.required],
+            PKG_DESC: [element.PKG_DESC, Validators.required],
+            GROSS_WEIGHT: [element.GROSS_WEIGHT, Validators.required],
             NET_WEIGHT: [element.NET_WEIGHT],
             MEASUREMENT: [element.MEASUREMENT?.toString()],
           })
