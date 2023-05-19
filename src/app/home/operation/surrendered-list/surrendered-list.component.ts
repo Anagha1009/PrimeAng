@@ -43,15 +43,22 @@ export class SurrenderedListComponent implements OnInit {
 
   getBLFiles(blNo: any, value: any) {
     this.isSurrendered = value;
-    this._blService.GetBLFiles(blNo).subscribe((res: any) => {
-      if (res.responseCode == 200) {
-        this.blFiles = res.data;
-        this.blNo = blNo;
-        this.openBtn.nativeElement.click();
-      } else {
-        this._commonService.errorMsg('Sorry, No Files Found !');
+    this._blService.GetBLFiles(blNo).subscribe(
+      (res: any) => {
+        if (res.responseCode == 200) {
+          this.blFiles = res.data;
+          this.blNo = blNo;
+          this.openBtn.nativeElement.click();
+        } else {
+          this._commonService.errorMsg('Sorry, No Files Found !');
+        }
+      },
+      (error: any) => {
+        if (error.status == 500) {
+          this._commonService.errorMsg('Sorry, No Files Found !');
+        }
       }
-    });
+    );
   }
 
   markSurrender() {

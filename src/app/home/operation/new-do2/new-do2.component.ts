@@ -52,7 +52,7 @@ export class NewDo2Component implements OnInit {
 
   getDOList() {
     this._commonService.destroyDT();
-    var pod = this._commonService.getUser().port.replace(',', ' ');
+    var pod = this._commonService.getUser().port;
     var orgCode = this._commonService.getUser().orgcode;
 
     this._blService.GetBLSurrenderedList(orgCode, pod).subscribe((res: any) => {
@@ -127,6 +127,7 @@ export class NewDo2Component implements OnInit {
   }
 
   getBLDetails(value: any, blNo: any, blType: string) {
+    debugger;
     if (!value && blType != 'seaway') {
       this._commonService.warnMsg(
         blNo +
