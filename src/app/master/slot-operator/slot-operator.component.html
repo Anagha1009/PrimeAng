@@ -166,6 +166,59 @@
                                 </div>
                             </div>
                         </div>
+
+ <!----------------------- EDIT FIELDS ---------------------------------------------------->
+<div class="row mt-4 ">
+  <div class="col-md-6">
+    <div class="form-group">
+      <textarea  rows="4" cols="50" [ngClass]="{'invalid':submitted && f.ADDRESS.errors}"formControlName="ADDRESS" class="form-control"></textarea>
+      <!-- <input type="text" [ngClass]="{'invalid':submitted && f.ADDRESS.errors}"formControlName="ADDRESS" class="form-control"> -->
+      <label class="form-label">Address<span class="text-danger">
+        *</span></label>
+      <div *ngIf="submitted && f.ADDRESS.errors" class="invalid-feedback">
+        Address is required
+    </div>
+  </div>
+</div>
+<div class="col-md-6">
+  <div class="form-group">
+    <input type="text" maxlength="12" [ngClass]="{'invalid':submitted && f.CONTACT.errors}"formControlName="CONTACT" class="form-control">
+    <label class="form-label">Contact<span class="text-danger">
+      *</span></label>
+      <div *ngIf="submitted && f.CONTACT.errors" class="invalid-feedback">
+       Contact is required
+    </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row mt-4 ">
+  <div class="col-md-6">
+    <div class="form-group">
+      <input type="text" maxlength="255" [ngClass]="{'invalid':submitted && f.EMAIL.errors}"formControlName="EMAIL" class="form-control">
+      <label class="form-label">Email<span class="text-danger">
+        *</span></label>
+        <div *ngIf="submitted && f.EMAIL.errors" class="invalid-feedback">
+          Email is required
+       </div>
+      </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <input type="text" maxlength="20" [ngClass]="{'invalid':submitted && f.SLOT_CODE.errors}"formControlName="SLOT_CODE" class="form-control">
+          <label class="form-label">Slot Code<span class="text-danger">
+            *</span></label>
+            <div *ngIf="submitted && f.SLOT_CODE.errors" class="invalid-feedback">
+              Slot Code is required
+           </div>
+          </div>
+          </div>
+</div>
+
+
+
+<!--------------------------- END FIELDS -------------------------------------------------->
                     </div>
                 </form>
             </div>
