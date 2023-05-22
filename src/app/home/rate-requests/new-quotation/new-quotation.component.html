@@ -960,10 +960,15 @@
                                                                     <tbody>
                                                                         <tr *ngFor="let item of f4;let j = index;"
                                                                             [formGroup]="item">
-                                                                            <td width="15%">{{item.value.CHARGE_CODE}}
+                                                                            <td width="15%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                {{item.value.CHARGE_CODE}}
                                                                             </td>
-                                                                            <td width="10%">{{item.value.CURRENCY}}</td>
-                                                                            <td width="20%">
+                                                                            <td width="10%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                {{item.value.CURRENCY}}</td>
+                                                                            <td width="20%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
                                                                                 <select class="form-control3"
                                                                                     (change)="OnPaymentTerm($event,j,'POL_CHARGES')"
                                                                                     formControlName="PAYMENT_TERM">
@@ -979,7 +984,8 @@
                                                                                 <span class="invalid-feedback"
                                                                                     *ngIf="submiitedRate && item.get('PAYMENT_TERM').errors">required</span>
                                                                             </td>
-                                                                            <td width="15%">
+                                                                            <td width="15%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
                                                                                 <select class="form-control3"
                                                                                     formControlName="TRANSPORT_TYPE">
                                                                                     <option value=null selected
@@ -992,8 +998,11 @@
                                                                                 <span class="invalid-feedback"
                                                                                     *ngIf="submiitedRate && item.get('TRANSPORT_TYPE').errors">required</span>
                                                                             </td>
-                                                                            <td width="10%">{{item.value.RATE}}</td>
-                                                                            <td width="9%">
+                                                                            <td width="10%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                {{item.value.RATE}}</td>
+                                                                            <td width="9%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
                                                                                 <input class="form-control3"
                                                                                     maxlength="5"
                                                                                     (keypress)="numericOnly($event)"
@@ -1002,10 +1011,15 @@
                                                                                 <span class="invalid-feedback"
                                                                                     *ngIf="submiitedRate && item.get('RATE_REQUESTED').errors">required</span>
                                                                             </td>
-                                                                            <td width="20%"><input type="text"
+                                                                            <td width="20%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                <input type="text"
                                                                                     formControlName="AGENT_REMARKS"
-                                                                                    class="form-control3" /></td>
-                                                                            <td width="1%"> <i placement="right"
+                                                                                    class="form-control3" />
+                                                                            </td>
+                                                                            <td width="1%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                <i placement="right"
                                                                                     tooltip="Please enter rate after deducting BAF & EWRI"
                                                                                     *ngIf="item.value.CHARGE_CODE == 'Freight'"
                                                                                     class="fa fa-info-circle ms-1"></i>
@@ -1050,10 +1064,15 @@
                                                                     <tbody>
                                                                         <tr *ngFor="let item of f8;let j = index;"
                                                                             [formGroup]="item">
-                                                                            <td width="15%">{{item.value.CHARGE_CODE}}
+                                                                            <td width="15%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                {{item.value.CHARGE_CODE}}
                                                                             </td>
-                                                                            <td width="10%">{{item.value.CURRENCY}}</td>
-                                                                            <td width="20%">
+                                                                            <td width="10%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                {{item.value.CURRENCY}}</td>
+                                                                            <td width="20%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
                                                                                 <select class="form-control3"
                                                                                     (change)="OnPaymentTerm($event,j,'POD_CHARGES')"
                                                                                     formControlName="PAYMENT_TERM">
@@ -1069,7 +1088,8 @@
                                                                                 <span class="invalid-feedback"
                                                                                     *ngIf="submiitedRate && item.get('PAYMENT_TERM').errors">required</span>
                                                                             </td>
-                                                                            <td width="15%">
+                                                                            <td width="15%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
                                                                                 <select class="form-control3"
                                                                                     formControlName="TRANSPORT_TYPE">
                                                                                     <option value=null selected
@@ -1082,8 +1102,11 @@
                                                                                 <span class="invalid-feedback"
                                                                                     *ngIf="submiitedRate && item.get('TRANSPORT_TYPE').errors">required</span>
                                                                             </td>
-                                                                            <td width="10%">{{item.value.RATE}}</td>
-                                                                            <td width="9%">
+                                                                            <td width="10%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                {{item.value.RATE}}</td>
+                                                                            <td width="9%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
                                                                                 <input class="form-control3"
                                                                                     maxlength="5"
                                                                                     (keypress)="numericOnly($event)"
@@ -1092,10 +1115,14 @@
                                                                                 <span class="invalid-feedback"
                                                                                     *ngIf="submiitedRate && item.get('RATE_REQUESTED').errors">required</span>
                                                                             </td>
-                                                                            <td width="20%"><input type="text"
+                                                                            <td width="20%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                <input type="text"
                                                                                     formControlName="AGENT_REMARKS"
                                                                                     class="form-control3" /></td>
-                                                                            <td width="1%"> <i placement="right"
+                                                                            <td width="1%"
+                                                                                *ngIf="item.value.CHARGE_CODE != 'TLUC'">
+                                                                                <i placement="right"
                                                                                     tooltip="Please enter rate after deducting BAF & EWRI"
                                                                                     *ngIf="item.value.CHARGE_CODE == 'Freight'"
                                                                                     class="fa fa-info-circle ms-1"></i>

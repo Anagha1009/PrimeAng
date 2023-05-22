@@ -74,10 +74,10 @@ export class SlotOperatorComponent implements OnInit {
       TERM: ['', Validators.required],
       STATUS: ['', Validators.required],
       CREATED_BY: [''],
-      ADDRESS : ['', Validators.required],
-      CONTACT : ['', Validators.required],
-      EMAIL : ['',[Validators.email, Validators.required]],
-      SLOT_CODE : ['', Validators.required]
+      ADDRESS: ['', Validators.required],
+      CONTACT: ['', Validators.required],
+      EMAIL: ['', [Validators.email, Validators.required]],
+      SLOT_CODE: ['', Validators.required],
     });
 
     this.sForm = this._formBuilder.group({
@@ -168,7 +168,6 @@ export class SlotOperatorComponent implements OnInit {
     if (this.slotForm.invalid) {
       return;
     }
-    console.log("slotform value:",JSON.stringify(this.slotForm.value))
 
     const add = this.slotForm.get('SERVICE') as FormArray;
     var service = '';
@@ -183,7 +182,6 @@ export class SlotOperatorComponent implements OnInit {
       port += element.CODE + ',';
     });
     this.slotForm.get('PORT_CODE').setValue(port);
-    console.log("slotform value:",JSON.stringify(this.slotForm.value))
     this._masterService
       .insertSlot(JSON.stringify(this.slotForm.value))
       .subscribe((res: any) => {

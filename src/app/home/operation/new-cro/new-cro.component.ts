@@ -296,10 +296,10 @@ export class NewCroComponent implements OnInit {
               {
                 text: this.croDetails?.CUSTOMER_NAME,
                 bold: true,
+                fontSize: 11,
               },
-              { text: this.croDetails?.ADDRESS },
-              { text: this.croDetails?.EMAIL },
-              { text: this.croDetails?.CONTACT },
+              { text: this.croDetails?.ADDRESS, fontSize: 10, bold: false },
+              { text: this.croDetails?.CONTACT, fontSize: 10, bold: false },
             ],
             [
               {
