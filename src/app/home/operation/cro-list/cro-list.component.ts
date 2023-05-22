@@ -103,6 +103,8 @@ export class CroListComponent implements OnInit {
     var cro = new CRO();
     cro.AGENT_CODE = this._commonService.getUserCode();
     cro.CRO_NO = CRO_NO;
+    cro.ORG_CODE = this._commonService.getUserOrgCode();
+    cro.PORT = this._commonService.getUserPort();
 
     this._croService.getCRODetails(cro).subscribe((res: any) => {
       if (res.ResponseCode == 200) {
@@ -120,13 +122,56 @@ export class CroListComponent implements OnInit {
       },
       content: [
         {
-          image: await this._commonService.getBase64ImageFromURL(
-            'assets/img/logo_p.png'
-          ),
-          alignment: 'right',
-          height: 50,
-          width: 100,
-          margin: [0, 0, 0, 10],
+          layout: 'noBorders',
+          table: {
+            widths: [70, 350, 60],
+            headerRows: 1,
+            body: [
+              [
+                { text: ' ', fontSize: 8, bold: true },
+                {
+                  text: 'PRIME MARITIME',
+                  bold: true,
+                  fontSize: 16,
+                  alignment: 'center',
+                },
+                {
+                  image: await this._commonService.getBase64ImageFromURL(
+                    'assets/img/logo_p.png'
+                  ),
+                  height: 40,
+                  width: 100,
+                  margin: [0, 0, 0, 0],
+                },
+              ],
+              [
+                {},
+                {
+                  text: this.croDetails?.ORG_NAME,
+                  bold: true,
+                  fontSize: 10,
+                  alignment: 'center',
+                },
+                {},
+              ],
+              [
+                {},
+                {
+                  text: this.croDetails?.ORG_ADDRESS1,
+                  bold: false,
+                  fontSize: 9,
+                  alignment: 'center',
+                },
+                {},
+              ],
+            ],
+          },
+        },
+        {
+          canvas: [
+            { type: 'line', x1: 0, y1: 0, x2: 520, y2: 0, lineWidth: 1 },
+          ],
+          margin: [0, 10, 0, 10],
         },
         {
           columns: [
@@ -140,7 +185,7 @@ export class CroListComponent implements OnInit {
             ],
             [
               {
-                text: `Date: ${this._commonService.getcurrentDate(
+                text: `Date: ${this._commonService.getIndianDate(
                   new Date(this.croDetails?.CREATED_DATE)
                 )}`,
                 bold: true,
@@ -155,233 +200,216 @@ export class CroListComponent implements OnInit {
           ],
         },
         {
+          text: 'Pickup Location:',
+          bold: true,
+          fontSize: 11,
+          margin: [0, 10, 0, 0],
+        },
+        {
+          text: this.croDetails?.EMPTY_CONT_PCKP,
+          fontSize: 10,
+        },
+        {
           text: 'Booking Details',
           style: 'sectionHeader',
         },
         {
-          columns: [
-            [
-              {
-                text: 'Booking No:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'Location:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'Booking Party:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'Email Id:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'Contact No:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'Valid Upto:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
+          layout: 'noBorders',
+          table: {
+            headerRows: 1,
+            widths: [100, 200, 100, 200],
+            body: [
+              [
+                {
+                  text: 'Booking No:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.BOOKING_NO == null
+                      ? '-'
+                      : this.croDetails?.BOOKING_NO == ''
+                      ? '-'
+                      : this.croDetails?.BOOKING_NO,
+                  fontSize: 10,
+                },
+                {
+                  text: 'Vessel/ Voyage:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.BookingDetails?.VESSEL_NAME +
+                    '/ ' +
+                    this.croDetails?.BookingDetails?.VOYAGE_NO,
+                  fontSize: 10,
+                },
+              ],
+              [
+                {
+                  text: 'Location:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.LADEN_ACPT_LOCATION == null
+                      ? '-'
+                      : this.croDetails?.LADEN_ACPT_LOCATION == ''
+                      ? '-'
+                      : this.croDetails?.LADEN_ACPT_LOCATION,
+                  fontSize: 10,
+                },
+                {
+                  text: 'ETA:',
+                  bold: true,
+                  fontSize: 10,
+                },
+
+                {
+                  text: this._commonService.getIndianDate(
+                    new Date(this.croDetails?.ETA)
+                  ),
+                  fontSize: 10,
+                },
+              ],
+              [
+                {
+                  text: 'Booking Party:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.CUSTOMER_NAME == null
+                      ? '-'
+                      : this.croDetails?.CUSTOMER_NAME == ''
+                      ? '-'
+                      : this.croDetails?.CUSTOMER_NAME,
+                  fontSize: 10,
+                },
+                {
+                  text: 'ETD:',
+                  bold: true,
+                  fontSize: 10,
+                },
+
+                {
+                  text: this._commonService.getIndianDate(
+                    new Date(this.croDetails?.ETD)
+                  ),
+                  fontSize: 10,
+                },
+              ],
+              [
+                {
+                  text: 'Email Id:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.EMAIL == null
+                      ? '-'
+                      : this.croDetails?.EMAIL == ''
+                      ? '-'
+                      : this.croDetails?.EMAIL,
+                  fontsize: 10,
+                },
+                {
+                  text: 'Service:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.SERVICE_NAME == null
+                      ? '-'
+                      : this.croDetails?.SERVICE_NAME == ''
+                      ? '-'
+                      : this.croDetails?.SERVICE_NAME,
+                  fontSize: 10,
+                },
+              ],
+              [
+                {
+                  text: 'Contact No:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.CONTACT == null
+                      ? '-'
+                      : this.croDetails?.CONTACT == ''
+                      ? '-'
+                      : this.croDetails?.CONTACT,
+                  fontSize: 10,
+                },
+                {
+                  text: 'POL:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.POL == null
+                      ? '-'
+                      : this.croDetails?.POL == ''
+                      ? '-'
+                      : this.croDetails?.POL,
+                  fontSize: 10,
+                },
+              ],
+              [
+                {
+                  text: 'Valid Upto:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text: this._commonService.getIndianDate(
+                    new Date(this.croDetails?.CRO_VALIDITY_DATE)
+                  ),
+                  fontSize: 10,
+                },
+                {
+                  text: 'POD:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.POD == null
+                      ? '-'
+                      : this.croDetails?.POD == ''
+                      ? '-'
+                      : this.croDetails?.POD,
+                  fontSize: 10,
+                },
+              ],
+              [
+                {},
+                {},
+                {
+                  text: 'FPOD:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.FINAL_DESTINATION == null
+                      ? '-'
+                      : this.croDetails?.FINAL_DESTINATION == ''
+                      ? '-'
+                      : this.croDetails?.FINAL_DESTINATION,
+                  fontSize: 10,
+                },
+              ],
             ],
-            [
-              {
-                text:
-                  this.croDetails?.BOOKING_NO == null
-                    ? '-'
-                    : this.croDetails?.BOOKING_NO == ''
-                    ? '-'
-                    : this.croDetails?.BOOKING_NO,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text:
-                  this.croDetails?.LADEN_ACPT_LOCATION == null
-                    ? '-'
-                    : this.croDetails?.LADEN_ACPT_LOCATION == ''
-                    ? '-'
-                    : this.croDetails?.LADEN_ACPT_LOCATION,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text:
-                  this.croDetails?.CUSTOMER_NAME == null
-                    ? '-'
-                    : this.croDetails?.CUSTOMER_NAME == ''
-                    ? '-'
-                    : this.croDetails?.CUSTOMER_NAME,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text:
-                  this.croDetails?.EMAIL == null
-                    ? '-'
-                    : this.croDetails?.EMAIL == ''
-                    ? '-'
-                    : this.croDetails?.EMAIL,
-                margin: [0, 0, 0, 5],
-                fontsize: 10,
-              },
-              {
-                text:
-                  this.croDetails?.CONTACT == null
-                    ? '-'
-                    : this.croDetails?.CONTACT == ''
-                    ? '-'
-                    : this.croDetails?.CONTACT,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text: this._commonService.getcurrentDate(
-                  new Date(this.croDetails?.CRO_VALIDITY_DATE)
-                ),
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-            ],
-            [
-              {
-                text: 'Vessel/ Voyage:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'ETA:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'ETD:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'Service:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'POL:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'POD:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'FPOD:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-              {
-                text: 'Depo:',
-                margin: [0, 0, 0, 5],
-                bold: true,
-                fontSize: 10,
-              },
-            ],
-            [
-              {
-                text:
-                  this.croDetails?.BookingDetails?.VESSEL_NAME +
-                  '/ ' +
-                  this.croDetails?.BookingDetails?.VOYAGE_NO,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text: this._commonService.getIndianDate(
-                  new Date(this.croDetails?.ETA)
-                ),
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text: this._commonService.getIndianDate(
-                  new Date(this.croDetails?.ETD)
-                ),
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text:
-                  this.croDetails?.SERVICE_NAME == null
-                    ? '-'
-                    : this.croDetails?.SERVICE_NAME == ''
-                    ? '-'
-                    : this.croDetails?.SERVICE_NAME,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text:
-                  this.croDetails?.POL == null
-                    ? '-'
-                    : this.croDetails?.POL == ''
-                    ? '-'
-                    : this.croDetails?.POL,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text:
-                  this.croDetails?.POD == null
-                    ? '-'
-                    : this.croDetails?.POD == ''
-                    ? '-'
-                    : this.croDetails?.POD,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text:
-                  this.croDetails?.FINAL_DESTINATION == null
-                    ? '-'
-                    : this.croDetails?.FINAL_DESTINATION == ''
-                    ? '-'
-                    : this.croDetails?.FINAL_DESTINATION,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-              {
-                text:
-                  this.croDetails?.EMPTY_CONT_PCKP == null
-                    ? '-'
-                    : this.croDetails?.EMPTY_CONT_PCKP == ''
-                    ? '-'
-                    : this.croDetails?.EMPTY_CONT_PCKP,
-                margin: [0, 0, 0, 5],
-                fontSize: 10,
-              },
-            ],
-          ],
+          },
         },
         {
           text: 'Container Details',
@@ -412,30 +440,33 @@ export class CroListComponent implements OnInit {
         },
         {
           margin: [0, 10, 0, 0],
-          fontSize: 10,
+          fontSize: 9,
           text:
             'Remarks:\n\n1) PLS DO NOT PICK UP DAMAGE CONTAINER, ANY CLAIM FROM DESTINATION WILL BE COLLECTED FROM CONSIGNEE' +
             '\n2) All containers mis-declared for weight will be charged in line with the scale of rates for misdeclaration.' +
-            'This charge will be applied with immediate effect. In order to avoid this charge, please advise all concerned to ensure declaration of' +
-            'correct weight at the time of booking.' +
-            '\n3) LINE WILL NOT BE RESPONSIBLE FOR EARLY CLOSURE OF GATE / NOT OPENING OF GATE FOR A' +
-            'PARTICULAR TERMINAL / VESSEL' +
+            'This charge will be applied with immediate effect. In order to avoid this charge, please advise all concerned to ensure declaration of correct weight at the time of booking.' +
+            '\n3) LINE WILL NOT BE RESPONSIBLE FOR EARLY CLOSURE OF GATE / NOT OPENING OF GATE FOR A PARTICULAR TERMINAL / VESSEL' +
             '\n4) Containers will not be loaded without duplicate shipping bill in our custody' +
-            '\n5) Please gate-in the containers at most 3 days before vessel ETA. Containers gated-in earlier shall incur ground rent which will be' +
-            'On shipper&#39;s account.' +
+            "\n5) Please gate-in the containers at most 3 days before vessel ETA. Containers gated-in earlier shall incur ground rent which will be On shipper's account" +
             '\n\nGeneral Instructions' +
-            '\n\nTHIS D.O IS VALID FOR FOUR (4) DAYS FROM TODAY I.E. ( ) NO DELIVERIES WILL BE ALLOWED FROM THE' +
+            '\n\nTHIS D.O IS VALID FOR FOUR (4) DAYS FROM TODAY I.E. ( ' +
+            this._commonService.getIndianDate(
+              new Date(this.croDetails?.CREATED_DATE)
+            ) +
+            ' ) NO DELIVERIES WILL BE ALLOWED FROM THE ' +
             'STORAGE YARD BEYOND SEABIRD MARINE SERVICES PVT LTD CONTR TERMINAL:' +
-            '\nPLEASE NOTE THAT YOU ARE NOT PERMITTED TO HONOUR THIS D.O. AFTER – Date of Expiry' +
+            '\nPLEASE NOTE THAT YOU ARE NOT PERMITTED TO HONOUR THIS D.O. AFTER - ' +
+            this._commonService.getIndianDate(
+              new Date(this.croDetails?.CRO_VALIDITY_DATE)
+            ) +
             '\n\n1. Export Detention on containers will be applicable as per lines prevailing tariff.' +
             '\n2. Please do not exceed the permitted maximum gross weight shown on the container.' +
             '\n3. Containers that are picked up from empty yard at origin by the Exporter or their Agents per the Booking release order shall be' +
             'resumed to have been inspected and accepted in good and sound condition for the purpose of cargo stuffing. Consignee (Buyers)' +
             'shall be responsible to return the containers to our custody in good and sound condition at destination after cargo is unstuffed.' +
-            '\n4. Containers are moved by Export/C &amp; F agents at their own risk/cost. Any damage to the container shall be borne by Exporter/C &amp;' +
-            'F agent.' +
-            '\n5. C &amp; F agent/Exporters are requested to prepare container load plan and put Co.&#39;s Stamp / Sign.' +
-            '\n6. In case of hazardous cargo, please apply hazardous cargo sticker &amp; put all details.',
+            '\n4.  Containers are moved by Export/C & F agents at their own risk/cost. Any damage to the container shall be borne by Exporter/C & F agent.' +
+            "\n5. C & F agent/Exporters are requested to prepare container load plan and put Co.'s Stamp / Sign." +
+            '\n6. In case of hazardous cargo, please apply hazardous cargo sticker & put all details.',
         },
       ],
       styles: {

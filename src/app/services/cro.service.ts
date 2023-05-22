@@ -63,7 +63,11 @@ export class CroService {
         'CRO/GetCRODetails?AGENT_CODE=' +
         cro.AGENT_CODE +
         '&CRO_NO=' +
-        cro.CRO_NO,
+        cro.CRO_NO +
+        '&ORG_CODE=' +
+        cro.ORG_CODE +
+        '&PORT=' +
+        cro.PORT,
       this.httpOptions
     );
   }

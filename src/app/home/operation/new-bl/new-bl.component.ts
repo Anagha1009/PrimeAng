@@ -951,7 +951,6 @@ export class NewBlComponent implements OnInit {
   }
 
   getRandomNumber(POL: any, POD: any) {
-    var num = Math.floor(Math.random() * 1e3)?.toString();
     var date = new Date();
     var month: any = date.getMonth() + 1;
     if (month < 10) {
@@ -962,8 +961,7 @@ export class NewBlComponent implements OnInit {
       POL.substr(POL.length - 3) +
       POD.substr(POD.length - 3) +
       date.getFullYear() +
-      month +
-      num
+      month
     );
   }
 
