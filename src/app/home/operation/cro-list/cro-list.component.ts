@@ -116,10 +116,6 @@ export class CroListComponent implements OnInit {
 
   async generatePDF() {
     let docDefinition = {
-      header: {
-        text: 'Container Release Order',
-        margin: [10, 10, 0, 0],
-      },
       content: [
         {
           layout: 'noBorders',
@@ -130,9 +126,9 @@ export class CroListComponent implements OnInit {
               [
                 { text: ' ', fontSize: 8, bold: true },
                 {
-                  text: 'PRIME MARITIME',
+                  text: this.croDetails?.ORG_NAME,
                   bold: true,
-                  fontSize: 16,
+                  fontSize: 14,
                   alignment: 'center',
                 },
                 {
@@ -144,22 +140,13 @@ export class CroListComponent implements OnInit {
                   margin: [0, 0, 0, 0],
                 },
               ],
-              [
-                {},
-                {
-                  text: this.croDetails?.ORG_NAME,
-                  bold: true,
-                  fontSize: 10,
-                  alignment: 'center',
-                },
-                {},
-              ],
+
               [
                 {},
                 {
                   text: this.croDetails?.ORG_ADDRESS1,
                   bold: false,
-                  fontSize: 9,
+                  fontSize: 10,
                   alignment: 'center',
                 },
                 {},
@@ -175,14 +162,14 @@ export class CroListComponent implements OnInit {
         },
         {
           columns: [
+            [],
             [
               {
-                text: this.croDetails?.CUSTOMER_NAME,
-                bold: true,
-                fontSize: 11,
+                text: 'Container Release Order',
+                bold: false,
+                fontSize: 12,
+                alignment: 'center',
               },
-              { text: this.croDetails?.ADDRESS, fontSize: 10, bold: false },
-              { text: this.croDetails?.CONTACT, fontSize: 10, bold: false },
             ],
             [
               {
@@ -236,15 +223,14 @@ export class CroListComponent implements OnInit {
                   fontSize: 10,
                 },
                 {
-                  text: 'Vessel/ Voyage:',
+                  text: 'Booking Date:',
                   bold: true,
                   fontSize: 10,
                 },
                 {
-                  text:
-                    this.croDetails?.BookingDetails?.VESSEL_NAME +
-                    '/ ' +
-                    this.croDetails?.BookingDetails?.VOYAGE_NO,
+                  text: this._commonService.getIndianDate(
+                    new Date(this.croDetails?.BookingDetails?.CREATED_DATE)
+                  ),
                   fontSize: 10,
                 },
               ],
@@ -264,15 +250,15 @@ export class CroListComponent implements OnInit {
                   fontSize: 10,
                 },
                 {
-                  text: 'ETA:',
+                  text: 'Vessel/ Voyage:',
                   bold: true,
                   fontSize: 10,
                 },
-
                 {
-                  text: this._commonService.getIndianDate(
-                    new Date(this.croDetails?.ETA)
-                  ),
+                  text:
+                    this.croDetails?.BookingDetails?.VESSEL_NAME +
+                    '/ ' +
+                    this.croDetails?.BookingDetails?.VOYAGE_NO,
                   fontSize: 10,
                 },
               ],
@@ -292,14 +278,14 @@ export class CroListComponent implements OnInit {
                   fontSize: 10,
                 },
                 {
-                  text: 'ETD:',
+                  text: 'ETA:',
                   bold: true,
                   fontSize: 10,
                 },
 
                 {
                   text: this._commonService.getIndianDate(
-                    new Date(this.croDetails?.ETD)
+                    new Date(this.croDetails?.ETA)
                   ),
                   fontSize: 10,
                 },
@@ -320,17 +306,15 @@ export class CroListComponent implements OnInit {
                   fontsize: 10,
                 },
                 {
-                  text: 'Service:',
+                  text: 'ETD:',
                   bold: true,
                   fontSize: 10,
                 },
+
                 {
-                  text:
-                    this.croDetails?.SERVICE_NAME == null
-                      ? '-'
-                      : this.croDetails?.SERVICE_NAME == ''
-                      ? '-'
-                      : this.croDetails?.SERVICE_NAME,
+                  text: this._commonService.getIndianDate(
+                    new Date(this.croDetails?.ETD)
+                  ),
                   fontSize: 10,
                 },
               ],
@@ -350,17 +334,17 @@ export class CroListComponent implements OnInit {
                   fontSize: 10,
                 },
                 {
-                  text: 'POL:',
+                  text: 'Service:',
                   bold: true,
                   fontSize: 10,
                 },
                 {
                   text:
-                    this.croDetails?.POL == null
+                    this.croDetails?.SERVICE_NAME == null
                       ? '-'
-                      : this.croDetails?.POL == ''
+                      : this.croDetails?.SERVICE_NAME == ''
                       ? '-'
-                      : this.croDetails?.POL,
+                      : this.croDetails?.SERVICE_NAME,
                   fontSize: 10,
                 },
               ],
@@ -376,6 +360,24 @@ export class CroListComponent implements OnInit {
                   ),
                   fontSize: 10,
                 },
+                {
+                  text: 'POL:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text:
+                    this.croDetails?.POL == null
+                      ? '-'
+                      : this.croDetails?.POL == ''
+                      ? '-'
+                      : this.croDetails?.POL,
+                  fontSize: 10,
+                },
+              ],
+              [
+                {},
+                {},
                 {
                   text: 'POD:',
                   bold: true,
@@ -443,7 +445,7 @@ export class CroListComponent implements OnInit {
           margin: [0, 10, 0, 0],
           fontSize: 9,
           text:
-            'Remarks:\n\n1) PLS DO NOT PICK UP DAMAGE CONTAINER, ANY CLAIM FROM DESTINATION WILL BE COLLECTED FROM CONSIGNEE' +
+            'Remarks:\n\n1) PLEASE DO NOT PICK UP DAMAGE CONTAINER, ANY CLAIM FROM DESTINATION WILL BE COLLECTED FROM CONSIGNEE' +
             '\n2) All containers mis-declared for weight will be charged in line with the scale of rates for misdeclaration.' +
             'This charge will be applied with immediate effect. In order to avoid this charge, please advise all concerned to ensure declaration of correct weight at the time of booking.' +
             '\n3) LINE WILL NOT BE RESPONSIBLE FOR EARLY CLOSURE OF GATE / NOT OPENING OF GATE FOR A PARTICULAR TERMINAL / VESSEL' +
@@ -455,7 +457,8 @@ export class CroListComponent implements OnInit {
               new Date(this.croDetails?.CREATED_DATE)
             ) +
             ' ) NO DELIVERIES WILL BE ALLOWED FROM THE ' +
-            'STORAGE YARD BEYOND SEABIRD MARINE SERVICES PVT LTD CONTR TERMINAL:' +
+            'STORAGE YARD : ' +
+            this.croDetails?.EMPTY_CONT_PCKP +
             '\nPLEASE NOTE THAT YOU ARE NOT PERMITTED TO HONOUR THIS D.O. AFTER - ' +
             this._commonService.getIndianDate(
               new Date(this.croDetails?.CRO_VALIDITY_DATE)
