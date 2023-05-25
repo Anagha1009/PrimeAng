@@ -216,6 +216,8 @@ export class NewCroComponent implements OnInit {
     var cro = new CRO();
     cro.AGENT_CODE = this._commonService.getUserCode();
     cro.CRO_NO = CRO_NO;
+    cro.ORG_CODE = this._commonService.getUserOrgCode();
+    cro.PORT = this._commonService.getUserPort();
 
     if (this.email == '') {
       this.isemail = false;
@@ -225,6 +227,7 @@ export class NewCroComponent implements OnInit {
     this.isLoading = true;
     this._croService.getCRODetails(cro).subscribe((res: any) => {
       if (res.ResponseCode == 200) {
+        debugger;
         this.croDetails = res.Data;
         this.generatePDF();
       }
@@ -556,7 +559,7 @@ export class NewCroComponent implements OnInit {
         },
         {
           margin: [0, 10, 0, 0],
-          fontSize: 10,
+          fontSize: 9,
           text:
             'Remarks:\n\n1) PLEASE DO NOT PICK UP DAMAGE CONTAINER, ANY CLAIM FROM DESTINATION WILL BE COLLECTED FROM CONSIGNEE' +
             '\n2) All containers mis-declared for weight will be charged in line with the scale of rates for misdeclaration.' +
