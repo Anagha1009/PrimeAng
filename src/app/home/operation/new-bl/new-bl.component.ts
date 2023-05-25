@@ -1285,8 +1285,10 @@ export class NewBlComponent implements OnInit {
                   this._formBuilder.group({
                     CONTAINER_NO: [element.CONTAINER_NO],
                     CONTAINER_TYPE: [element.CONTAINER_TYPE],
-                    // CONTAINER_SIZE: [element.CONTAINER_SIZE],
                     SEAL_NO: [element.SEAL_NO?.toString()],
+                    PKG_COUNT: [element.PKG_COUNT],
+                    PKG_DESC: [element.PKG_DESC],
+                    NET_WEIGHT: [element.NET_WEIGHT],
                     AGENT_SEAL_NO: [element.AGENT_SEAL_NO?.toString()],
                     MARKS_NOS: [element.MARKS_NOS],
                     DESC_OF_GOODS: [element.DESC_OF_GOODS],
@@ -1302,10 +1304,11 @@ export class NewBlComponent implements OnInit {
                   this._formBuilder.group({
                     CONTAINER_NO: [element.CONTAINER_NO],
                     CONTAINER_TYPE: [element.CONTAINER_TYPE],
-                    // CONTAINER_SIZE: [element.CONTAINER_SIZE],
                     SEAL_NO: [element.SEAL_NO?.toString()],
+                    PKG_COUNT: [element.PKG_COUNT],
+                    PKG_DESC: [element.PKG_DESC],
+                    NET_WEIGHT: [element.NET_WEIGHT],
                     AGENT_SEAL_NO: [element.AGENT_SEAL_NO?.toString()],
-                    //MARKS_NOS: [element.MARKS_NOS],
                     MARKS_NOS: [''],
                     DESC_OF_GOODS: [element.DESC_OF_GOODS],
                     GROSS_WEIGHT: [element.GROSS_WEIGHT],
@@ -1330,10 +1333,8 @@ export class NewBlComponent implements OnInit {
                   this._formBuilder.group({
                     CONTAINER_NO: [element.CONTAINER_NO],
                     CONTAINER_TYPE: [element.CONTAINER_TYPE],
-                    // CONTAINER_SIZE: [element.CONTAINER_SIZE],
                     SEAL_NO: [element.SEAL_NO?.toString()],
                     AGENT_SEAL_NO: [element.AGENT_SEAL_NO?.toString()],
-                    // MARKS_NOS: [element.MARKS_NOS],
                     MARKS_NOS: [''],
                     DESC_OF_GOODS: [element.DESC_OF_GOODS],
                     GROSS_WEIGHT: [element.GROSS_WEIGHT],
@@ -1341,6 +1342,9 @@ export class NewBlComponent implements OnInit {
                     NO_OF_CONTPKG: [this.groupedList[this.i]],
                     KIND_OF_GOODS: [''],
                     MKS_NO: [''],
+                    PKG_COUNT: [element.PKG_COUNT],
+                    PKG_DESC: [element.PKG_DESC],
+                    NET_WEIGHT: [element.NET_WEIGHT],
                   })
                 );
               }
@@ -1459,6 +1463,7 @@ export class NewBlComponent implements OnInit {
     BL.AGENT_CODE = this._commonService.getUserCode();
     BL.BL_NO = BLNO;
     this._blService.getBLDetails(BL).subscribe((res: any) => {
+      debugger;
       this.blForm.patchValue(res.Data);
       var contList: any[] = res.Data.CONTAINER_LIST;
       const add = this.blForm.get('CONTAINER_LIST2') as FormArray;
