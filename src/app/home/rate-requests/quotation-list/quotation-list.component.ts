@@ -543,8 +543,7 @@ export class QuotationListComponent implements OnInit {
     this._commonService
       .getDropdownData(
         'SLOT_OPERATOR',
-        this.quotationDetails?.POL.split('(')[1].split(')')[0],
-        this.quotationDetails?.POD.split('(')[1].split(')')[0]
+        this.quotationDetails?.POL.split('(')[1].split(')')[0]
       )
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
