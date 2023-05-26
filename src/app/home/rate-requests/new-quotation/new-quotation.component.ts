@@ -773,6 +773,7 @@ export class NewQuotationComponent implements OnInit {
           this.slotDetailsForm
             .get('VESSEL_NAME')
             ?.setValue(this.voyageForm.get('VESSEL_NAME')?.value);
+          this.getSlotOperator(this.voyageForm.get('VOYAGE_NO')?.value);
 
           this.isVoyageAdded = true;
           this.closeBtn3.nativeElement.click();
@@ -1051,19 +1052,6 @@ export class NewQuotationComponent implements OnInit {
           this.finalDestList = res.Data;
         }
       });
-
-    this.slotoperatorList = [];
-    this._commonService
-      .getDropdownData(
-        'SLOT_OPERATOR',
-        this.quotationForm.get('POL').value,
-        event
-      )
-      .subscribe((res: any) => {
-        if (res.ResponseCode == 200) {
-          this.slotoperatorList = res.Data;
-        }
-      });
   }
 
   getServiceName1(event: any) {
@@ -1084,6 +1072,21 @@ export class NewQuotationComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.hasOwnProperty('Data')) {
           this.terminalList = res.Data;
+        }
+      });
+  }
+
+  getSlotOperator(event: any) {
+    this.slotoperatorList = [];
+    this._commonService
+      .getDropdownData(
+        'SLOT_OPERATOR',
+        this.quotationForm.get('POL').value,
+        event
+      )
+      .subscribe((res: any) => {
+        if (res.ResponseCode == 200) {
+          this.slotoperatorList = res.Data;
         }
       });
   }

@@ -74,7 +74,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <ng-select [ngClass]="{'invalid': submitted && f2.VOYAGE_NO.errors}"
+                                    <ng-select (change)="getSlotOperator($event)"
+                                        [ngClass]="{'invalid': submitted && f2.VOYAGE_NO.errors}"
                                         formControlName="VOYAGE_NO">
                                         <ng-option> <button data-bs-toggle="modal" href="#voyageModal"
                                                 class="form-btn rounded-pill btn-sm"><i class="fa fa-plus me-1"></i>

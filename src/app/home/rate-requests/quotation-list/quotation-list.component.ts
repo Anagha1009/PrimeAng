@@ -540,18 +540,22 @@ export class QuotationListComponent implements OnInit {
       })
     );
 
+    this.openBtn.nativeElement.click();
+  }
+
+  getSlotOperator(event: any) {
+    this.slotoperatorList = [];
     this._commonService
       .getDropdownData(
         'SLOT_OPERATOR',
-        this.quotationDetails?.POL.split('(')[1].split(')')[0]
+        this.quotationDetails?.POL.split('(')[1].split(')')[0],
+        event
       )
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
           this.slotoperatorList = res.Data;
         }
       });
-
-    this.openBtn.nativeElement.click();
   }
 
   bookNow() {

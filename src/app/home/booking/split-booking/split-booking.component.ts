@@ -155,12 +155,15 @@ export class SplitBookingComponent implements OnInit {
         this.portList = res.Data;
       }
     });
+  }
 
+  getSlotOperator(event: any) {
+    this.slotoperatorList = [];
     this._commonService
       .getDropdownData(
         'SLOT_OPERATOR',
         this.booking?.POL.split('(')[1].split(')')[0],
-        this.booking?.POD.split('(')[1].split(')')[0]
+        event
       )
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
