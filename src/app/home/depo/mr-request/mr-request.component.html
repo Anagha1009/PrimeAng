@@ -31,28 +31,27 @@
             </div>
             <div class="form-group">
                 <label class="label-header">{{'Header.tareWt'|translate}}</label>
-                <label class="label-subheader">2300 KGS</label>
+                <label class="label-subheader">-</label>
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-group">
                 <label class="label-header">{{'Header.sizeType'|translate}}</label>
-                <label
-                    class="label-subheader">{{containerDetails?.CONTAINER_SIZE}}/{{containerDetails?.CONTAINER_TYPE}}</label>
+                <label class="label-subheader">{{containerDetails?.CONTAINER_TYPE}}</label>
             </div>
             <div class="form-group">
                 <label class="label-header">{{'Header.payloadCapacity'|translate}}</label>
-                <label class="label-subheader">76567 KGS</label>
+                <label class="label-subheader">-</label>
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-group">
                 <label class="label-header">{{'Header.cscDetails'|translate}}</label>
-                <label class="label-subheader">F/BV/161/29</label>
+                <label class="label-subheader">-</label>
             </div>
             <div class="form-group">
                 <label class="label-header">{{'Header.grossWt'|translate}}</label>
-                <label class="label-subheader">2434 KGS</label>
+                <label class="label-subheader">-</label>
             </div>
         </div>
         <div class="col-md-2">
@@ -62,28 +61,28 @@
             </div>
             <div class="form-group">
                 <label class="label-header">{{'Header.currency'|translate}}</label>
-                <label class="label-subheader">INR/ India</label>
+                <label class="label-subheader">-</label>
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-group">
                 <label class="label-header">{{'Header.turninDate'|translate}}</label>
-                <label class="label-subheader">Sep 12 1956</label>
+                <label class="label-subheader">-</label>
             </div>
 
             <div class="form-group">
                 <label class="label-header">{{'Header.location'|translate}}</label>
-                <label class="label-subheader">Nhava Sheva</label>
+                <label class="label-subheader">-</label>
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-group">
                 <label class="label-header">{{'Header.inspection'|translate}}</label>
-                <label class="label-subheader">Sep 12 1956</label>
+                <label class="label-subheader">-</label>
             </div>
             <div class="form-group">
                 <label class="label-header">{{'Header.depotName'|translate}}</label>
-                <label class="label-subheader">ABC Depot</label>
+                <label class="label-subheader">{{depoName}}</label>
             </div>
         </div>
         <hr>
@@ -128,14 +127,13 @@
                         </div>
                     </td>
                     <td width="10%">
-                        <div class="col-md-12">
-                            <label class="form-label3">{{'Header.component'|translate}}</label>
-                            <select formControlName="COMPONENT" class="form-control3">
-                                <option value="" selected disabled>--Select--</option>
-                                <option *ngFor="let item of componentList" value="{{item.CODE}}">
+                        <div class="form-group">
+                            <ng-select formControlName="COMPONENT">
+                                <ng-option value="" selected disabled>--Select--</ng-option>
+                                <ng-option *ngFor="let item of componentList" value="{{item.CODE}}">
                                     {{item.CODE}}
-                                </option>
-                            </select>
+                                </ng-option>
+                            </ng-select>
                         </div>
                     </td>
                     <td width="10%">
@@ -163,9 +161,6 @@
                     <td width="10%">
                         <div class="row">
                             <div class="col-md-4 px-0">
-                                <!-- <label class="form-label3">L</label>
-
-                                <input formControlName="LENGTH" class="form-control3" type="text" /> -->
                                 <label class="form-label3">L</label>
                                 <select formControlName="LENGTH" class="form-control3">
                                     <option value=0 selected disabled>--Select--</option>

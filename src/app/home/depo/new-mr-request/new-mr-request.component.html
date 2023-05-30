@@ -1,0 +1,366 @@
+<div class="section-title">
+    <h2>New MnR Request</h2>
+</div>
+<div class="container">
+    <a routerLink="/home/depo/mr-request-list"><i class='bx bx-arrow-back'></i>Back to List</a>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label class="form-label2">Container No</label>
+                <input [ngClass]="{'invalid': submitted && containerNo == ''}" type="text" class="form-control2"
+                    [(ngModel)]="containerNo">
+                <small *ngIf="submitted && containerNo == ''" class="text-danger">Container No is required</small>
+            </div>
+        </div>
+        <div class="col-md-3 mt-4">
+            <button class="form-btn" (click)="getContainerDetails()">Get Container Details</button>
+        </div>
+    </div>
+    <div class="col-md-5 mx-auto" *ngIf="!isRecords">
+        <h5 class="text-center">Sorry! No records found !!</h5>
+        <img src="assets/img/doimg.jpg" class="img-fluid" alt="">
+    </div>
+
+    <div class="row mt-5" *ngIf="isRecords && submitted">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="label-header">{{'Header.containerNo'|translate}}</label>
+                <label class="label-subheader">{{containerDetails?.CONTAINER_NO}}</label>
+            </div>
+            <div class="form-group">
+                <label class="label-header">{{'Header.tareWt'|translate}}</label>
+                <label class="label-subheader">-</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="label-header">{{'Header.sizeType'|translate}}</label>
+                <label class="label-subheader">{{containerDetails?.CONTAINER_TYPE}}</label>
+            </div>
+            <div class="form-group">
+                <label class="label-header">{{'Header.payloadCapacity'|translate}}</label>
+                <label class="label-subheader">-</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="label-header">{{'Header.cscDetails'|translate}}</label>
+                <label class="label-subheader">-</label>
+            </div>
+            <div class="form-group">
+                <label class="label-header">{{'Header.grossWt'|translate}}</label>
+                <label class="label-subheader">-</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="label-header">{{'Header.manufacturingDate'|translate}}</label>
+                <label class="label-subheader">{{containerDetails?.MANUFACTURING_DATE == null ||
+                    containerDetails?.MANUFACTURING_DATE == '' ? '-' : containerDetails?.MANUFACTURING_DATE |
+                    date:'mediumDate'}}</label>
+            </div>
+            <div class="form-group">
+                <label class="label-header">{{'Header.currency'|translate}}</label>
+                <label class="label-subheader">-</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="label-header">{{'Header.turninDate'|translate}}</label>
+                <label class="label-subheader">-</label>
+            </div>
+
+            <div class="form-group">
+                <label class="label-header">{{'Header.location'|translate}}</label>
+                <label class="label-subheader">-</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
+                <label class="label-header">{{'Header.inspection'|translate}}</label>
+                <label class="label-subheader">-</label>
+            </div>
+            <div class="form-group">
+                <label class="label-header">{{'Header.depotName'|translate}}</label>
+                <label class="label-subheader">{{depoName}}</label>
+            </div>
+        </div>
+        <hr>
+    </div>
+
+    <div *ngIf="isRecords && submitted">
+        <div class="col-md-6 offset-md-6 text-end">
+            <button (click)="openMrModal()" class="form-btn">
+                <i class="fa fa-plus me-2"></i>{{'Button.addNew'|translate}}</button>
+            <a #openBtn href="#mrModal" data-bs-toggle="modal" class="d-none"></a>
+        </div>
+        <div class="table-responsive mt-3" *ngIf="f?.length > 0">
+            <table class="table" style="font-size: 12px;">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Location</th>
+                        <th>Component</th>
+                        <th>Damage</th>
+                        <th>Repair</th>
+                        <th>Measurement</th>
+                        <th>Unit</th>
+                        <th>Respons.</th>
+                        <th>Man Hr</th>
+                        <th>Labour</th>
+                        <th>Material</th>
+                        <th>Total</th>
+                        <th>Remarks</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of f;let j = index" [formGroup]="item">
+                        <td>
+                            {{j+1}}
+                        </td>
+                        <td>
+                            {{item.value.LOCATION}}
+                        </td>
+                        <td>
+                            {{item.value.COMPONENT}}
+                        </td>
+                        <td>
+                            {{item.value.DAMAGE}}
+                        </td>
+                        <td>
+                            {{item.value.REPAIR}}
+                        </td>
+                        <td>
+                            {{item.value.LENGTH}} | {{item.value.WIDTH}} | {{item.value.HEIGHT}}
+                        </td>
+                        <td>
+                            {{item.value.UNIT}}
+                        </td>
+                        <td>
+                            {{item.value.RESPONSIBILITY}}
+                        </td>
+                        <td>
+                            {{item.value.MAN_HOUR}}
+                        </td>
+                        <td>
+                            {{item.value.LABOUR}}
+                        </td>
+                        <td>
+                            {{item.value.MATERIAL}}
+                        </td>
+                        <td>
+                            {{item.value.TOTAL}}
+                        </td>
+                        <td>
+                            <textarea class="form-control3" formControlName="REMARKS" type="text"></textarea>
+                        </td>
+                        <td>
+                            <a class="pointer" (click)="removeItem(j)"><i style="font-size:18px"
+                                    class="fa fa-trash mt-3"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <h6 class="mt-1">{{ManHourSum()}}</h6>
+                    </td>
+                    <td>
+                        <h6 class="mt-1">{{LabourSum()}}</h6>
+                    </td>
+                    <td>
+                        <h6 class="mt-1">{{MaterialSum()}}</h6>
+                    </td>
+                    <td>
+                        <h6 class="mt-1">{{TotalSum()}}</h6>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-md-4 offset-md-8 text-end mt-3" *ngIf="f?.length > 0">
+            <h6>{{'Header.freshDamage'|translate}} :
+                <small class="text-danger">{{TotalFreshDamageSum()}}</small> <br>
+                {{'Header.wtDamage'|translate}} :
+                <small class="text-danger">{{TotalWTSum()}}</small> <br>
+            </h6>
+            <h6>{{'Header.tax'|translate}} :
+                <small class="text-danger">{{TaxTotal()}}</small><br>
+                {{'Header.total'|translate}} :
+                <small class="text-danger">{{FinalTotal()}}</small>
+            </h6>
+        </div>
+        <hr *ngIf="f?.length > 0">
+
+        <h5 class="mb-4 mt-5" *ngIf="f?.length > 0">{{'Header.fileUpload'|translate}}</h5>
+        <div class="row" *ngIf="f?.length > 0">
+            <div class="col-md-4">
+                <div class="formbold-mb-5 formbold-file-input">
+                    <input type="file" (change)="fileUpload($event)" accept="image/*" multiple="" name="file"
+                        id="file" />
+                    <label for="file">
+                        <div>
+                            <h3><i class="fa fa-file-pdf-o"></i></h3>
+                            <span class="formbold-drop-file">{{'Header.upload'|translate}}</span>
+                            <small>{{'Header.containerImages'|translate}}</small>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-2" *ngFor='let url of images'>
+                        <span class="bx bx-x-circle close" (click)="removeFile(url)"></span>
+                        <img [src]="url" height="100" width="100" class="me-2">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr *ngIf="f?.length > 0">
+        <div class="row mb-5" *ngIf="f?.length > 0">
+            <div class="col-md-2 offset-md-10 text-end">
+                <button (click)="submitRequest()" [disabled]="isLoading"
+                    class="form-btn w-100">{{'Button.save'|translate}} <span *ngIf="isLoading"
+                        class="fa fa-spinner fa-spin"></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mrModal" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="exampleModalLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="exampleModalLabel">MnR Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
+            </div>
+            <div class="modal-body">
+                <div class="form" [formGroup]="mrModalForm">
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input [ngClass]="{'invalid': submitted1 && f1.LOCATION.errors}"
+                                    formControlName="LOCATION" class="form-control" type="text" />
+                                <label class="form-label">{{'Header.Location'|translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <ng-select [ngClass]="{'invalid': submitted1 && f1.COMPONENT.errors}"
+                                    (change)="getRepairMaster($event)" formControlName="COMPONENT">
+                                    <ng-option value="" selected disabled>--Select--</ng-option>
+                                    <ng-option *ngFor="let item of componentList" value="{{item.CODE}}">
+                                        {{item.CODE}}
+                                    </ng-option>
+                                </ng-select>
+                                <label class="form-label-ddl">{{'Header.component'|translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <ng-select formControlName="DAMAGE"
+                                    [ngClass]="{'invalid': submitted1 && f1.DAMAGE.errors}">
+                                    <ng-option value="" selected disabled>--Select--</ng-option>
+                                    <ng-option *ngFor="let item of damageList" value="{{item.CODE}}">
+                                        {{item.CODE}}
+                                    </ng-option>
+                                </ng-select>
+                                <label class="form-label-ddl">{{'Header.damage'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <ng-select [ngClass]="{'invalid': submitted1 && f1.REPAIR.errors}"
+                                    (change)="GetMeasurementList('',$event)" formControlName="REPAIR">
+                                    <ng-option value="" selected disabled>--Select--</ng-option>
+                                    <ng-option *ngFor="let item of repairList" value="{{item.CODE}}">
+                                        {{item.CODE}}
+                                    </ng-option>
+                                </ng-select>
+                                <label class="form-label-ddl">{{'Header.repair'|translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <ng-select formControlName="UNIT" [ngClass]="{'invalid': submitted1 && f1.UNIT.errors}">
+                                    <ng-option value="" selected disabled>--Select--</ng-option>
+                                    <ng-option *ngFor="let item of quantityList" value="{{item.CODE}}">
+                                        {{item.CODE}}
+                                    </ng-option>
+                                </ng-select>
+                                <label class="form-label-ddl">{{'Header.unit'|translate}}</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <ng-select formControlName="RESPONSIBILITY"
+                                    [ngClass]="{'invalid': submitted1 && f1.RESPONSIBILITY.errors}">
+                                    <ng-option value="" selected disabled>--Select--</ng-option>
+                                    <ng-option value="Shipper">Shipper</ng-option>
+                                    <ng-option value="Consignee">Consignee</ng-option>
+                                    <ng-option value="Third Party">Third Party</ng-option>
+                                    <ng-option value="Owner">Owner</ng-option>
+                                </ng-select>
+                                <label class="form-label-ddl">{{'Header.responsibility'|translate}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <ng-select formControlName="LENGTH"
+                                    [ngClass]="{'invalid': submitted1 && f1.LENGTH.errors}">
+                                    <ng-option value="" selected disabled>--Select--</ng-option>
+                                    <ng-option *ngFor="let item of lengthList" value="{{item.CODE}}">
+                                        {{item.CODE}}
+                                    </ng-option>
+                                </ng-select>
+                                <label class="form-label-ddl">Length (cm)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <ng-select formControlName="WIDTH"
+                                    [ngClass]="{'invalid': submitted1 && f1.WIDTH.errors}">
+                                    <ng-option value="" selected disabled>--Select--</ng-option>
+                                    <ng-option *ngFor="let item of widthList" value="{{item.CODE}}">
+                                        {{item.CODE}}
+                                    </ng-option>
+                                </ng-select>
+                                <label class="form-label-ddl">Width (cm)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <ng-select formControlName="HEIGHT"
+                                    [ngClass]="{'invalid': submitted1 && f1.HEIGHT.errors}">
+                                    <ng-option value="" selected disabled>--Select--</ng-option>
+                                    <ng-option *ngFor="let item of heightList" value="{{item.CODE}}">
+                                        {{item.CODE}}
+                                    </ng-option>
+                                </ng-select>
+                                <label class="form-label-ddl">Height (cm)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" (click)="addRequest()" class="form-btn-primary">Add MnR Request</button>
+            </div>
+        </div>
+    </div>
+</div>

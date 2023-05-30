@@ -46,7 +46,9 @@ export class DepoService {
         '&HEIGHT=' +
         Mr.HEIGHT +
         '&QUANTITY=' +
-        Mr.QUANTITY,
+        Mr.QUANTITY +
+        '&DEPO_CODE=' +
+        Mr.DEPO_CODE,
       this.httpOptions
     );
   }

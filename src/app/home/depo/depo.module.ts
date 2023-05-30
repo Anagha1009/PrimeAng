@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TranslateModule } from '@ngx-translate/core';
 import { DataTablesModule } from 'angular-datatables';
 import { InventoryListComponent } from './inventory-list/inventory-list.component';
+import { NewMrRequestComponent } from './new-mr-request/new-mr-request.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { InventoryListComponent } from './inventory-list/inventory-list.componen
     MrRequestComponent,
     MrRequestListComponent,
     InventoryListComponent,
+    NewMrRequestComponent,
   ],
   imports: [
     CommonModule,

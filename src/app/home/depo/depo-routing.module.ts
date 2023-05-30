@@ -9,6 +9,7 @@ import { DetentionWaverRequestComponent } from './detention-waver-request/detent
 import { InventoryListComponent } from './inventory-list/inventory-list.component';
 import { MrRequestListComponent } from './mr-request-list/mr-request-list.component';
 import { MrRequestComponent } from './mr-request/mr-request.component';
+import { NewMrRequestComponent } from './new-mr-request/new-mr-request.component';
 
 const routes: Routes = [
   {
@@ -36,8 +37,8 @@ const routes: Routes = [
     data: { roles: [Role.Agent, Role.Depot] },
   },
   {
-    path: 'mr-request',
-    component: MrRequestComponent,
+    path: 'new-mr-request',
+    component: NewMrRequestComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Depot] },
   },

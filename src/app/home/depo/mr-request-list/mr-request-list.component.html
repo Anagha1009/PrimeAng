@@ -4,7 +4,8 @@
 <div class="container">
     <form class="mx-5" [formGroup]="mrForm">
         <div class="col-md-6 offset-md-6 text-end">
-            <button class="form-btn-primary" routerLink="/home/depo/mr-request"><i class="fa fa-plus me-2"></i>New M&R
+            <button class="form-btn-primary" routerLink="/home/depo/new-mr-request"><i class="fa fa-plus me-2"></i>New
+                M&R
                 Request</button>
         </div>
         <div class="row">
@@ -43,7 +44,7 @@
         </div>
     </form>
     <div class="mt-3">
-        <table class="table table-responsive-xl">
+        <table class="ratetable" id="data-table-config">
             <thead>
                 <tr>
                     <th>No</th>

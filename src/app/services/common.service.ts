@@ -22,7 +22,7 @@ export class CommonService {
     key: string,
     port: string = '',
     value: string = '',
-    value1: number = 0,
+    value1: string = '',
     value2: string = ''
   ) {
     return this._http.get<any>(

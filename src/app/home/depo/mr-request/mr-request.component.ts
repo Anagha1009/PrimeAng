@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { CoreTranslationService } from 'src/app/@core/services/translation.service';
 import { CONTAINER } from 'src/app/models/container';
@@ -33,6 +33,7 @@ export class MrRequestComponent implements OnInit {
   widthList: any[] = [];
   heightList: any[] = [];
   quantityList: any[] = [];
+  depoName: string = '';
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -45,7 +46,9 @@ export class MrRequestComponent implements OnInit {
     this._coreTranslationService.translate(english, hindi, arabic);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.depoName = this._commonService.getUserName();
+  }
 
   getAllDetails() {
     this.mrForm = this._formBuilder.group({
@@ -78,7 +81,6 @@ export class MrRequestComponent implements OnInit {
 
     this.GetComponentMasterList();
     this.GetDamageMasterList();
-    this.GetRepairMasterList();
   }
 
   getContainerDetails() {
@@ -104,14 +106,29 @@ export class MrRequestComponent implements OnInit {
         });
     }
   }
+
+  getRepairMaster(componentvalue: any) {
+    this._commonService
+      .getDropdownData('REPAIR', '', componentvalue)
+      .subscribe((res: any) => {
+        if (res.ResponseCode == 200) {
+          this.repairList = res.Data;
+        }
+      });
+  }
+
   getRepairList(i: number) {
+    var x = this.repairList;
     const add = this.mrForm.get('MR_LIST') as FormArray;
     var component = add.at(i).get('COMPONENT').value;
     if (component) {
+      this.getRepairMaster(component);
+      var x = this.repairList;
       return this.repairList.filter((x) => x.CODE_DESC == component);
     }
     return [];
   }
+
   Sum(index: number) {
     const add = this.mrForm.get('MR_LIST') as FormArray;
     var labour = add.at(index)?.get('LABOUR')?.value;
@@ -321,41 +338,33 @@ export class MrRequestComponent implements OnInit {
     });
   }
 
-  GetRepairMasterList() {
-    this._commonService.getDropdownData('REPAIR').subscribe((res: any) => {
-      if (res.ResponseCode == 200) {
-        this.repairList = res.Data;
-      }
-    });
-  }
-
   GetLengthMasterList(i: number) {
     const add = this.mrForm.get('MR_LIST') as FormArray;
     var component = add.at(i).get('COMPONENT').value;
     var repair = add.at(i).get('REPAIR').value;
     this._commonService
-      .getDropdownData('MNR_LENGTH', '', component, 0, repair)
+      .getDropdownData('MNR_LENGTH', '', component, '', repair)
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
           this.lengthList = res.Data;
         }
       });
     this._commonService
-      .getDropdownData('MNR_WIDTH', '', component, 0, repair)
+      .getDropdownData('MNR_WIDTH', '', component, '', repair)
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
           this.widthList = res.Data;
         }
       });
     this._commonService
-      .getDropdownData('MNR_HEIGHT', '', component, 0, repair)
+      .getDropdownData('MNR_HEIGHT', '', component, '', repair)
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
           this.heightList = res.Data;
         }
       });
     this._commonService
-      .getDropdownData('MNR_QUANTITY', '', component, 0, repair)
+      .getDropdownData('MNR_QUANTITY', '', component, '', repair)
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
           this.quantityList = res.Data;

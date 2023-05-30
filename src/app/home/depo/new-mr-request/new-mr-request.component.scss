@@ -1,0 +1,23 @@
+.input-group:focus-within .form-control,
+.input-group:focus-within .input-group-text {
+  /* border-color: #696cff; */
+  border-color: lightgray;
+}
+
+.input-group {
+  border: 1px solid #c7c7c7;
+  border-radius: 0.375rem;
+  border-bottom: none;
+}
+
+thead > tr {
+  background-color: #467b97;
+  border-bottom: 4px solid #eceffa;
+}
+
+thead th {
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}

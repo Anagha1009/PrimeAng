@@ -38,12 +38,15 @@ export class MrRequestListComponent implements OnInit {
   }
 
   getMRList() {
+    this._commonService.destroyDT();
     this.mr.OPERATION = 'GET_MNR_LIST';
     this.mr.DEPO_CODE = this._commonService.getUserCode();
     this._depoService.getMRList(this.mr).subscribe((res: any) => {
       if (res.ResponseCode == 200) {
         this.mrList = res.Data;
       }
+
+      this._commonService.getDT();
     });
   }
 
