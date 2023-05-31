@@ -19,6 +19,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Convert } from 'igniteui-angular-core';
+import { ContainerService } from 'src/app/services/container.service';
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -36,7 +37,6 @@ export class NewErComponent implements OnInit {
   croNo: string;
   tabs: string = '1';
   currentLocation: any = '';
-  roleCode: any = '';
   isVessel: boolean = false;
   status: any = 'Available';
   erForm: FormGroup;
@@ -52,6 +52,7 @@ export class NewErComponent implements OnInit {
   currencyList: any[] = [];
   vesselList: any[] = [];
   voyageList: any[] = [];
+  slotoperatorList: any[] = [];
   vesselRateList: any[] = [];
   fixedChargeCode: any[] = [
     'Lift On',
@@ -67,6 +68,10 @@ export class NewErComponent implements OnInit {
   agentCode: any = '';
   depoCode: any = '';
   excelFile: File;
+  depolist: any[] = [];
+  portlist: any[] = [];
+  quotationDetails: any;
+
   @ViewChild('openBtn') openBtn: ElementRef;
   @ViewChild('closeBtn') closeBtn: ElementRef;
   @ViewChild('openBtn1') openBtn1: ElementRef;
@@ -76,6 +81,8 @@ export class NewErComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _erService: ErService,
     private _commonService: CommonService,
+    private _cm: CmService,
+
     private _cmService: CmService,
     private _croService: CroService,
     private http: HttpClient,
@@ -88,7 +95,6 @@ export class NewErComponent implements OnInit {
   ngOnInit(): void {
     this.currentLocation = 'Dammam';
 
-    this.getDropdownData();
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'ID',
@@ -109,21 +115,21 @@ export class NewErComponent implements OnInit {
     };
 
     this.erForm = this._formBuilder.group({
-      REPO_NO: ['', Validators.required],
+      REPO_NO: [''],
       LOAD_DEPOT: ['', Validators.required],
       DISCHARGE_DEPOT: ['', Validators.required],
-      LOAD_PORT: [''],
-      DISCHARGE_PORT: [''],
-      VESSEL_NAME: [''],
-      VOYAGE_NO: [''],
+      LOAD_PORT: ['', Validators.required],
+      DISCHARGE_PORT: ['', Validators.required],
+      VESSEL_NAME: ['', Validators.required],
+      VOYAGE_NO: ['', Validators.required],
       MOVEMENT_DATE: ['', Validators.required],
       NO_OF_CONTAINER: [''],
       LIFT_ON_CHARGE: [0],
       LIFT_OFF_CHARGE: [0],
       CURRENCY: [''],
-      MODE_OF_TRANSPORT: ['', Validators.required],
+      MODE_OF_TRANSPORT: [''],
       REASON: [''],
-      REMARKS: ['', Validators.required],
+      REMARKS: [''],
       STATUS: [''],
       AGENT_CODE: [''],
       AGENT_NAME: [''],
@@ -147,9 +153,47 @@ export class NewErComponent implements OnInit {
       AGENT_CODE: [''],
       CREATED_BY: [''],
     });
-    this.getCurrent();
+
     this.slotAllocation();
     this.loadContent = true;
+    this.dropdown();
+    this.addRates();
+  }
+
+  dropdown() {
+    this._commonService.getDropdownData('DEPO').subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this.depolist = res.Data;
+      }
+    });
+    this._commonService.getDropdownData('CURRENCY').subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this.currencyList = res.Data;
+      }
+    });
+    this._commonService.getDropdownData('VESSEL_NAME').subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this.vesselList = res.Data;
+      }
+    });
+    this._commonService.getDropdownData('PORT').subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this.portlist = res.Data;
+      }
+    });
+  }
+
+  getSlotOperator(POL: any, Voyage: any) {
+    POL = POL == '' ? this.erForm.get('LOAD_PORT').value : POL;
+    Voyage = Voyage == '' ? this.erForm.get('VOYAGE_NO').value : Voyage;
+    this.slotoperatorList = [];
+    this._commonService
+      .getDropdownData('SLOT_OPERATOR', POL, Voyage)
+      .subscribe((res: any) => {
+        if (res.ResponseCode == 200) {
+          this.slotoperatorList = res.Data;
+        }
+      });
   }
 
   get f() {
@@ -197,7 +241,7 @@ export class NewErComponent implements OnInit {
         CONTAINER_TYPE: [''],
         CHARGE_CODE: ['', Validators.required],
         CURRENCY: ['USD', Validators.required],
-        STANDARD_RATE: ['100', Validators.required],
+        STANDARD_RATE: ['', Validators.required],
         RATE_REQUESTED: [''],
         PAYMENT_TERM: [''],
         TRANSPORT_TYPE: [''],
@@ -214,139 +258,7 @@ export class NewErComponent implements OnInit {
     slotDetails.push(
       this._formBuilder.group({
         SLOT_OPERATOR: ['', Validators.required],
-        NO_OF_SLOTS: [0, Validators.required],
-      })
-    );
-  }
-  getCurrent() {
-    this.roleCode = this._commonService.getUserCode();
-    var rateList = this.erForm.get('CONTAINER_RATES') as FormArray;
-    rateList.clear();
-    //this.fixedChargeCode=["Lift On","Truck In To Terminal","Stevedoring-POL","Stevedoring-POD","Truck In To Depo","Lift Off"];
-    // this.vesselRateList=[
-    //   {
-    //     ID:1,
-    //     CHARGE_CODE: "Lift On",
-    //     CURRENCY: "USD",
-    //     STANDARD_RATE: "100",
-
-    //   },
-    //   {
-    //     ID:2,
-    //     CHARGE_CODE: "Truck In To Terminal",
-    //     CURRENCY: "USD",
-    //     STANDARD_RATE: "100",
-
-    //   },
-    //   {
-    //     CHARGE_CODE: "Stevedoring-POL",
-    //     CURRENCY: "USD",
-    //     STANDARD_RATE: "100",
-
-    //   },
-    //   {
-    //     ID:3,
-    //     CHARGE_CODE: "Stevedoring-POD",
-    //     CURRENCY: "USD",
-    //     STANDARD_RATE: "100",
-
-    //   },
-    //   {
-    //     ID:4,
-    //     CHARGE_CODE: "Truck In To Depo",
-    //     CURRENCY: "USD",
-    //     STANDARD_RATE: "100",
-    //   },
-    //   {
-    //     ID:5,
-    //     CHARGE_CODE: "Lift Off",
-    //     CURRENCY: "USD",
-    //     STANDARD_RATE: "100",
-
-    //   }
-    // ];
-
-    // this.vesselList.forEach((element)=>{
-    //   rateList.push(
-    //     this._formBuilder.group({
-    //           CHARGE_CODE: [element.CHARGE_CODE],
-    //           CURRENCY: [element.CURRENCY],
-    //           STANDARD_RATE: [element.STANDARD_RATE],
-    //         })
-    //   );
-    // });
-
-    rateList.push(
-      this._formBuilder.group({
-        CONTAINER_TYPE: [''],
-        CHARGE_CODE: ['Lift On', Validators.required],
-        CURRENCY: ['USD', Validators.required],
-        STANDARD_RATE: ['100', Validators.required],
-        RATE_REQUESTED: [''],
-        PAYMENT_TERM: [''],
-        TRANSPORT_TYPE: [''],
-        REMARKS: ['NULL'],
-      })
-    );
-    rateList.push(
-      this._formBuilder.group({
-        CONTAINER_TYPE: [''],
-        CHARGE_CODE: ['Truck In To Terminal', Validators.required],
-        CURRENCY: ['USD', Validators.required],
-        STANDARD_RATE: ['100', Validators.required],
-        RATE_REQUESTED: [''],
-        PAYMENT_TERM: [''],
-        TRANSPORT_TYPE: [''],
-        REMARKS: ['NULL'],
-      })
-    );
-    rateList.push(
-      this._formBuilder.group({
-        CONTAINER_TYPE: [''],
-        CHARGE_CODE: ['Stevedoring-POL', Validators.required],
-        CURRENCY: ['USD', Validators.required],
-        STANDARD_RATE: ['100', Validators.required],
-        RATE_REQUESTED: [''],
-        PAYMENT_TERM: [''],
-        TRANSPORT_TYPE: [''],
-        REMARKS: ['NULL'],
-      })
-    );
-    rateList.push(
-      this._formBuilder.group({
-        CONTAINER_TYPE: [''],
-        CHARGE_CODE: ['Stevedoring-POD', Validators.required],
-        CURRENCY: ['USD', Validators.required],
-        STANDARD_RATE: ['100', Validators.required],
-        RATE_REQUESTED: [''],
-        PAYMENT_TERM: [''],
-        TRANSPORT_TYPE: [''],
-        REMARKS: ['NULL'],
-      })
-    );
-
-    rateList.push(
-      this._formBuilder.group({
-        CONTAINER_TYPE: [''],
-        CHARGE_CODE: ['Truck In To Depo', Validators.required],
-        CURRENCY: ['USD', Validators.required],
-        STANDARD_RATE: ['100', Validators.required],
-        RATE_REQUESTED: [''],
-        PAYMENT_TERM: [''],
-        TRANSPORT_TYPE: [''],
-        REMARKS: ['NULL'],
-      })
-    );
-    rateList.push(
-      this._formBuilder.group({
-        CONTAINER_TYPE: [''],
-        CHARGE_CODE: ['Lift Off', Validators.required],
-        CURRENCY: ['USD', Validators.required],
-        STANDARD_RATE: ['100', Validators.required],
-        RATE_REQUESTED: [''],
-        PAYMENT_TERM: [''],
-        TRANSPORT_TYPE: [''],
-        REMARKS: ['NULL'],
+        NO_OF_SLOTS: ['', Validators.required],
       })
     );
   }
@@ -365,36 +277,11 @@ export class NewErComponent implements OnInit {
   getAvailableContainers(event: any) {
     this.erForm.get('CONTAINER_LIST')?.setValue('');
     this.containerDropdownList = [];
-    this._cmService.getCMAvailable(this.status, event).subscribe((res: any) => {
+    this._cmService.getAllCMAvailable(event).subscribe((res: any) => {
       if (res.ResponseCode == 200) {
         this.containerDropdownList = res.Data;
       }
-      if (res.ResponseCode == 500) {
-        this.containerDropdownList = [];
-      }
     });
-  }
-  getDropdownData() {
-    //this.containerDropdownList=[];
-    this._commonService.getDropdownData('VESSEL_NAME').subscribe((res: any) => {
-      if (res.ResponseCode == 200) {
-        this.vesselList = res.Data;
-      }
-    });
-    this._commonService.getDropdownData('CURRENCY').subscribe((res: any) => {
-      if (res.hasOwnProperty('Data')) {
-        this.currencyList = res.Data;
-      }
-    });
-    // this._cmService.getCMAvailable(this.status,this.currentLocation).subscribe((res: any) => {
-    //   if(res.ResponseCode==200){
-    //     this.containerDropdownList=res.Data;
-
-    //   }
-    //   if(res.ResponseCode==500){
-    //     this.containerDropdownList=[];
-    //   }
-    // });
   }
 
   cancelER() {
@@ -426,17 +313,14 @@ export class NewErComponent implements OnInit {
   saveER() {
     this.isVessel = false;
     this.submitted = true;
-    if (this.roleCode == '1') {
-      this.erForm
-        .get('AGENT_NAME')
-        ?.setValue(this._commonService.getUserName());
-      this.erForm
-        .get('AGENT_CODE')
-        ?.setValue(this._commonService.getUserCode());
+
+    debugger;
+    if (this.erForm.invalid) {
+      return;
     }
-    if (this.roleCode == '3') {
-      this.erForm.get('DEPO_CODE')?.setValue(this._commonService.getUserCode());
-    }
+
+    this.erForm.get('AGENT_NAME')?.setValue(this._commonService.getUserName());
+    this.erForm.get('AGENT_CODE')?.setValue(this._commonService.getUserCode());
     if (this.tabs == '1') {
       this.erForm.get('MODE_OF_TRANSPORT')?.setValue('Truck');
     } else if (this.tabs == '2') {
@@ -444,10 +328,11 @@ export class NewErComponent implements OnInit {
     } else if (this.tabs == '3') {
       this.erForm.get('MODE_OF_TRANSPORT')?.setValue('Vessel');
       this.isVessel = true;
-      //this.submittedSlot=true;
     }
 
-    this.erForm.get('REPO_NO')?.setValue(this.getRandomNumber('RP'));
+    this.erForm
+      .get('REPO_NO')
+      ?.setValue(this._commonService.getRandomNumber('ER'));
     this.erForm.get('CONTAINER_LIST')?.setValue(this.selectedItems);
     this.erForm.get('NO_OF_CONTAINER')?.setValue(this.selectedItems?.length);
     this.erForm.get('STATUS')?.setValue(1);
@@ -457,14 +342,15 @@ export class NewErComponent implements OnInit {
       .postERDetails(JSON.stringify(this.erForm.value), this.isVessel)
       .subscribe((res: any) => {
         if (res.responseCode == 200) {
-          alert(
+          this._commonService.successMsg(
             'Your Request has successfully been placed! Your Repo No. is' +
               this.erForm.get('REPO_NO')?.value
           );
-          this._router.navigateByUrl('/home/booking-list');
+          this._router.navigateByUrl('/home/booking/er-list');
         }
       });
   }
+
   SaveCRO() {
     this.submitted1 = true;
     if (this.erCROForm.invalid) {
@@ -1031,10 +917,5 @@ export class NewErComponent implements OnInit {
   getCRORandomNumber() {
     var num = Math.floor(Math.random() * 1e16).toString();
     return 'CRO' + num;
-  }
-
-  getRandomNumber(repo: string) {
-    var num = Math.floor(Math.random() * 1e16).toString();
-    return repo + '-' + num;
   }
 }
