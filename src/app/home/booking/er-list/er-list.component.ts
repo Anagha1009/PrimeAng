@@ -32,8 +32,6 @@ export class ErListComponent implements OnInit {
   fileData: any;
   er = new ER();
   croNo: string;
-  agentCode: any = '';
-  depoCode: any = '';
   erList: any[] = [];
   erDetails: any;
   erContDetails: any[] = [];
@@ -79,13 +77,8 @@ export class ErListComponent implements OnInit {
   getERList() {
     this.previewList = false;
     this.previewNoData = false;
-    if (this._commonService.getUser().roleCode == '1') {
-      this.agentCode = this._commonService.getUserCode();
-    }
-    if (this._commonService.getUser().roleCode == '3') {
-      this.depoCode = this._commonService.getUserCode();
-    }
-    this._erService.getERList(this.agentCode, this.depoCode).subscribe(
+
+    this._erService.getERList(this._commonService.getUserCode(), '').subscribe(
       (res: any) => {
         this.erList = [];
         this.isScroll = false;
@@ -136,11 +129,7 @@ export class ErListComponent implements OnInit {
       ?.setValue(this._commonService.getUserName());
 
     this._erService
-      .getERDetails(
-        this.erCROForm.get('REPO_NO')?.value,
-        this.agentCode,
-        this.depoCode
-      )
+      .getERDetails(this.erCROForm.get('REPO_NO')?.value, '', '')
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
           this.erDetails = res.Data;
@@ -233,49 +222,26 @@ export class ErListComponent implements OnInit {
   }
 
   //generateCROpdf
-  getERCRODetails(CRO_NO: string) {
+  getERCRODetails(ERNO: any, CRO_NO: string) {
     this.isLoading = true;
-    this._erService
-      .getERDetails(
-        this.erCROForm.get('REPO_NO')?.value,
-        this.agentCode,
-        this.depoCode
-      )
-      .subscribe((res: any) => {
-        if (res.ResponseCode == 200) {
-          this.erDetails = res.Data;
-          this._erService
-            .getERContainerDetails(
-              this.erCROForm.get('REPO_NO')?.value,
-              this.agentCode,
-              this.depoCode
-            )
-            .subscribe((res: any) => {
-              if (res.ResponseCode == 200) {
-                this.erContDetails = res.Data;
-                this.generatePDF(
-                  CRO_NO,
-                  this.erCROForm.get('CRO_VALIDITY_DATE')?.value
-                );
-              }
-              if (res.ResponseCode == 500) {
-                //this.previewNoData=true;
-              }
-            });
-        }
-        if (res.ResponseCode == 500) {
-          //this.previewNoData=true;
-        }
-      });
+    this._erService.getERDetails(ERNO, '', '').subscribe((res: any) => {
+      debugger;
+      if (res.ResponseCode == 200) {
+        this.erDetails = res.Data;
+        this._erService
+          .getERContainerDetails(ERNO, '', '')
+          .subscribe((res1: any) => {
+            debugger;
+            if (res.ResponseCode == 200) {
+              this.erContDetails = res1.Data;
+              this.generatePDF(CRO_NO, this.erDetails.CRO_VALIDITY_DATE);
+            }
+          });
+      }
+    });
   }
+
   async generatePDF(CRO_NO: string, CRO_VALIDITY_DATE: string) {
-    var tempArr = [];
-
-    // tempArr.push({
-    //   TYPE: this.croDetails?.ContainerList[0].CONTAINER_TYPE,
-    //   SIZE: this.croDetails?.ContainerList[0].CONTAINER_SIZE,
-    // });
-
     if (this.erDetails?.MODE_OF_TRANSPORT == 'Vessel') {
       let docDefinition = {
         header: {
@@ -495,7 +461,7 @@ export class ErListComponent implements OnInit {
       const pdfDocGenerator = pdfMake.createPdf(docDefinition);
       pdfDocGenerator.getBlob((blob: any) => {
         this.http
-          .get('assets/img/SI.xlsx', {
+          .get('assets/img/Shipping Instructions.xlsx', {
             responseType: 'blob',
           })
           .subscribe((data: any) => {

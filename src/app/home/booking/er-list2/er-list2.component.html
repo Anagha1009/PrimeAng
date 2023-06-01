@@ -1,0 +1,88 @@
+<div class="section-title">
+    <h2>{{'Header.title'|translate}}</h2>
+</div>
+<div class="container">
+    <form class="mx-5" [formGroup]="filterForm">
+        <div class="col-md-6 offset-md-6 text-end">
+            <button class="form-btn-primary" routerLink="/home/booking/new-er"><i
+                    class="fa fa-plus me-1"></i>{{'Header.NewEmptyRepo'|translate}}</button>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label2">{{'Header.RepoNo'|translate}}</label>
+                    <input formControlName="REPO_NO" type="text" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label2">{{'Header.FromDate'|translate}}</label>
+                    <input formControlName="FROM_DATE" (change)="filterForm.get('TO_DATE')?.setValue('')"
+                        onkeypress="return false" type="date" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label2">{{'Header.ToDate'|translate}}</label>
+                    <input formControlName="TO_DATE" [min]="filterForm.get('FROM_DATE')?.value"
+                        onkeypress="return false" type="date" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-3 mt-4">
+                <button class="form-btn me-2" (click)="Search()">{{'Button.Search'|translate}}</button>
+                <button class="form-btn-light" (click)="Clear()">{{'Button.Clear'|translate}}</button>
+            </div>
+        </div>
+    </form>
+    <section class="services" *ngIf="erList.length > 0">
+        <div [class]="isScroll ? 'scrollbar' : ''" id="style-3">
+            <div [class]="isScroll ? 'force-overflow' : ''">
+                <div class="icon-box icon-box-cyan text-start" *ngFor="let item of erList; let i = index">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h4 class="title"><a href="javascript:void(0)">{{item.REPO_NO}} </a>
+                                <small *ngIf="item.MODE_OF_TRANSPORT=='Truck'"><img height="20" width="20"
+                                        src="assets/img/delivery.png"></small>
+                                <small *ngIf="item.MODE_OF_TRANSPORT=='Rail'"><img height="20" width="20"
+                                        src="assets/img/train.png"></small>
+                                <small *ngIf="item.MODE_OF_TRANSPORT=='Vessel'"><img height="20" width="20"
+                                        src="assets/img/cruise.png"></small>
+                            </h4>
+                            <p class="description" *ngIf="item.MODE_OF_TRANSPORT!='Vessel'"><img
+                                    src="assets/img/warehouse.png" height="13px" width="13px"> {{item.LOAD_DEPOT}}
+                                <i class='bx bxs-right-arrow-circle mx-2'></i> <img src="assets/img/warehouse.png"
+                                    height="13px" width="13px">
+                                {{item.DISCHARGE_DEPOT}}
+                            </p>
+
+                            <p class="description" *ngIf="item.MODE_OF_TRANSPORT=='Vessel'"><img
+                                    src="assets/img/warehouse.png" height="13px" width="13px"> {{item.LOAD_DEPOT}}
+                                <i class='bx bxs-right-arrow-circle mx-2'></i> <span class="bx bxs-ship me-2">
+                                </span>{{item.LOAD_PORT}}
+                                <i class='bx bxs-right-arrow-circle mx-2'></i> <span class="bx bxs-ship me-2">
+                                </span>{{item.DISCHARGE_PORT}}
+                                <i class='bx bxs-right-arrow-circle mx-2'></i> <img src="assets/img/warehouse.png"
+                                    height="13px" width="13px"> {{item.DISCHARGE_DEPOT}}
+                            </p>
+                        </div>
+                        <div class="col-md-2 text-end" *ngIf="!item.CRO_NO">
+                            <button (click)="openCROModal(item)" class="form-btn btn-sm rounded-pill">CREATE
+                                CRO</button>
+                            <button class="form-btn d-none" #openBtn data-bs-toggle="modal" href="#croModal">CREATE
+                                CRO</button>
+
+                        </div>
+                        <div class="col-md-2 text-end" *ngIf="item.CRO_NO">
+                            <button (click)="getERCRODetails(item.REPO_NO)" class="form-btn btn-sm rounded-pill">View
+                                PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="col-md-5 mx-auto" *ngIf="erList.length == 0">
+        <h5 class="text-center">Sorry! No records found !!</h5>
+        <img src="assets/img/doimg.jpg" class="img-fluid" alt="">
+    </div>
+</div>

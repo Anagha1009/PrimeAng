@@ -5,6 +5,7 @@ import { Role } from 'src/app/models/login';
 import { BookingListComponent } from './booking-list/booking-list.component';
 import { ErDetailsComponent } from './er-details/er-details.component';
 import { ErListComponent } from './er-list/er-list.component';
+import { ErList2Component } from './er-list2/er-list2.component';
 import { NewErComponent } from './new-er/new-er.component';
 import { SplitBookingComponent } from './split-booking/split-booking.component';
 const routes: Routes = [
@@ -33,16 +34,21 @@ const routes: Routes = [
     data: { roles: [Role.Agent] },
   },
   {
+    path: 'er-list2',
+    component: ErList2Component,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Agent] },
+  },
+  {
     path: 'er-details',
     component: ErDetailsComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Agent] },
   },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class BookingRoutingModule { }
+export class BookingRoutingModule {}

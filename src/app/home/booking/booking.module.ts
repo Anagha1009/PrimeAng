@@ -13,13 +13,15 @@ import { ErDetailsComponent } from './er-details/er-details.component';
 import { ErListComponent } from './er-list/er-list.component';
 import { NewErComponent } from './new-er/new-er.component';
 import { SplitBookingComponent } from './split-booking/split-booking.component';
+import { ErList2Component } from './er-list2/er-list2.component';
 @NgModule({
   declarations: [
     BookingListComponent,
     ErDetailsComponent,
     ErListComponent,
     NewErComponent,
-    SplitBookingComponent
+    SplitBookingComponent,
+    ErList2Component
   ],
   imports: [
     CommonModule,
