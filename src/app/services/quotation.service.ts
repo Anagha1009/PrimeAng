@@ -209,13 +209,22 @@ export class QuotationService {
     );
   }
 
-  insertDestinationAgent(dAgent: string, srrno: string) {
+  insertDestinationAgent(
+    dAgent: string,
+    srrno: string,
+    polfreedays: number,
+    podfreedays: number
+  ) {
     return this._http.post<any>(
       this.BASE_URL +
         'SRR/InsertDestinationAgent?DESTINATION_AGENT_CODE=' +
         dAgent +
         '&SRR_NO=' +
-        srrno,
+        srrno +
+        '&POL_FREE_DAYS=' +
+        polfreedays +
+        '&POD_FREE_DAYS=' +
+        podfreedays,
       this.httpOptions
     );
   }

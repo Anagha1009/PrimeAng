@@ -27,6 +27,7 @@ export class PmQuotationDetailsComponent implements OnInit {
   srrcal: boolean = false;
   SRR_NO: any = '';
   calcForm: FormGroup;
+  srrcontainerForm: FormGroup;
   requestOptions: any;
   submitted: boolean = false;
   destinationAgent: string = '';
@@ -52,6 +53,11 @@ export class PmQuotationDetailsComponent implements OnInit {
     this.SRR_NO = this._activatedRoute.snapshot.paramMap.get('SRR_NO');
     this.rateForm = this._formBuilder.group({
       SRR_RATES: new FormArray([]),
+    });
+
+    this.srrcontainerForm = this._formBuilder.group({
+      POL_FREE_DAYS: [''],
+      POD_FREE_DAYS: [''],
     });
 
     this.getDetails();
@@ -86,6 +92,8 @@ export class PmQuotationDetailsComponent implements OnInit {
             add.patchValue(this.rateForm.get('SRR_RATES').value);
           }
         });
+
+        this.srrcontainerForm.patchValue(res.Data.SRR_CONTAINERS[0]);
 
         this.commodityDetails = res.Data.SRR_COMMODITIES;
         this.container = this.quotationDetails?.SRR_CONTAINERS[0].CONTAINERS;
@@ -402,7 +410,9 @@ export class PmQuotationDetailsComponent implements OnInit {
     this._quotationService
       .insertDestinationAgent(
         this.destinationAgent,
-        this.quotationDetails?.SRR_NO
+        this.quotationDetails?.SRR_NO,
+        this.srrcontainerForm.get('POL_FREE_DAYS').value,
+        this.srrcontainerForm.get('POD_FREE_DAYS').value
       )
       .subscribe((res: any) => {
         if (res.responseCode == 200) {

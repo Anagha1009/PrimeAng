@@ -90,7 +90,7 @@
     </div>
 </div>
 <hr>
-<div class="col-md-12" style="font-size: 14px" *ngFor="let item1 of quotationDetails?.SRR_CONTAINERS">
+<div class="col-md-12" *ngFor="let item1 of quotationDetails?.SRR_CONTAINERS" [formGroup]="srrcontainerForm">
     <div class="row">
         <div class="col-md-10">
             <h6 style="font-weight: 600;">
@@ -101,6 +101,22 @@
                     {{item1.STATUS == 'Requested' ? item1.STATUS :
                     item1.STATUS + ' by ' + item1.CREATED_BY}}</small>
             </h6>
+
+            <label class="label-header">Free Days :</label>
+            <div class="row">
+                <div class="col-2">
+                    <div class="form-group">
+                        <label class="form-label3">POL</label>
+                        <input type="text" formControlName="POL_FREE_DAYS" class="form-control3" />
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label class="form-label3">POD</label>
+                        <input type="text" formControlName="POD_FREE_DAYS" class="form-control3" />
+                    </div>
+                </div>
+            </div>
 
         </div>
         <div class="col-md-2">
