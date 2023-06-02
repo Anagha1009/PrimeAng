@@ -169,7 +169,11 @@ export class PmQuotationDetailsComponent implements OnInit {
           this.openBtn.nativeElement.click();
         } else {
           this._quotationService
-            .approveRate(this.srrRates)
+            .approveRate(
+              this.srrRates,
+              this.srrcontainerForm.get('POL_FREE_DAYS').value,
+              this.srrcontainerForm.get('POD_FREE_DAYS').value
+            )
             .subscribe((res: any) => {
               if (res.responseCode == 200) {
                 this._commonService.successMsg(
@@ -410,14 +414,16 @@ export class PmQuotationDetailsComponent implements OnInit {
     this._quotationService
       .insertDestinationAgent(
         this.destinationAgent,
-        this.quotationDetails?.SRR_NO,
-        this.srrcontainerForm.get('POL_FREE_DAYS').value,
-        this.srrcontainerForm.get('POD_FREE_DAYS').value
+        this.quotationDetails?.SRR_NO
       )
       .subscribe((res: any) => {
         if (res.responseCode == 200) {
           this._quotationService
-            .approveRate(this.srrRates)
+            .approveRate(
+              this.srrRates,
+              this.srrcontainerForm.get('POL_FREE_DAYS').value,
+              this.srrcontainerForm.get('POD_FREE_DAYS').value
+            )
             .subscribe((res: any) => {
               if (res.responseCode == 200) {
                 if (this.value == 'Approved') {

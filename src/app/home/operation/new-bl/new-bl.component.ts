@@ -960,7 +960,7 @@ export class NewBlComponent implements OnInit {
       'PM' +
       POL.substr(POL.length - 3) +
       POD.substr(POD.length - 3) +
-      date.getFullYear() +
+      date.getFullYear().toString().substr(-2) +
       month
     );
   }

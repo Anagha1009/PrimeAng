@@ -92,8 +92,15 @@ export class QuotationService {
     );
   }
 
-  approveRate(rootobject: any) {
-    return this._http.post<any>(this.BASE_URL + 'SRR/ApproveRate', rootobject);
+  approveRate(rootobject: any, polfreedays: number, podfreedays: number) {
+    return this._http.post<any>(
+      this.BASE_URL +
+        'SRR/ApproveRate?POL_FREE_DAYS=' +
+        polfreedays +
+        '&POD_FREE_DAYS=' +
+        podfreedays,
+      rootobject
+    );
   }
 
   counterRate(rootobject: any, polfreedays: number, podfreedays: number) {
@@ -216,22 +223,13 @@ export class QuotationService {
     );
   }
 
-  insertDestinationAgent(
-    dAgent: string,
-    srrno: string,
-    polfreedays: number,
-    podfreedays: number
-  ) {
+  insertDestinationAgent(dAgent: string, srrno: string) {
     return this._http.post<any>(
       this.BASE_URL +
         'SRR/InsertDestinationAgent?DESTINATION_AGENT_CODE=' +
         dAgent +
         '&SRR_NO=' +
-        srrno +
-        '&POL_FREE_DAYS=' +
-        polfreedays +
-        '&POD_FREE_DAYS=' +
-        podfreedays,
+        srrno,
       this.httpOptions
     );
   }
