@@ -742,10 +742,11 @@
                         #closeBtn2></button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12" *ngFor="let item1 of containerList">
+                    <div class="col-md-12" *ngFor="let item1 of containerList" [formGroup]="srrcontainerForm">
                         <div class="row">
                             <div class="col-md-12">
-                                <h6>Container : <small class="text-dark me-2">{{item1.CONTAINERS}} </small>
+                                <h6 class="fw-bold">Container : <small class="text-dark me-2">{{item1.CONTAINERS}}
+                                    </small>
                                     Service Mode : <small class="text-dark me-2">{{item1.SERVICE_MODE}}</small>
                                     <!-- Status : <small
                                         [class]="item1.STATUS == 'Requested' ? 'text-warning me-2' : item1.STATUS == 'Approved' ? 'text-success me-2':  item1.STATUS == 'Rejected' ? 'text-danger me-2': 'text-info me-2'">
@@ -759,6 +760,21 @@
                                         [class]="item1.STATUS == 'Requested' ? 'text-warning me-2' : item1.STATUS == 'Approved' ? 'text-success me-2':  item1.STATUS == 'Rejected' ? 'text-danger me-2': 'text-info me-2'">
                                         {{'Accepted ' + 'by ' + item1.CREATED_BY}}</small>
                                 </h6>
+                                <label class="label-header">Free Days :</label>
+                                <div class="row">
+                                    <div class="col-2">
+                                        <div class="form-group">
+                                            <label class="form-label3">POL</label>
+                                            <input type="text" formControlName="POL_FREE_DAYS" class="form-control3" />
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="form-group">
+                                            <label class="form-label3">POD</label>
+                                            <input type="text" formControlName="POD_FREE_DAYS" class="form-control3" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12 mt-3">

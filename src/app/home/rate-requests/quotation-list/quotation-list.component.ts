@@ -78,6 +78,8 @@ export class QuotationListComponent implements OnInit {
   SurAcceptanceFile: string = '';
   fileList: any[] = [];
 
+  srrcontainerForm: FormGroup;
+
   @ViewChild('openBtn') openBtn: ElementRef;
   @ViewChild('openBtn1') openBtn1: ElementRef;
   @ViewChild('closeBtn') closeBtn: ElementRef;
@@ -135,6 +137,11 @@ export class QuotationListComponent implements OnInit {
     });
 
     this.getDropdown();
+
+    this.srrcontainerForm = this._formBuilder.group({
+      POL_FREE_DAYS: [''],
+      POD_FREE_DAYS: [''],
+    });
   }
 
   getDropdown() {
@@ -295,6 +302,8 @@ export class QuotationListComponent implements OnInit {
             })
           );
         });
+
+        this.srrcontainerForm.patchValue(res.Data?.SRR_CONTAINERS[0]);
 
         const add1 = this.rateForm.get('SRR_RATES') as FormArray;
         add1.clear();
@@ -678,27 +687,33 @@ export class QuotationListComponent implements OnInit {
       element.CREATED_BY = this._commonService.getUser().role;
     });
 
-    this._quotationService.counterRate(this.rateForm.value.SRR_RATES).subscribe(
-      (res: any) => {
-        if (res.responseCode == 200) {
-          this._commonService.successMsg(
-            'Your request is been ' + value == 'Approved'
-              ? 'Accepted'
-              : value + ' Successfully !'
-          );
-          this.closeBtn2.nativeElement.click();
-          this.getSRRList();
+    this._quotationService
+      .counterRate(
+        this.rateForm.value.SRR_RATES,
+        this.srrcontainerForm.get('POL_FREE_DAYS').value,
+        this.srrcontainerForm.get('POD_FREE_DAYS').value
+      )
+      .subscribe(
+        (res: any) => {
+          if (res.responseCode == 200) {
+            this._commonService.successMsg(
+              'Your request is been ' + value == 'Approved'
+                ? 'Accepted'
+                : value + ' Successfully !'
+            );
+            this.closeBtn2.nativeElement.click();
+            this.getSRRList();
+          }
+        },
+        (error: any) => {
+          if (error.status == 401) {
+            this._commonService.errorMsg(
+              'You are not authorized to access this page, please login'
+            );
+            this._router.navigateByUrl('login');
+          }
         }
-      },
-      (error: any) => {
-        if (error.status == 401) {
-          this._commonService.errorMsg(
-            'You are not authorized to access this page, please login'
-          );
-          this._router.navigateByUrl('login');
-        }
-      }
-    );
+      );
   }
 
   getForm() {

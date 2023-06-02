@@ -96,8 +96,15 @@ export class QuotationService {
     return this._http.post<any>(this.BASE_URL + 'SRR/ApproveRate', rootobject);
   }
 
-  counterRate(rootobject: any) {
-    return this._http.post<any>(this.BASE_URL + 'SRR/CounterRate', rootobject);
+  counterRate(rootobject: any, polfreedays: number, podfreedays: number) {
+    return this._http.post<any>(
+      this.BASE_URL +
+        'SRR/CounterRate?POL_FREE_DAYS=' +
+        polfreedays +
+        '&POD_FREE_DAYS=' +
+        podfreedays,
+      rootobject
+    );
   }
 
   GetFiles(SRR_NO: string, COMM_TYPE: any) {
