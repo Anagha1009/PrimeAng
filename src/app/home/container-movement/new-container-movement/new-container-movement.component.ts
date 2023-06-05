@@ -200,8 +200,8 @@ export class NewContainerMovementComponent implements OnInit {
     }
 
     this.cmTable.forEach((element) => {
-      var newdate = new Date();
-      newdate.setDate(element.ACTIVITY_DATE.getDate() + 1);
+      var newdate = new Date(element.ACTIVITY_DATE);
+      newdate.setDate(newdate.getDate() + 1);
       element.ACTIVITY_DATE = newdate;
     });
     this.closeBtn1.nativeElement.click();
