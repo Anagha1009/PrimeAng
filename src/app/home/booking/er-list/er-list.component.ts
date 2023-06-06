@@ -78,7 +78,7 @@ export class ErListComponent implements OnInit {
     this.previewList = false;
     this.previewNoData = false;
 
-    this._erService.getERList(this._commonService.getUserCode(), '').subscribe(
+    this._erService.getERList(this._commonService.getUserCode()).subscribe(
       (res: any) => {
         this.erList = [];
         this.isScroll = false;

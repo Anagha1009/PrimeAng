@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ErService } from 'src/app/services/er.service';
 import { CommonService } from 'src/app/services/common.service';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ER } from 'src/app/models/er';
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -64,38 +65,47 @@ export class ErList2Component implements OnInit {
   }
 
   getERList() {
-    this._erService
-      .getERList(this._commonService.getUserCode(), '')
-      .subscribe((res: any) => {
-        this.erList = [];
-        this.isScroll = false;
-        if (res.hasOwnProperty('Data')) {
-          if (res.Data?.length > 0) {
-            this.erList = res.Data;
-            if (this.erList?.length >= 4) {
-              this.isScroll = true;
-            } else {
-              this.isScroll = false;
-            }
+    var er = new ER();
+    er.AGENT_CODE = this._commonService.getUserCode();
+    er.ORG_CODE = this._commonService.getUserOrgCode();
+    er.PORT = this._commonService.getUserPort();
+    this._erService.getERList(er).subscribe((res: any) => {
+      this.erList = [];
+      this.isScroll = false;
+      if (res.hasOwnProperty('Data')) {
+        if (res.Data?.length > 0) {
+          this.erList = res.Data;
+          if (this.erList?.length >= 4) {
+            this.isScroll = true;
+          } else {
+            this.isScroll = false;
           }
         }
-      });
+      }
+    });
   }
 
   getERCRODetails(ERNO: any) {
-    this._erService.getERDetails(ERNO, '', '').subscribe((res: any) => {
-      if (res.ResponseCode == 200) {
-        this.erDetails = res.Data;
-        this._erService
-          .getERContainerDetails(ERNO, '', '')
-          .subscribe((res1: any) => {
-            if (res.ResponseCode == 200) {
-              this.erContDetails = res1.Data;
-              this.generatePDF();
-            }
-          });
-      }
-    });
+    this._erService
+      .getERDetails(
+        ERNO,
+        this._commonService.getUserOrgCode(),
+        this._commonService.getUserPort()
+      )
+      .subscribe((res: any) => {
+        if (res.ResponseCode == 200) {
+          debugger;
+          this.erDetails = res.Data;
+          this._erService
+            .getERContainerDetails(ERNO, '', '')
+            .subscribe((res1: any) => {
+              if (res.ResponseCode == 200) {
+                this.erContDetails = res1.Data;
+                this.generatePDF();
+              }
+            });
+        }
+      });
   }
 
   async generatePDF() {
@@ -193,27 +203,27 @@ export class ErList2Component implements OnInit {
             body: [
               [
                 {
-                  text: 'Booking No:',
+                  text: 'Repo No:',
                   bold: true,
                   fontSize: 10,
                 },
                 {
                   text:
-                    this.erDetails?.BOOKING_NO == null
+                    this.erDetails?.REPO_NO == null
                       ? '-'
-                      : this.erDetails?.BOOKING_NO == ''
+                      : this.erDetails?.REPO_NO == ''
                       ? '-'
-                      : this.erDetails?.BOOKING_NO,
+                      : this.erDetails?.REPO_NO,
                   fontSize: 10,
                 },
                 {
-                  text: 'Booking Date:',
+                  text: 'Repo Date:',
                   bold: true,
                   fontSize: 10,
                 },
                 {
                   text: this._commonService.getIndianDate(
-                    new Date(this.erDetails?.BookingDetails?.CREATED_DATE)
+                    new Date(this.erDetails?.CREATED_DATE)
                   ),
                   fontSize: 10,
                 },
@@ -226,11 +236,11 @@ export class ErList2Component implements OnInit {
                 },
                 {
                   text:
-                    this.erDetails?.LADEN_ACPT_LOCATION == null
+                    this.erDetails?.EMPTY_CONT_PCKP == null
                       ? '-'
-                      : this.erDetails?.LADEN_ACPT_LOCATION == ''
+                      : this.erDetails?.EMPTY_CONT_PCKP == ''
                       ? '-'
-                      : this.erDetails?.LADEN_ACPT_LOCATION,
+                      : this.erDetails?.EMPTY_CONT_PCKP,
                   fontSize: 10,
                 },
                 {
@@ -240,25 +250,25 @@ export class ErList2Component implements OnInit {
                 },
                 {
                   text:
-                    this.erDetails?.BookingDetails?.VESSEL_NAME +
+                    this.erDetails?.VESSEL_NAME +
                     '/ ' +
-                    this.erDetails?.BookingDetails?.VOYAGE_NO,
+                    this.erDetails?.VOYAGE_NO,
                   fontSize: 10,
                 },
               ],
               [
                 {
-                  text: 'Booking Party:',
+                  text: 'Service:',
                   bold: true,
                   fontSize: 10,
                 },
                 {
                   text:
-                    this.erDetails?.CUSTOMER_NAME == null
+                    this.erDetails?.SERVICE_NAME == null
                       ? '-'
-                      : this.erDetails?.CUSTOMER_NAME == ''
+                      : this.erDetails?.SERVICE_NAME == ''
                       ? '-'
-                      : this.erDetails?.CUSTOMER_NAME,
+                      : this.erDetails?.SERVICE_NAME,
                   fontSize: 10,
                 },
                 {
@@ -276,25 +286,24 @@ export class ErList2Component implements OnInit {
               ],
               [
                 {
-                  text: 'Email Id:',
+                  text: 'POL:',
                   bold: true,
                   fontSize: 10,
                 },
                 {
                   text:
-                    this.erDetails?.EMAIL == null
+                    this.erDetails?.LOAD_PORT == null
                       ? '-'
-                      : this.erDetails?.EMAIL == ''
+                      : this.erDetails?.LOAD_PORT == ''
                       ? '-'
-                      : this.erDetails?.EMAIL,
-                  fontsize: 10,
+                      : this.erDetails?.LOAD_PORT,
+                  fontSize: 10,
                 },
                 {
                   text: 'ETD:',
                   bold: true,
                   fontSize: 10,
                 },
-
                 {
                   text: this._commonService.getIndianDate(
                     new Date(this.erDetails?.ETD)
@@ -304,33 +313,21 @@ export class ErList2Component implements OnInit {
               ],
               [
                 {
-                  text: 'Contact No:',
+                  text: 'POD:',
                   bold: true,
                   fontSize: 10,
                 },
                 {
                   text:
-                    this.erDetails?.CONTACT == null
+                    this.erDetails?.DISCHARGE_PORT == null
                       ? '-'
-                      : this.erDetails?.CONTACT == ''
+                      : this.erDetails?.DISCHARGE_PORT == ''
                       ? '-'
-                      : this.erDetails?.CONTACT,
+                      : this.erDetails?.DISCHARGE_PORT,
                   fontSize: 10,
                 },
-                {
-                  text: 'Service:',
-                  bold: true,
-                  fontSize: 10,
-                },
-                {
-                  text:
-                    this.erDetails?.SERVICE_NAME == null
-                      ? '-'
-                      : this.erDetails?.SERVICE_NAME == ''
-                      ? '-'
-                      : this.erDetails?.SERVICE_NAME,
-                  fontSize: 10,
-                },
+                {},
+                {},
               ],
               [
                 {
@@ -344,56 +341,8 @@ export class ErList2Component implements OnInit {
                   ),
                   fontSize: 10,
                 },
-                {
-                  text: 'POL:',
-                  bold: true,
-                  fontSize: 10,
-                },
-                {
-                  text:
-                    this.erDetails?.POL == null
-                      ? '-'
-                      : this.erDetails?.POL == ''
-                      ? '-'
-                      : this.erDetails?.POL,
-                  fontSize: 10,
-                },
-              ],
-              [
                 {},
                 {},
-                {
-                  text: 'POD:',
-                  bold: true,
-                  fontSize: 10,
-                },
-                {
-                  text:
-                    this.erDetails?.POD == null
-                      ? '-'
-                      : this.erDetails?.POD == ''
-                      ? '-'
-                      : this.erDetails?.POD,
-                  fontSize: 10,
-                },
-              ],
-              [
-                {},
-                {},
-                {
-                  text: 'FPOD:',
-                  bold: true,
-                  fontSize: 10,
-                },
-                {
-                  text:
-                    this.erDetails?.FINAL_DESTINATION == null
-                      ? '-'
-                      : this.erDetails?.FINAL_DESTINATION == ''
-                      ? '-'
-                      : this.erDetails?.FINAL_DESTINATION,
-                  fontSize: 10,
-                },
               ],
             ],
           },
@@ -403,7 +352,7 @@ export class ErList2Component implements OnInit {
           style: 'sectionHeader',
         },
         {
-          text: this.erDetails?.COMMODITY,
+          text: 'Empty Containers',
           fontSize: 10,
           margin: [0, 0, 0, 10],
         },
@@ -413,48 +362,16 @@ export class ErList2Component implements OnInit {
             headerRows: 1,
             widths: ['*', '*', '*'],
             body: [
-              ['Container Type', 'Quantity', 'Service Mode'],
-              ...this.erContDetails.map((p: any) => [
+              ['Container Type', 'Quantity'],
+              [
                 {
-                  text: p.CONTAINER_TYPE,
+                  text: '20GP',
                   fontSize: 10,
                 },
                 { text: this.erDetails?.REQ_QUANTITY, fontSize: 10 },
-                { text: p.SERVICE_MODE, fontSize: 10 },
-              ]),
+              ],
             ],
           },
-        },
-        {
-          margin: [0, 10, 0, 0],
-          fontSize: 9,
-          text:
-            'Remarks:\n\n1) PLEASE DO NOT PICK UP DAMAGE CONTAINER, ANY CLAIM FROM DESTINATION WILL BE COLLECTED FROM CONSIGNEE' +
-            '\n2) All containers mis-declared for weight will be charged in line with the scale of rates for misdeclaration.' +
-            'This charge will be applied with immediate effect. In order to avoid this charge, please advise all concerned to ensure declaration of correct weight at the time of booking.' +
-            '\n3) LINE WILL NOT BE RESPONSIBLE FOR EARLY CLOSURE OF GATE / NOT OPENING OF GATE FOR A PARTICULAR TERMINAL / VESSEL' +
-            '\n4) Containers will not be loaded without duplicate shipping bill in our custody' +
-            "\n5) Please gate-in the containers at most 3 days before vessel ETA. Containers gated-in earlier shall incur ground rent which will be On shipper's account" +
-            '\n\nGeneral Instructions' +
-            '\n\nTHIS D.O IS VALID FOR FOUR (4) DAYS FROM TODAY I.E. ( ' +
-            this._commonService.getIndianDate(
-              new Date(this.erDetails?.CREATED_DATE)
-            ) +
-            ' ) NO DELIVERIES WILL BE ALLOWED FROM THE ' +
-            'STORAGE YARD : ' +
-            this.erDetails?.EMPTY_CONT_PCKP +
-            '\nPLEASE NOTE THAT YOU ARE NOT PERMITTED TO HONOUR THIS D.O. AFTER - ' +
-            this._commonService.getIndianDate(
-              new Date(this.erDetails?.CRO_VALIDITY_DATE)
-            ) +
-            '\n\n1. Export Detention on containers will be applicable as per lines prevailing tariff.' +
-            '\n2. Please do not exceed the permitted maximum gross weight shown on the container.' +
-            '\n3. Containers that are picked up from empty yard at origin by the Exporter or their Agents per the Booking release order shall be' +
-            'resumed to have been inspected and accepted in good and sound condition for the purpose of cargo stuffing. Consignee (Buyers)' +
-            'shall be responsible to return the containers to our custody in good and sound condition at destination after cargo is unstuffed.' +
-            '\n4.  Containers are moved by Export/C & F agents at their own risk/cost. Any damage to the container shall be borne by Exporter/C & F agent.' +
-            "\n5. C & F agent/Exporters are requested to prepare container load plan and put Co.'s Stamp / Sign." +
-            '\n6. In case of hazardous cargo, please apply hazardous cargo sticker & put all details.',
         },
       ],
       styles: {

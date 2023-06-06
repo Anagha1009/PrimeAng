@@ -98,7 +98,7 @@
 </div>
 <div class="modal fade" #customerModal id="customerModal" tabindex="-1" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog modal-xl">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Customer Details</h5>
@@ -119,13 +119,13 @@
               data-bs-parent="#accordion">
               <div class="card-body">
                 <div class="row mt-4">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="form-group">
                       <input type="text" class="form-control">
                       <label class="form-label">Customer Name <span class="text-danger"> *</span></label>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="form-group">
                       <ng-select>
                         <ng-option disabled="true">--Select--</ng-option>
@@ -134,24 +134,76 @@
                       <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="form-group">
-                      <ng-select>
-                        <ng-option disabled="true">--Select--</ng-option>
-                        <ng-option>Maharashtra</ng-option>
-                      </ng-select>
-                      <label class="form-label-ddl">State <span class="text-danger"> *</span></label>
+                      <input type="text" class="form-control">
+                      <label class="form-label">State</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">City</label>
                     </div>
                   </div>
                 </div>
                 <div class="row mt-4">
-                  <div class="col-md-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Pincode</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">PAN</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Email</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Contact Person Name</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Contact Person No</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
                     <div class="form-group">
                       <ng-select>
                         <ng-option disabled="true">--Select--</ng-option>
-                        <ng-option>Navi Mumbai</ng-option>
+                        <ng-option>India</ng-option>
                       </ng-select>
-                      <label class="form-label-ddl">City <span class="text-danger"> *</span></label>
+                      <label class="form-label-ddl">Customer Type <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mt-4">
+                    <div class="row ms-1">
+                      <label class="checkbox-wrap checkbox-primary">
+                        <input class="chck" type="checkbox">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label>Group Companies</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      <textarea type="text" class="form-control addressbox"></textarea>
+                      <label class="form-label">Address <span class="text-danger"> *</span></label>
                     </div>
                   </div>
                 </div>
@@ -163,14 +215,42 @@
               <h6 class="mb-0">
                 <a data-bs-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4"
                   data-abc="true" class="collapsed">
-                  <span class="fw-bolder">POL Charges</span>
+                  <span class="fw-bolder">Sales Representative Details</span>
                 </a>
               </h6>
             </div>
             <div id="collapse-4" class="collapse" role="tabpanel" aria-labelledby="heading-4"
               data-bs-parent="#accordion">
               <div class="card-body">
-
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Name <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Code <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <ng-select>
+                        <ng-option disabled="true">--Select--</ng-option>
+                        <ng-option>India</ng-option>
+                      </ng-select>
+                      <label class="form-label-ddl">Location <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="date" onkeypress="return false" class="form-control">
+                      <label class="form-label">Effective From <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -179,13 +259,185 @@
               <h6 class="mb-0">
                 <a data-bs-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5"
                   data-abc="true" class="collapsed">
-                  <span class="fw-bolder">POD Charges</span>
+                  <span class="fw-bolder">Branch Details</span>
                 </a>
               </h6>
             </div>
             <div id="collapse-5" class="collapse" role="tabpanel" aria-labelledby="heading-5"
               data-bs-parent="#accordion">
-
+              <div class="card-body">
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Name <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <ng-select>
+                        <ng-option disabled="true">--Select--</ng-option>
+                        <ng-option>India</ng-option>
+                      </ng-select>
+                      <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">State <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">City <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">TAN No <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Person In Charge <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Contact <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Email <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      <textarea type="text" class="form-control addressbox"></textarea>
+                      <label class="form-label">Address <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" role="tab" id="heading-6">
+              <h6 class="mb-0">
+                <a data-bs-toggle="collapse" href="#collapse-6" aria-expanded="false" aria-controls="collapse-6"
+                  data-abc="true" class="collapsed">
+                  <span class="fw-bolder">Bank Details</span>
+                </a>
+              </h6>
+            </div>
+            <div id="collapse-6" class="collapse" role="tabpanel" aria-labelledby="heading-6"
+              data-bs-parent="#accordion">
+              <div class="card-body">
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Bank Name<span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Account No<span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">IFSC Code<span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" class="form-control">
+                      <label class="form-label">Tax No <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <ng-select>
+                        <ng-option disabled="true">--Select--</ng-option>
+                        <ng-option>GST</ng-option>
+                        <ng-option>VAT</ng-option>
+                      </ng-select>
+                      <label class="form-label-ddl">Tax Type <span class="text-danger"> *</span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      <textarea type="text" class="form-control addressbox"></textarea>
+                      <label class="form-label">Remarks</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" role="tab" id="heading-7">
+              <h6 class="mb-0">
+                <a data-bs-toggle="collapse" href="#collapse-7" aria-expanded="false" aria-controls="collapse-7"
+                  data-abc="true" class="collapsed">
+                  <span class="fw-bolder">KYC Details</span>
+                </a>
+              </h6>
+            </div>
+            <div id="collapse-7" class="collapse" role="tabpanel" aria-labelledby="heading-7"
+              data-bs-parent="#accordion">
+              <div class="card-body">
+                <div class="col-md-6 mt-4">
+                  <div class="form-group">
+                    <div class="form-check form-switch">
+                      <input (change)="onchangeKYC($event)" class="form-check-input" type="checkbox" role="switch" />
+                      <label class="form-check-label">Is KYC </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3" *ngIf="isKYC">
+                  <button (click)="addNewFile()" class="form-btn-primary">Add New <i class="fa fa-plus"></i></button>
+                </div>
+                <div class="row" *ngIf="isKYC">
+                  <div class="col-md-4" *ngFor="let item of fileList;let i = index;">
+                    <div class="formbold-mb-5 formbold-file-input" *ngIf="fileList[i].FILE_NAME == ''">
+                      <input (change)="fileUpload($event,i)" type="file" name="{{'file' + i}}" id="{{'file' + i}}" />
+                      <label for="{{'file' + i}}">
+                        <div>
+                          <h3><i class="fa fa-file-pdf-o"></i></h3>
+                          <span class="formbold-drop-file">Upload</span>
+                          <small class="fw-bold">KYC FILE {{i + 1}}</small>
+                        </div>
+                      </label>
+                    </div>
+                    <div class="formbold-file-list formbold-mb-5" *ngIf="fileList[i].FILE_NAME != ''">
+                      <div class="formbold-file-item">
+                        <span class="formbold-file-name">{{item.FILE_NAME}}</span>
+                        <small class="formbold-file-size">{{item.FILE_SIZE}} Kb</small>
+                        <button><span class="bx bx-x-circle" (click)="removeFile(i)"></span></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

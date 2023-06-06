@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
+import { ER } from '../models/er';
 
 @Injectable({
   providedIn: 'root',
@@ -23,26 +24,30 @@ export class ErService {
     );
   }
 
-  getERList(agentCode: any, depoCode: any) {
+  getERList(er: ER) {
     return this._http.get<any>(
       this.BASE_URL +
         'ER/GetERList?AGENT_CODE=' +
-        agentCode +
+        er.AGENT_CODE +
         '&DEPO_CODE=' +
-        depoCode,
+        er.DEPO_CODE +
+        '&ORG_CODE=' +
+        er.ORG_CODE +
+        '&PORT=' +
+        er.PORT,
       this.httpOptions
     );
   }
 
-  getERDetails(erNo: any, agentCode: any, depoCode: any) {
+  getERDetails(erNo: any, orgcode: any, port: any) {
     return this._http.get<any>(
       this.BASE_URL +
         'ER/GetERDetails?REPO_NO=' +
         erNo +
-        '&AGENT_CODE=' +
-        agentCode +
-        '&DEPO_CODE=' +
-        depoCode,
+        '&ORG_CODE=' +
+        orgcode +
+        '&PORT=' +
+        port,
       this.httpOptions
     );
   }

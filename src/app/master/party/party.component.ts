@@ -29,6 +29,8 @@ export class PartyComponent implements OnInit {
   custTypeList: any[] = [];
   dropdownSettings = {};
   selectedItems: any[] = [];
+  isKYC: boolean = false;
+  fileList: any[] = [];
 
   @ViewChild('closeBtn') closeBtn: ElementRef;
   @ViewChild('openModalPopup') openModalPopup: ElementRef;
@@ -100,10 +102,40 @@ export class PartyComponent implements OnInit {
 
     this.GetPartyMasterList();
     this.getDropdown();
+
+    this.fileList = [];
+    this.fileList.push({
+      FILE_NAME: [''],
+      FILE_SIZE: [''],
+      FILE: [''],
+    });
+  }
+
+  onchangeKYC(event: any) {
+    this.isKYC = event.target.checked;
   }
 
   get f() {
     return this.partyForm.controls;
+  }
+
+  addNewFile() {
+    this.fileList.push({
+      FILE_NAME: [''],
+      FILE_SIZE: [''],
+      FILE: [''],
+    });
+  }
+
+  removeFile(i: number) {
+    this.fileList.splice(i, 1);
+    if (this.fileList.length == 0) {
+      this.fileList.push({
+        FILE_NAME: [''],
+        FILE_SIZE: [''],
+        FILE: [''],
+      });
+    }
   }
 
   Search() {
