@@ -29,12 +29,6 @@ const routes: Routes = [
   },
   {
     path: 'er-list',
-    component: ErListComponent,
-    canActivate: [AuthGuard],
-    data: { roles: [Role.Agent] },
-  },
-  {
-    path: 'er-list2',
     component: ErList2Component,
     canActivate: [AuthGuard],
     data: { roles: [Role.Agent] },

@@ -66,7 +66,7 @@
                             </p>
                         </div>
                         <div class="col-md-2 text-end" *ngIf="!item.CRO_NO">
-                            <button (click)="openCROModal(item)" class="form-btn btn-sm rounded-pill">CREATE
+                            <button (click)="openCROModal(item.REPO_NO)" class="form-btn btn-sm rounded-pill">CREATE
                                 CRO</button>
                             <button class="form-btn d-none" #openBtn data-bs-toggle="modal" href="#croModal">CREATE
                                 CRO</button>
@@ -84,5 +84,78 @@
     <div class="col-md-5 mx-auto" *ngIf="erList.length == 0">
         <h5 class="text-center">Sorry! No records found !!</h5>
         <img src="assets/img/doimg.jpg" class="img-fluid" alt="">
+    </div>
+</div>
+
+<div class="modal fade" id="croModal" aria-labelledby="exampleModalLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center" id="exampleModalLabel">Create CRO</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="erCROForm">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="form-label2"> Repo No. <span class="text-danger">*</span></label>
+                            <input type="text" [ngClass]="{'invalid':submitted1 && f1.REPO_NO.errors}"
+                                formControlName="REPO_NO" class="form-control2" readonly>
+                            <div *ngIf="submitted1 && f1.REPO_NO.errors" class="invalid-feedback">
+                                Please Enter Repo No.
+                            </div>
+                        </div>
+                        <label></label>
+                        <div class="form-group">
+                            <ng-select [ngClass]="{'invalid':submitted1 && f1.EMPTY_CONT_PCKP.errors}"
+                                formControlName="EMPTY_CONT_PCKP">
+                                <ng-option value="">--Select--</ng-option>
+                                <ng-option *ngFor="let item of icdList" value="{{item.CODE}}">{{item.CODE_DESC}}
+                                    ({{item.CODE}})</ng-option>
+                                <ng-option *ngFor="let item of cfsList" value="{{item.CODE}}">{{item.CODE_DESC}}
+                                    ({{item.CODE}})</ng-option>
+                                <ng-option *ngFor="let item of depoList" value="{{item.CODE}}">{{item.CODE_DESC}}
+                                    ({{item.CODE}})</ng-option>
+                            </ng-select>
+                            <label class="form-label-ddl">Cont Pickup Point <span class="text-danger">*</span></label>
+                            <div *ngIf="submitted1 && f1.EMPTY_CONT_PCKP.errors" class="invalid-feedback">
+                                Please Enter Pickup Point.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label2"> CRO Validity Date <span class="text-danger">*</span></label>
+                            <input formControlName="CRO_VALIDITY_DATE" type="date" class="form-control2"
+                                [ngClass]="{'invalid':submitted1 && f1.CRO_VALIDITY_DATE.errors}">
+                            <div *ngIf="submitted1 && f1.CRO_VALIDITY_DATE.errors" class="invalid-feedback">
+                                Please Enter CRO Validity Date
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label2"> Required Qty <span class="text-danger">*</span></label>
+                            <input type="text" [ngClass]="{'invalid':submitted1 && f1.REQ_QUANTITY.errors}"
+                                formControlName="REQ_QUANTITY" class="form-control2">
+                            <div *ngIf="submitted1 && f1.REQ_QUANTITY.errors" class="invalid-feedback">
+                                Please Enter Required Quantity
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6 text-end">
+                            <button class="form-btn w-50">Clear</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="form-btn w-50" (click)="SaveCRO()">Save</button>
+                            <button #openBtn1 data-bs-toggle="modal" href="#mailModal"
+                                class="form-btn d-none">Submit</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

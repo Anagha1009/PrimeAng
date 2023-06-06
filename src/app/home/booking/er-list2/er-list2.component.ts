@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CoreTranslationService } from 'src/app/@core/services/translation.service';
 import { locale as english } from 'src/app/@core/translate/er/en';
 import { locale as hindi } from 'src/app/@core/translate/er/hi';
 import { locale as arabic } from 'src/app/@core/translate/er/ar';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ErService } from 'src/app/services/er.service';
 import { CommonService } from 'src/app/services/common.service';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ER } from 'src/app/models/er';
+import { CroService } from 'src/app/services/cro.service';
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -19,15 +20,24 @@ const pdfMake = require('pdfmake/build/pdfmake.js');
 })
 export class ErList2Component implements OnInit {
   filterForm: FormGroup;
+  erCROForm: FormGroup;
   erList: any[] = [];
   erDetails: any;
   erContDetails: any[] = [];
   isScroll: boolean = false;
+  submitted1: boolean = false;
+  icdList: any;
+  cfsList: any;
+  depoList: any;
+
+  @ViewChild('openBtn') openBtn: ElementRef;
+  @ViewChild('closeBtn') closeBtn: ElementRef;
 
   constructor(
     private _erService: ErService,
     private _formBuilder: FormBuilder,
     private _commonService: CommonService,
+    private _croService: CroService,
     private _coreTranslationService: CoreTranslationService
   ) {
     this._coreTranslationService.translate(english, hindi, arabic);
@@ -40,7 +50,45 @@ export class ErList2Component implements OnInit {
       TO_DATE: [''],
     });
 
+    this.erCROForm = this._formBuilder.group({
+      CRO_NO: [''],
+      REPO_NO: ['', Validators.required],
+      EMPTY_CONT_PCKP: ['', Validators.required],
+      CRO_VALIDITY_DATE: ['', Validators.required],
+      REQ_QUANTITY: ['', Validators.required],
+      AGENT_NAME: [''],
+      AGENT_CODE: [''],
+      CREATED_BY: [''],
+    });
+
     this.getERList();
+    this.getDropdown();
+  }
+
+  getDropdown() {
+    this._commonService.getDropdownData('ICD').subscribe((res: any) => {
+      if (res.hasOwnProperty('Data')) {
+        this.icdList = res.Data;
+      }
+    });
+
+    this._commonService.getDropdownData('CFS').subscribe((res: any) => {
+      if (res.hasOwnProperty('Data')) {
+        this.cfsList = res.Data;
+      }
+    });
+
+    this._commonService.getDropdownData('DEPO').subscribe((res: any) => {
+      if (res.hasOwnProperty('Data')) {
+        this.depoList = res.Data;
+      }
+    });
+  }
+
+  openCROModal(erNo: any) {
+    this.ClearForm();
+    this.erCROForm.get('REPO_NO').setValue(erNo);
+    this.openBtn.nativeElement.click();
   }
 
   Search() {
@@ -230,34 +278,6 @@ export class ErList2Component implements OnInit {
               ],
               [
                 {
-                  text: 'Location:',
-                  bold: true,
-                  fontSize: 10,
-                },
-                {
-                  text:
-                    this.erDetails?.EMPTY_CONT_PCKP == null
-                      ? '-'
-                      : this.erDetails?.EMPTY_CONT_PCKP == ''
-                      ? '-'
-                      : this.erDetails?.EMPTY_CONT_PCKP,
-                  fontSize: 10,
-                },
-                {
-                  text: 'Vessel/ Voyage:',
-                  bold: true,
-                  fontSize: 10,
-                },
-                {
-                  text:
-                    this.erDetails?.VESSEL_NAME +
-                    '/ ' +
-                    this.erDetails?.VOYAGE_NO,
-                  fontSize: 10,
-                },
-              ],
-              [
-                {
                   text: 'Service:',
                   bold: true,
                   fontSize: 10,
@@ -272,15 +292,15 @@ export class ErList2Component implements OnInit {
                   fontSize: 10,
                 },
                 {
-                  text: 'ETA:',
+                  text: 'Vessel/ Voyage:',
                   bold: true,
                   fontSize: 10,
                 },
-
                 {
-                  text: this._commonService.getIndianDate(
-                    new Date(this.erDetails?.ETA)
-                  ),
+                  text:
+                    this.erDetails?.VESSEL_NAME +
+                    '/ ' +
+                    this.erDetails?.VOYAGE_NO,
                   fontSize: 10,
                 },
               ],
@@ -300,13 +320,14 @@ export class ErList2Component implements OnInit {
                   fontSize: 10,
                 },
                 {
-                  text: 'ETD:',
+                  text: 'ETA:',
                   bold: true,
                   fontSize: 10,
                 },
+
                 {
                   text: this._commonService.getIndianDate(
-                    new Date(this.erDetails?.ETD)
+                    new Date(this.erDetails?.ETA)
                   ),
                   fontSize: 10,
                 },
@@ -326,8 +347,17 @@ export class ErList2Component implements OnInit {
                       : this.erDetails?.DISCHARGE_PORT,
                   fontSize: 10,
                 },
-                {},
-                {},
+                {
+                  text: 'ETD:',
+                  bold: true,
+                  fontSize: 10,
+                },
+                {
+                  text: this._commonService.getIndianDate(
+                    new Date(this.erDetails?.ETD)
+                  ),
+                  fontSize: 10,
+                },
               ],
               [
                 {
@@ -384,5 +414,65 @@ export class ErList2Component implements OnInit {
     };
 
     pdfMake.createPdf(docDefinition).open();
+  }
+
+  get f1() {
+    return this.erCROForm.controls;
+  }
+
+  ClearForm() {
+    this.erCROForm.reset();
+    this.erCROForm.get('EMPTY_CONT_PCKP').setValue('');
+  }
+
+  SaveCRO() {
+    this.submitted1 = true;
+    if (this.erCROForm.invalid) {
+      return;
+    }
+
+    var croNo = this._commonService.getRandomNumber('CRO');
+    this.erCROForm.get('CRO_NO')?.setValue(croNo);
+    this.erCROForm
+      .get('AGENT_NAME')
+      ?.setValue(this._commonService.getUserName());
+    this.erCROForm
+      .get('AGENT_CODE')
+      ?.setValue(this._commonService.getUserCode());
+    this.erCROForm
+      .get('CREATED_BY')
+      ?.setValue(this._commonService.getUserName());
+
+    this._erService
+      .getERDetails(this.erCROForm.get('REPO_NO')?.value, '', '')
+      .subscribe((res: any) => {
+        if (res.ResponseCode == 200) {
+          this.erDetails = res.Data;
+          if (
+            +this.erCROForm.get('REQ_QUANTITY')?.value ==
+            this.erDetails.NO_OF_CONTAINER
+          ) {
+            this._croService
+              .insertCRO(JSON.stringify(this.erCROForm.value))
+              .subscribe((res: any) => {
+                if (res.responseCode == 200) {
+                  this._commonService.successMsg(
+                    'CRO created successfully! Your CRO No. is ' + croNo
+                  );
+                }
+                this.closeBtn.nativeElement.click();
+                this.getERList();
+                this.ClearForm();
+              });
+          } else {
+            this._commonService.errorMsg(
+              'Required Quantity should be equal to the number of containers since you can create only one CRO for a specific Container Repositioning!'
+            );
+          }
+        }
+        if (res.ResponseCode == 500) {
+          alert('Invalid Repo No.');
+        }
+      });
   }
 }
