@@ -97,8 +97,6 @@ export class PartyComponent implements OnInit {
       BANK_NAME: ['', Validators.required],
       BANK_ACC_NO: ['', Validators.required],
       BANK_IFSC: ['', Validators.required],
-      BANK_TAX_NO: ['', Validators.required],
-      BANK_TAX_TYPE: ['', Validators.required],
       BANK_REMARKS: [''],
       BRANCH_LIST: new FormArray([]),
     });
@@ -131,11 +129,15 @@ export class PartyComponent implements OnInit {
 
     add.push(
       this._formBuilder.group({
+        ID: [''],
+        CUST_ID: [''],
         BRANCH_NAME: ['', Validators.required],
         COUNTRY: ['', Validators.required],
         STATE: [''],
         CITY: [''],
         TAN: [''],
+        TAX_NO: ['', Validators.required],
+        TAX_TYPE: ['', Validators.required],
         PIC_NAME: [''],
         PIC_CONTACT: [''],
         PIC_EMAIL: [''],
@@ -393,11 +395,15 @@ export class PartyComponent implements OnInit {
     add.clear();
     add.push(
       this._formBuilder.group({
+        ID: [''],
+        CUST_ID: [''],
         BRANCH_NAME: ['', Validators.required],
         COUNTRY: ['', Validators.required],
         STATE: [''],
         CITY: [''],
         TAN: [''],
+        TAX_NO: ['', Validators.required],
+        TAX_TYPE: ['', Validators.required],
         PIC_NAME: [''],
         PIC_CONTACT: [''],
         PIC_EMAIL: [''],

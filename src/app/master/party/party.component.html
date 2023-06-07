@@ -362,6 +362,33 @@
                     </div>
                   </div>
                   <div class="row mt-4">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <ng-select formControlName="TAX_TYPE"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('TAX_TYPE').errors}">
+                          <ng-option disabled="true">--Select--</ng-option>
+                          <ng-option value="GST">GST</ng-option>
+                          <ng-option value="VAT">VAT</ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">Tax Type</label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('TAX_TYPE').errors"
+                          class="invalid-feedback">Tax Type is required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('TAX_NO').errors}"
+                          formControlName="TAX_NO" class="form-control">
+                        <label class="form-label">Tax No</label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('TAX_NO').errors"
+                          class="invalid-feedback">Tax No is required
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-4">
                     <div class="col-md-5">
                       <div class="form-group">
                         <textarea type="text"
@@ -419,30 +446,6 @@
                         formControlName="BANK_IFSC" class="form-control">
                       <label class="form-label">IFSC Code<span class="text-danger"> *</span></label>
                       <div *ngIf="submitted && f.BANK_IFSC.errors" class="invalid-feedback">IFSC Code is required
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" [ngClass]="{'invalid':submitted && f.BANK_TAX_NO.errors}"
-                        formControlName="BANK_TAX_NO" class="form-control">
-                      <label class="form-label">Tax No <span class="text-danger"> *</span></label>
-                      <div *ngIf="submitted && f.BANK_TAX_NO.errors" class="invalid-feedback">Tax No is required
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-4">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <ng-select formControlName="BANK_TAX_TYPE"
-                        [ngClass]="{'invalid':submitted && f.BANK_TAX_TYPE.errors}">
-                        <ng-option disabled="true">--Select--</ng-option>
-                        <ng-option value="GST">GST</ng-option>
-                        <ng-option value="VAT">VAT</ng-option>
-                      </ng-select>
-                      <label class="form-label-ddl">Tax Type <span class="text-danger"> *</span></label>
-                      <div *ngIf="submitted && f.BANK_TAX_TYPE.errors" class="invalid-feedback">Tax Type is required
                       </div>
                     </div>
                   </div>
