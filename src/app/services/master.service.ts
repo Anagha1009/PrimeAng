@@ -368,4 +368,25 @@ export class MasterService {
       this.httpOptions
     );
   }
+
+// New charge Master
+  InsertChargeMaster(type: any) {
+    return this._http.post<any>(this.BASE_URL + 'Master/InsertChargesMaster',type,this.httpOptions);
+  }
+
+  GetChargeMasterList(){
+    return this._http.get<any>(this.BASE_URL + 'Master/GetChargeMaster', this.httpOptions);
+  }
+
+  GetChargeMastersDetails(ID: number) {
+    return this._http.get<any>(this.BASE_URL + 'Master/GetChargeMastersDetails?ID=' + ID, this.httpOptions);
+  }
+
+  UpdateChargeMaster(master:any){
+    return this._http.post<any>(this.BASE_URL + 'Master/UpdateChargesMaster', master, this.httpOptions );
+  }
+
+  DeleteChargeMaster(ID: number) {
+    return this._http.delete<any>(this.BASE_URL + 'Master/DeleteChargesMaster?ID=' + ID, this.httpOptions);
+  }
 }

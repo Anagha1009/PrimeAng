@@ -26,6 +26,8 @@ import { UserComponent } from './user/user.component';
 import { VesselComponent } from './vessel/vessel.component';
 import { VoyageComponent } from './voyage/voyage.component';
 
+import {ChargeMasterComponent } from './charge-master/charge-master.component'
+
 const routes: Routes = [
   {
     path: 'container-master',
@@ -162,6 +164,12 @@ const routes: Routes = [
   {
     path: 'organisation-master',
     component: OrganisationComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Principal, Role.Admin] },
+  },
+  {
+    path: 'charges-master',
+    component: ChargeMasterComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Principal, Role.Admin] },
   },
