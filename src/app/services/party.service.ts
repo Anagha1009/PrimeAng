@@ -35,6 +35,13 @@ export class PartyService {
     );
   }
 
+  uploadFiles(file: any, CUSTID: string) {
+    return this._http.post<any>(
+      this.BASE_URL + 'Master/UploadCustomerFiles?CUSTID=' + CUSTID,
+      file
+    );
+  }
+
   getPartyDetails(party: PARTY) {
     return this._http.get<any>(
       this.BASE_URL +

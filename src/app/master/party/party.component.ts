@@ -65,13 +65,12 @@ export class PartyComponent implements OnInit {
       CUST_ID: [0],
       CUST_NAME: ['', Validators.required],
       CUST_EMAIL: ['', [Validators.email]],
-      CUST_ADDRESS: ['', Validators.required],
+      CUST_ADDRESS: [''],
       CUST_TYPE: [''],
       CUST_TYPE_CODE: new FormControl(this.custTypeList, Validators.required),
       GSTIN: [
         '',
         [
-          Validators.required,
           Validators.pattern(
             '^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$'
           ),
@@ -79,18 +78,30 @@ export class PartyComponent implements OnInit {
       ],
       STATUS: ['', Validators.required],
       CUST_CONTACT: [''],
-      VAT_NO: ['', Validators.required],
+      VAT_NO: [''],
+      COUNTRY: ['', Validators.required],
+      STATE: [''],
+      CITY: [''],
+      PINCODE: [''],
+      PAN: [
+        '',
+        [Validators.required, Validators.pattern('^[A-Z]{5}[0-9]{4}[A-Z]{1}$')],
+      ],
+      CONTACT_PERSON_NAME: [''],
+      CONTACT_PERSON_NO: [''],
+      IS_GROUP_COMPANIES: [false],
+      SALES_NAME: [''],
+      SALES_CODE: [''],
+      SALES_LOC: [''],
+      SALES_EFFECTIVE_DATE: [''],
+      BANK_NAME: ['', Validators.required],
+      BANK_ACC_NO: ['', Validators.required],
+      BANK_IFSC: ['', Validators.required],
+      BANK_TAX_NO: ['', Validators.required],
+      BANK_TAX_TYPE: ['', Validators.required],
+      BANK_REMARKS: [''],
+      BRANCH_LIST: new FormArray([]),
     });
-
-    if (this._commonService.getUser()?.countrycode == 'IN') {
-      this.partyForm.get('GSTIN').enable();
-      this.partyForm.get('VAT_NO').disable();
-      this.isGST = true;
-    } else {
-      this.partyForm.get('GSTIN').disable();
-      this.partyForm.get('VAT_NO').enable();
-      this.isGST = false;
-    }
 
     this.custForm = this._formBuilder.group({
       CUST_NAME: [''],
@@ -115,8 +126,31 @@ export class PartyComponent implements OnInit {
     this.isKYC = event.target.checked;
   }
 
+  addNewBranch() {
+    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+
+    add.push(
+      this._formBuilder.group({
+        BRANCH_NAME: ['', Validators.required],
+        COUNTRY: ['', Validators.required],
+        STATE: [''],
+        CITY: [''],
+        TAN: [''],
+        PIC_NAME: [''],
+        PIC_CONTACT: [''],
+        PIC_EMAIL: [''],
+        ADDRESS: ['', Validators.required],
+      })
+    );
+  }
+
   get f() {
     return this.partyForm.controls;
+  }
+
+  get f1() {
+    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    return add.controls;
   }
 
   addNewFile() {
@@ -136,6 +170,22 @@ export class PartyComponent implements OnInit {
         FILE: [''],
       });
     }
+  }
+
+  uploadFilestoDB(CUSTID: string) {
+    const payload = new FormData();
+
+    var x = this.fileList;
+    this.fileList.forEach((element: any) => {
+      payload.append('formFile', element.FILE);
+    });
+
+    this._partyService.uploadFiles(payload, CUSTID).subscribe();
+  }
+
+  deleteBranch(i: number) {
+    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    add.removeAt(i);
   }
 
   Search() {
@@ -199,6 +249,14 @@ export class PartyComponent implements OnInit {
 
   InsertPartyMaster() {
     this.submitted = true;
+
+    if (this.isKYC) {
+      if (this.fileList[0].FILE_NAME == '') {
+        this._commonService.warnMsg('Please Upload atleast 1 file !');
+        return;
+      }
+    }
+
     if (this.partyForm.invalid) {
       return;
     }
@@ -213,6 +271,7 @@ export class PartyComponent implements OnInit {
       custType += element.CODE + ',';
     });
     this.partyForm.get('CUST_TYPE').setValue(custType);
+
     this._partyService
       .postParty(JSON.stringify(this.partyForm.value))
       .subscribe((res: any) => {
@@ -220,10 +279,37 @@ export class PartyComponent implements OnInit {
           this._commonService.successMsg(
             'Your record has been inserted successfully !'
           );
+          this.uploadFilestoDB(res.responseMessage);
           this.GetPartyMasterList();
           this.closeBtn.nativeElement.click();
         }
       });
+  }
+
+  fileUpload(event: any, index: number) {
+    if (
+      event.target.files[0].type == 'application/pdf' ||
+      event.target.files[0].type ==
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+      event.target.files[0].type ==
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+      event.target.files[0].type == 'application/xls' ||
+      event.target.files[0].type == 'application/xlsx' ||
+      event.target.files[0].type == 'application/doc'
+    ) {
+    } else {
+      alert('Please Select PDF or Excel or Word Format only');
+      return;
+    }
+
+    if (+event.target.files[0].size > 5000000) {
+      alert('Please upload file less than 5 mb..!');
+      return;
+    }
+
+    this.fileList[index].FILE_NAME = event.target.files[0].name;
+    this.fileList[index].FILE_SIZE = event.target.files[0].size;
+    this.fileList[index].FILE = event.target.files[0];
   }
 
   DeletePartyMaster(partyID: number) {
@@ -290,6 +376,7 @@ export class PartyComponent implements OnInit {
     this.partyForm.reset();
     this.partyForm.get('CUST_TYPE')?.setValue('');
     this.partyForm.get('CUST_ID')?.setValue(0);
+    this.partyForm.get('IS_GROUP_COMPANIES')?.setValue(false);
   }
 
   openModal(custID: any = 0) {
@@ -301,6 +388,22 @@ export class PartyComponent implements OnInit {
       this.isUpdate = true;
       this.GetPartyMasterDetails(custID);
     }
+
+    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    add.clear();
+    add.push(
+      this._formBuilder.group({
+        BRANCH_NAME: ['', Validators.required],
+        COUNTRY: ['', Validators.required],
+        STATE: [''],
+        CITY: [''],
+        TAN: [''],
+        PIC_NAME: [''],
+        PIC_CONTACT: [''],
+        PIC_EMAIL: [''],
+        ADDRESS: ['', Validators.required],
+      })
+    );
 
     this.openModalPopup.nativeElement.click();
   }

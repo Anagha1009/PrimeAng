@@ -104,7 +104,7 @@
         <h5 class="modal-title" id="exampleModalLabel">Customer Details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" [formGroup]="partyForm">
         <div class="accordion mt-3" id="accordion" role="tablist">
           <div class="card">
             <div class="card-header" role="tab" id="heading-1">
@@ -121,28 +121,33 @@
                 <div class="row mt-4">
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" [ngClass]="{'invalid':submitted && f.CUST_NAME.errors}"
+                        formControlName="CUST_NAME" class="form-control">
                       <label class="form-label">Customer Name <span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.CUST_NAME.errors" class="invalid-feedback">Customer Name is required
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <ng-select>
+                      <ng-select formControlName="COUNTRY" [ngClass]="{'invalid':submitted && f.COUNTRY.errors}">
                         <ng-option disabled="true">--Select--</ng-option>
-                        <ng-option>India</ng-option>
+                        <ng-option value="IND">India</ng-option>
                       </ng-select>
                       <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.COUNTRY.errors" class="invalid-feedback">Country is required
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" formControlName="STATE" class="form-control">
                       <label class="form-label">State</label>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" formControlName="CITY" class="form-control">
                       <label class="form-label">City</label>
                     </div>
                   </div>
@@ -150,25 +155,33 @@
                 <div class="row mt-4">
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" formControlName="PINCODE" class="form-control">
                       <label class="form-label">Pincode</label>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">PAN</label>
+                      <input type="text" oninput="this.value = this.value.toUpperCase()" formControlName="PAN"
+                        [ngClass]="{'invalid':submitted && f.PAN.errors}" class="form-control">
+                      <label class="form-label">PAN <span class="text-danger">*</span></label>
+                      <div *ngIf="submitted && f.PAN.errors?.required" class="invalid-feedback">PAN is required
+                      </div>
+                      <div *ngIf="submitted && f.PAN.errors?.pattern" class="invalid-feedback">PAN is invalid
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" formControlName="CUST_EMAIL"
+                        [ngClass]="{'invalid':submitted && f.CUST_EMAIL.errors}" class="form-control">
                       <label class="form-label">Email</label>
+                      <div *ngIf="submitted && f.CUST_EMAIL.errors?.email" class="invalid-feedback">Email is invalid
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" formControlName="CONTACT_PERSON_NAME" class="form-control">
                       <label class="form-label">Contact Person Name</label>
                     </div>
                   </div>
@@ -176,23 +189,26 @@
                 <div class="row mt-4">
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" formControlName="CONTACT_PERSON_NO" class="form-control">
                       <label class="form-label">Contact Person No</label>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <ng-select>
-                        <ng-option disabled="true">--Select--</ng-option>
-                        <ng-option>India</ng-option>
-                      </ng-select>
-                      <label class="form-label-ddl">Customer Type <span class="text-danger"> *</span></label>
+                      <label class="form-label2" style="z-index: 1;">Customer Type<span class="text-danger">
+                          *</span></label>
+                      <ng-multiselect-dropdown #multiSelect [ngClass]="{'invalid':submitted && f.CUST_TYPE_CODE.errors}"
+                        [placeholder]="'Select Type'" [settings]="dropdownSettings" [formControl]="f.CUST_TYPE_CODE"
+                        [data]="custTypeList" [(ngModel)]="selectedItems">
+                      </ng-multiselect-dropdown>
+                      <div *ngIf="submitted && f.CUST_TYPE_CODE.errors" class="invalid-feedback">Select
+                        atleast 1 Customer Type</div>
                     </div>
                   </div>
                   <div class="col-md-3 mt-4">
                     <div class="row ms-1">
                       <label class="checkbox-wrap checkbox-primary">
-                        <input class="chck" type="checkbox">
+                        <input formControlName="IS_GROUP_COMPANIES" class="chck" type="checkbox">
                         <span class="checkmark"></span>
                       </label>
                       <label>Group Companies</label>
@@ -202,8 +218,18 @@
                 <div class="row mt-4">
                   <div class="col-md-5">
                     <div class="form-group">
-                      <textarea type="text" class="form-control addressbox"></textarea>
-                      <label class="form-label">Address <span class="text-danger"> *</span></label>
+                      <textarea type="text" formControlName="CUST_ADDRESS" class="form-control addressbox"></textarea>
+                      <label class="form-label">Address </label>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mt-4">
+                    <div class="form-group">
+                      <div class="form-check form-switch">
+                        <input formControlName="STATUS" class="form-check-input" type="checkbox" role="switch" />
+                        <label class="form-check-label">Status <span class="text-danger"> *</span></label>
+                      </div>
+                      <div *ngIf="submitted && f.STATUS.errors" class="invalid-feedback">Status is required
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -225,29 +251,27 @@
                 <div class="row mt-4">
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">Name <span class="text-danger"> *</span></label>
+                      <input type="text" formControlName="SALES_NAME" class="form-control">
+                      <label class="form-label">Name </label>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">Code <span class="text-danger"> *</span></label>
+                      <input type="text" formControlName="SALES_CODE" class="form-control">
+                      <label class="form-label">Code </label>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <ng-select>
-                        <ng-option disabled="true">--Select--</ng-option>
-                        <ng-option>India</ng-option>
-                      </ng-select>
-                      <label class="form-label-ddl">Location <span class="text-danger"> *</span></label>
+                      <input type="text" formControlName="SALES_LOC" class="form-control">
+                      <label class="form-label">Location </label>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="date" onkeypress="return false" class="form-control">
-                      <label class="form-label">Effective From <span class="text-danger"> *</span></label>
+                      <input type="date" formControlName="SALES_EFFECTIVE_DATE" onkeypress="return false"
+                        class="form-control">
+                      <label class="form-label">Effective From </label>
                     </div>
                   </div>
                 </div>
@@ -266,66 +290,92 @@
             <div id="collapse-5" class="collapse" role="tabpanel" aria-labelledby="heading-5"
               data-bs-parent="#accordion">
               <div class="card-body">
-                <div class="row mt-4">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">Name <span class="text-danger"> *</span></label>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <ng-select>
-                        <ng-option disabled="true">--Select--</ng-option>
-                        <ng-option>India</ng-option>
-                      </ng-select>
-                      <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">State <span class="text-danger"> *</span></label>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">City <span class="text-danger"> *</span></label>
-                    </div>
-                  </div>
+                <div class="col-md-3 offset-md-9 text-end mb-3">
+                  <button (click)="addNewBranch()" class="form-btn-primary">Add New Branch <i
+                      class="fa fa-plus"></i></button>
                 </div>
-                <div class="row mt-4">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">TAN No <span class="text-danger"> *</span></label>
+                <div *ngFor="let item of f1;let i = index" [formGroup]="item">
+                  <hr class="text-success" style="height:2px;">
+                  <h6>Branch {{i+1}}</h6>
+                  <div class="row mt-4">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('BRANCH_NAME').errors}"
+                          formControlName="BRANCH_NAME" class="form-control">
+                        <label class="form-label">Name <span class="text-danger"> *</span></label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('BRANCH_NAME').errors"
+                          class="invalid-feedback">Name is required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <ng-select formControlName="COUNTRY"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('COUNTRY').errors}">
+                          <ng-option disabled="true">--Select--</ng-option>
+                          <ng-option value="IND">India</ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('COUNTRY').errors"
+                          class="invalid-feedback">Country is required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="STATE" class="form-control">
+                        <label class="form-label">State</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="CITY" class="form-control">
+                        <label class="form-label">City </label>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">Person In Charge <span class="text-danger"> *</span></label>
+                  <div class="row mt-4">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="TAN" class="form-control">
+                        <label class="form-label">TAN No</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="PIC_NAME" class="form-control">
+                        <label class="form-label">Person In Charge (PIC)</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="PIC_CONTACT" class="form-control">
+                        <label class="form-label">PIC Contact </label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="PIC_EMAIL" class="form-control">
+                        <label class="form-label">Email </label>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">Contact <span class="text-danger"> *</span></label>
+                  <div class="row mt-4">
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <textarea type="text"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('ADDRESS').errors}"
+                          formControlName="ADDRESS" class="form-control addressbox"></textarea>
+                        <label class="form-label">Address <span class="text-danger"> *</span></label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('ADDRESS').errors"
+                          class="invalid-feedback">Address is required
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" class="form-control">
-                      <label class="form-label">Email <span class="text-danger"> *</span></label>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-4">
-                  <div class="col-md-5">
-                    <div class="form-group">
-                      <textarea type="text" class="form-control addressbox"></textarea>
-                      <label class="form-label">Address <span class="text-danger"> *</span></label>
+                    <div class="col-md-7 text-end">
+                      <button *ngIf="i > 0" (click)="deleteBranch(i)" class="form-btn-primary rounded"><i
+                          class="fa fa-trash"></i></button>
                     </div>
                   </div>
                 </div>
@@ -347,45 +397,60 @@
                 <div class="row mt-4">
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" [ngClass]="{'invalid':submitted && f.BANK_NAME.errors}"
+                        formControlName="BANK_NAME" class="form-control">
                       <label class="form-label">Bank Name<span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.BANK_NAME.errors" class="invalid-feedback">Bank Name is required
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" formControlName="BANK_ACC_NO"
+                        [ngClass]="{'invalid':submitted && f.BANK_ACC_NO.errors}" class="form-control">
                       <label class="form-label">Account No<span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.BANK_ACC_NO.errors" class="invalid-feedback">Account No is required
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" [ngClass]="{'invalid':submitted && f.BANK_IFSC.errors}"
+                        formControlName="BANK_IFSC" class="form-control">
                       <label class="form-label">IFSC Code<span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.BANK_IFSC.errors" class="invalid-feedback">IFSC Code is required
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" class="form-control">
+                      <input type="text" [ngClass]="{'invalid':submitted && f.BANK_TAX_NO.errors}"
+                        formControlName="BANK_TAX_NO" class="form-control">
                       <label class="form-label">Tax No <span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.BANK_TAX_NO.errors" class="invalid-feedback">Tax No is required
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="row mt-4">
                   <div class="col-md-3">
                     <div class="form-group">
-                      <ng-select>
+                      <ng-select formControlName="BANK_TAX_TYPE"
+                        [ngClass]="{'invalid':submitted && f.BANK_TAX_TYPE.errors}">
                         <ng-option disabled="true">--Select--</ng-option>
-                        <ng-option>GST</ng-option>
-                        <ng-option>VAT</ng-option>
+                        <ng-option value="GST">GST</ng-option>
+                        <ng-option value="VAT">VAT</ng-option>
                       </ng-select>
                       <label class="form-label-ddl">Tax Type <span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.BANK_TAX_TYPE.errors" class="invalid-feedback">Tax Type is required
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="row mt-4">
                   <div class="col-md-5">
                     <div class="form-group">
-                      <textarea type="text" class="form-control addressbox"></textarea>
+                      <textarea formControlName="BANK_REMARKS" type="text" class="form-control addressbox"></textarea>
                       <label class="form-label">Remarks</label>
                     </div>
                   </div>
@@ -443,9 +508,9 @@
         </div>
       </div>
       <div class="modal-footer">
+        <button class="form-btn-light me-2" (click)="ClearForm()">Clear</button>
         <button *ngIf="!isUpdate" (click)="InsertPartyMaster()" class="form-btn">Save</button>
         <button *ngIf="isUpdate" (click)="UpdatePartyMaster()" class="form-btn">Update</button>
-        <button class="form-btn-light me-2" (click)="ClearForm()">Clear</button>
       </div>
     </div>
   </div>
