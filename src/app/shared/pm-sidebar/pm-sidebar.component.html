@@ -192,6 +192,14 @@
                                 <div data-i18n="Alerts">Vessel Schedule</div>
                             </a>
                         </li>
+
+                        <!--  -->
+                        <li [class]="submenu == 'charges-master' ? 'menu-item active' : 'menu-item'">
+                          <a (click)="redirectToSubMenu('charges-master')" class="menu-link pointer">
+                              <div data-i18n="Alerts">charges-master</div>
+                          </a>
+                      </li>
+                        <!--  -->
                     </ul>
                 </li>
             </ul>
