@@ -32,6 +32,7 @@ import { StevedoringComponent } from './stevedoring/stevedoring.component';
 import { DetentionComponent } from './detention/detention.component';
 import { MandatoryComponent } from './mandatory/mandatory.component';
 import { ChargeMasterComponent } from './charge-master/charge-master.component';
+import { VendorComponent } from './vendor/vendor.component';
 
 @NgModule({
     declarations: [
@@ -58,7 +59,8 @@ import { ChargeMasterComponent } from './charge-master/charge-master.component';
         StevedoringComponent,
         DetentionComponent,
         MandatoryComponent,
-        ChargeMasterComponent
+        ChargeMasterComponent,
+        VendorComponent
     ],
     imports: [
         CommonModule,

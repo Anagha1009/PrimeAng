@@ -23,7 +23,6 @@ export class ChargeMasterComponent implements OnInit {
   isLoading: boolean = false;
   isLoading1: boolean = false;
   isGST: boolean = false;
-  IsGst:any
   master: MASTER = new MASTER();
 
 
@@ -48,7 +47,7 @@ export class ChargeMasterComponent implements OnInit {
       HSN_CODE:[''],
       CHARGE_AMOUNT: ['',Validators.required],
       CHARGE_TYPE: [''],
-      GST: ['']
+      IS_GST: ['']
     });
 
     this.chargeForm1 = this._formBuilder.group({
