@@ -199,6 +199,11 @@
                               <div data-i18n="Alerts">charge master</div>
                           </a>
                       </li>
+                      <li [class]="submenu == 'vendor' ? 'menu-item active' : 'menu-item'">
+                        <a (click)="redirectToSubMenu('vendor')" class="menu-link pointer">
+                            <div data-i18n="Alerts">vendor</div>
+                        </a>
+                    </li>
                         <!--  -->
                     </ul>
                 </li>
