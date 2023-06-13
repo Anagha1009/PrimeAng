@@ -49,14 +49,14 @@
       <thead>
           <tr>
               <th width="1%">No</th>
-              <th width="12%">CHARGE_NAME</th>
-              <th width="14%">CHARGE_HEADER</th>
-              <th width="14%">APPLICABLE_FOR</th>
-              <th width="14%">GST_PERCENTAGE</th>
+              <th width="12%">CHARGE NAME</th>
+              <th width="14%">CHARGE HEADER</th>
+              <th width="14%">Charge Type</th>
+              <th width="14%">GST PERCENTAGE</th>
               <th width="14%">Currency</th>
               <th width="14%">HSN Code</th>
               <th width="14%">Charge Amount</th>
-              <th width="14%">Charge Type</th>
+              <th width="14%">APPLICABLE FOR</th>
               <th width="14%">Action</th>
           </tr>
       </thead>
@@ -65,12 +65,13 @@
               <td width="1%">{{i+1}}</td>
               <td width="12%">{{item.CHARGE_NAME}}</td>
               <td width="14%">{{item.CHARGE_HEADER}}</td>
-              <td width="14%">{{item.APPLICABLE_FOR}}</td>
+              <td width="14%">{{item.CHARGE_TYPE}}</td>
               <td width="14%">{{item.GST_PERCENTAGE}}</td>
               <td width="14%">{{item.CURRENCY}}</td>
               <td width="14%">{{item.HSN_CODE}}</td>
               <td width="14%">{{item.CHARGE_AMOUNT}}</td>
-              <td width="14%">{{item.CHARGE_TYPE}}</td>
+              <td width="14%">{{item.APPLICABLE_FOR}}</td>
+
               <td width="25%">
                 <i class="fa fa-pencil mx-2 pointer text-success" (click)="openModal(item.ID)"></i>
                 <i class="fa fa-trash ms-2 pointer text-danger" (click)="DeleteChargeMaster(item.ID)"></i></td>
@@ -102,8 +103,22 @@
                     <div class="col-md-6">
                       <div class="form-group" >
                       <label class="form-label2">Charge Header<span class="text-danger"> *</span></label>
-                      <input type="text" [ngClass]="{'invalid':submitted && f.CHARGE_HEADER.errors}"  formControlName="CHARGE_HEADER"
-                          class="form-control2" maxlength="20">
+                      <select formControlName="CHARGE_HEADER" class="form-control2" [ngClass]="{'invalid':submitted && f.CHARGE_HEADER.errors}">
+                        <option disabled value="">--Select--</option>
+                        <option> GROUND</option>
+                        <option> DETENTION</option>
+                        <option> LUMP SUM</option>
+                        <option> FREIGHT</option>
+                        <option> LOCAL</option>
+                        <option> STORAGE</option>
+                        <option> TERMINAL</option>
+                        <option> OTHER</option>
+                        <option> SURVEY</option>
+                        <option> CHA</option>
+                        <option> TRANSPORTER</option>
+                        <option> DEPOT</option>
+                        <option> CARRIER</option>
+                    </select>
                           <div *ngIf="submitted && f.CHARGE_HEADER.errors" class="invalid-feedback">Charge Header is required</div>
 
                     </div>
@@ -113,10 +128,14 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="form-group" >
-                      <label class="form-label2">Applicable For<span class="text-danger"> *</span></label>
-                      <input type="text" [ngClass]="{'invalid':submitted && f.APPLICABLE_FOR.errors}"  formControlName="APPLICABLE_FOR"
-                          class="form-control2" maxlength="20">
-                          <div *ngIf="submitted && f.APPLICABLE_FOR.errors" class="invalid-feedback">Applicable For required</div>
+                      <label class="form-label2">Charge Type<span class="text-danger"> *</span></label>
+                      <select formControlName="CHARGE_TYPE" class="form-control2" [ngClass]="{'invalid':submitted && f.CHARGE_TYPE.errors}">
+                        <option disabled value="">--Select--</option>
+                        <option> CONTAINER</option>
+                        <option> BL</option>
+
+                    </select>
+                          <div *ngIf="submitted && f.CHARGE_TYPE.errors" class="invalid-feedback">Charge Type is required</div>
 
                     </div>
                     </div>
@@ -145,13 +164,17 @@
 
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="form-label2" >Charge Type<span class="text-danger"> *</span></label>
-                        <select formControlName="CHARGE_TYPE" class="form-control2" >
+                          <label class="form-label2" >Applicable For<span class="text-danger"> *</span></label>
+                        <select formControlName="APPLICABLE_FOR" class="form-control2" [ngClass]="{'invalid':submitted && f.APPLICABLE_FOR.errors}" >
                         <option disabled value="">--Select--</option>
                         <option> Import</option>
                         <option> Export</option>
+                        <option> BOTH</option>
+
 
                     </select>
+                    <div *ngIf="submitted && f.APPLICABLE_FOR.errors" class="invalid-feedback">Applicable For is required</div>
+
                       </div>
                       </div>
                       </div>
@@ -159,7 +182,7 @@
                       <div class="row">
                         <div class="col-md-6">
                         <div class="form-check form-switch" >
-                          <input formControlName="GST" (change)="IsGST($event)" class="form-check-input" type="checkbox"
+                          <input formControlName="IS_GST" (change)="IsGST($event)" class="form-check-input" type="checkbox"
                               role="switch" />
                           <label class="form-check-label">Is GST <span class="text-danger"> *</span></label>
                       </div>
