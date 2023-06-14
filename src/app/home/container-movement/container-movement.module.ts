@@ -11,6 +11,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { NewContainerMovementComponent } from './new-container-movement/new-container-movement.component';
 import { NewTrackComponent } from './new-track/new-track.component';
 import { CtListComponent } from './ct-list/ct-list.component';
+import { TooltipModule } from 'ng2-tooltip-directive';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CtListComponent } from './ct-list/ct-list.component';
     TranslateModule,
     DataTablesModule,
     ContainerMovementRoutingModule,
+    TooltipModule,
   ],
 })
 export class ContainerMovementModule {}
