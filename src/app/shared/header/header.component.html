@@ -26,7 +26,9 @@
                         <li><a routerLink="/home/operations/load-list">{{'Menu.loadList'|translate}}</a></li>
                         <li><a routerLink="/home/operations/manifest-list">{{'Menu.MANIFEST'|translate}}</a></li>
                         <!-- <li><a routerLink="operations/invoice-list">{{'Menu.newinvoice'|translate}}</a></li> -->
-                        <li><a class="text-light" routerLink="#">{{'Menu.newinvoice'|translate}}</a></li>
+                        <!-- <li><a class="text-light" routerLink="#">{{'Menu.newinvoice'|translate}}</a></li> -->
+                        <li><a routerLink="/home/operations/new-invoice2">{{'Menu.newinvoice'|translate}}</a></li>
+
                     </ul>
                     <ul
                         *ngIf="item.menuName == 'Container Movement' || item.menuName == 'कंटेनर मूवमेंट' || item.menuName == 'كونتينر موفمنة'">

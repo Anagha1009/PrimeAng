@@ -290,15 +290,7 @@ export class PartyComponent implements OnInit {
 
   fileUpload(event: any, index: number) {
     if (
-      event.target.files[0].type == 'application/pdf' ||
-      event.target.files[0].type ==
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-      event.target.files[0].type ==
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-      event.target.files[0].type == 'application/xls' ||
-      event.target.files[0].type == 'application/xlsx' ||
-      event.target.files[0].type == 'application/doc'
-    ) {
+      event.target.files[0].type == 'application/pdf') {
     } else {
       alert('Please Select PDF or Excel or Word Format only');
       return;
