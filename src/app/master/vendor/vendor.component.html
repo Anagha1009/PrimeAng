@@ -2,23 +2,23 @@
   <h2>Vendor Master</h2>
 </div>
 <div class="mb-4">
-  <form [formGroup]="vendorForm">
+  <form [formGroup]="custForm">
     <div class="col-md-6 offset-md-6 text-end">
       <button class="form-btn-primary" (click)="openModal()"><i class="fa fa-plus me-1"></i>New Vendor</button>
-      <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#vendorModal">New
+      <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#customerModal">New
         Vendor</button>
     </div>
     <div class="row">
       <div class="col-md-3">
         <div class="form-group">
           <label class="form-label2">Vendor Name</label>
-          <input formControlName="VENDOR_NAME" type="text" class="form-control2">
+          <input formControlName="CUST_NAME" type="text" class="form-control2">
         </div>
       </div>
       <div class="col-md-2">
         <div class="form-group">
           <label class="form-label2">Type</label>
-          <select formControlName="VENDOR_TYPE" class="form-control2">
+          <select formControlName="CUST_TYPE" class="form-control2">
             <option disabled value="">--Select--</option>
             <option value="S">Shipper</option>
             <option value="C">Consignee</option>
@@ -26,7 +26,6 @@
             <option value="CHA">CHA</option>
             <option value="B">Broker</option>
             <option value="N">Notify Party</option>
-            <option value="SLOT">Slot Operator</option>
           </select>
         </div>
       </div>
@@ -43,22 +42,24 @@
       <div class="col-md-2">
         <div class="form-group">
           <label class="form-label2">From Date</label>
-          <input (change)="vendorForm.get('TO_DATE')?.setValue('')" onkeypress="return false;" formControlName="FROM_DATE"
+          <input (change)="custForm.get('TO_DATE')?.setValue('')" onkeypress="return false;" formControlName="FROM_DATE"
             type="date" class="form-control2">
         </div>
       </div>
       <div class="col-md-2">
         <div class="form-group">
           <label class="form-label2">To Date</label>
-          <input onkeypress="return false;" [min]="vendorForm.get('FROM_DATE')?.value" formControlName="TO_DATE"
+          <input onkeypress="return false;" [min]="custForm.get('FROM_DATE')?.value" formControlName="TO_DATE"
             type="date" class="form-control2">
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-md-3 offset-md-9 text-end mb-3">
-        <button class="form-btn me-2" (click)="Search()" >Search</button>
-        <button class="form-btn-light me-2" (click)="Clear()" >Clear</button>
+        <button class="form-btn me-2" (click)="Search()" [disabled]="isLoading">Search
+          <span *ngIf="isLoading" class="fa fa-spinner fa-spin"></span></button>
+        <button class="form-btn-light me-2" (click)="Clear()" [disabled]="isLoading1">Clear<span *ngIf="isLoading1"
+            class="fa fa-spinner fa-spin"></span></button>
       </div>
     </div>
   </form>
@@ -76,129 +77,460 @@
       </tr>
     </thead>
     <tbody>
-      <!-- <tr > -->
-        <!-- <td width="1%"></td>
-        <td width="30%"></td>
-        <td width="9%"></td>
-        <td width="10%"></td>
-        <td width="20%"></td>
-        <td width="10%"></td>
-        <td width="10%" class="status"><span ></span>
-        </td> -->
-        <!-- <td width="10%">
-          <i class="fa fa-pencil mx-2 pointer text-success" ></i>
-          <i class="fa fa-trash ms-2 pointer text-danger"></i>
-        </td> -->
-      <!-- </tr> -->
+      <tr *ngFor="let item of partyList; let i = index">
+        <td width="1%">{{i+1}}</td>
+        <td width="30%">{{item.CUST_NAME}}</td>
+        <td width="9%">{{item.CUST_TYPE}}</td>
+        <td width="10%">{{item.CUST_EMAIL == null ? '-' : item.CUST_EMAIL == '' ? '-' : item.CUST_EMAIL}}</td>
+        <td width="20%">{{item.CUST_ADDRESS == null ? '-' : item.CUST_ADDRESS == '' ? '-' : item.CUST_ADDRESS}}</td>
+        <td width="10%">{{item.CUST_CONTACT == null ? '-' : item.CUST_CONTACT == '' ? '-' : item.CUST_CONTACT}}</td>
+        <td width="10%" class="status"><span [class]="!item.STATUS ? 'rejected' : 'active'">{{item.STATUS ? 'Active'
+            :
+            'In-Active'}}</span>
+        </td>
+        <td width="10%">
+          <i class="fa fa-pencil mx-2 pointer text-success" (click)="openModal(item.CUST_ID)"></i>
+          <i class="fa fa-trash ms-2 pointer text-danger" (click)="DeletePartyMaster(item.CUST_ID)"></i>
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>
-<div class="modal fade" #vendorModal id="vendorModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+<div class="modal fade" #customerModal id="customerModal" tabindex="-1" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Vendor Details</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
       </div>
-      <div class="modal-body">
-        <form [formGroup]="vendorForm1">
-          <div class="col-md-12">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label2">Name<span class="text-danger"> *</span></label>
-                  <input maxlength="500" type="text" id="name"  [ngClass]="{'invalid':submitted && f.VENDOR_NAME.errors}"formControlName="VENDOR_NAME" class="form-control2">
-                  <div *ngIf="submitted && f.VENDOR_NAME.errors?.required" class="invalid-feedback">Vendor Name is required
+      <div class="modal-body" [formGroup]="partyForm">
+        <div class="accordion mt-3" id="accordion" role="tablist">
+          <div class="card">
+            <div class="card-header" role="tab" id="heading-1">
+              <h6 class="mb-0">
+                <a data-bs-toggle="collapse" href="#collapse-1" aria-expanded="false" aria-controls="collapse-1"
+                  data-abc="true" class="collapsed">
+                  <span class="fw-bolder">General Details</span>
+                </a>
+              </h6>
+            </div>
+            <div id="collapse-1" class="collapse show" role="tabpanel" aria-labelledby="heading-1"
+              data-bs-parent="#accordion">
+              <div class="card-body">
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" [ngClass]="{'invalid':submitted && f.CUST_NAME.errors}"
+                        formControlName="CUST_NAME" class="form-control">
+                      <label class="form-label">Vendor Name <span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.CUST_NAME.errors" class="invalid-feedback">Vendor Name is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <ng-select formControlName="COUNTRY" [ngClass]="{'invalid':submitted && f.COUNTRY.errors}">
+                        <ng-option disabled="true">--Select--</ng-option>
+                        <ng-option value="IND">India</ng-option>
+                      </ng-select>
+                      <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.COUNTRY.errors" class="invalid-feedback">Country is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="STATE" class="form-control">
+                      <label class="form-label">State</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="CITY" class="form-control">
+                      <label class="form-label">City</label>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label2">Address<span class="text-danger"> *</span></label>
-                  <textarea maxlength="500" type="text" id="address"[ngClass]="{'invalid':submitted && f.VENDOR_ADDRESS.errors}"  formControlName="VENDOR_ADDRESS"
-                    class="form-control2"></textarea>
-                    <div *ngIf="submitted && f.VENDOR_ADDRESS.errors?.required" class="invalid-feedback">Vendor Address is required
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="PINCODE" class="form-control">
+                      <label class="form-label">Pincode</label>
                     </div>
-
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" oninput="this.value = this.value.toUpperCase()" formControlName="PAN"
+                        [ngClass]="{'invalid':submitted && f.PAN.errors}" class="form-control">
+                      <label class="form-label">PAN <span class="text-danger">*</span></label>
+                      <div *ngIf="submitted && f.PAN.errors?.required" class="invalid-feedback">PAN is required
+                      </div>
+                      <div *ngIf="submitted && f.PAN.errors?.pattern" class="invalid-feedback">PAN is invalid
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="CUST_EMAIL"
+                        [ngClass]="{'invalid':submitted && f.CUST_EMAIL.errors}" class="form-control">
+                      <label class="form-label">Email</label>
+                      <div *ngIf="submitted && f.CUST_EMAIL.errors?.email" class="invalid-feedback">Email is invalid
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="CONTACT_PERSON_NAME" class="form-control">
+                      <label class="form-label">Contact Person Name</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="CONTACT_PERSON_NO" class="form-control">
+                      <label class="form-label">Contact Person No</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label class="form-label2" style="z-index: 1;">Vendor Type<span class="text-danger">
+                          *</span></label>
+                      <ng-multiselect-dropdown #multiSelect [ngClass]="{'invalid':submitted && f.CUST_TYPE_CODE.errors}"
+                        [placeholder]="'Select Type'" [settings]="dropdownSettings" [formControl]="f.CUST_TYPE_CODE"
+                        [data]="custTypeList" [(ngModel)]="selectedItems">
+                      </ng-multiselect-dropdown>
+                      <div *ngIf="submitted && f.CUST_TYPE_CODE.errors" class="invalid-feedback">Select
+                        atleast 1 Customer Type</div>
+                    </div>
+                  </div>
+                  <div class="col-md-3 mt-4">
+                    <div class="row ms-1" >
+                      <label class="checkbox-wrap checkbox-primary">
+                        <input formControlName="IS_GROUP_COMPANIES" class="chck" type="checkbox">
+                        <span class="checkmark"></span>
+                      </label>
+                      <label>Group Companies</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-4">
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      <textarea type="text" formControlName="CUST_ADDRESS" class="form-control addressbox"></textarea>
+                      <label class="form-label">Address </label>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mt-4">
+                    <div class="form-group">
+                      <div class="form-check form-switch">
+                        <input formControlName="STATUS" class="form-check-input" type="checkbox" role="switch" />
+                        <label class="form-check-label">Status <span class="text-danger"> *</span></label>
+                      </div>
+                      <div *ngIf="submitted && f.STATUS.errors" class="invalid-feedback">Status is required
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label2">Email</label>
-                  <input maxlength="255" type="text" id="VendorEmail" [ngClass]="{'invalid':submitted && f.VENDOR_EMAIL.errors}" formControlName="VENDOR_EMAIL"
-                    class="form-control2">
-                    <div *ngIf="submitted && f.VENDOR_EMAIL.errors?.email" class="invalid-feedback">Vendor Email is invalid
+          </div>
+          <div class="card">
+            <div class="card-header" role="tab" id="heading-4">
+              <h6 class="mb-0">
+                <a data-bs-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4"
+                  data-abc="true" class="collapsed">
+                  <span class="fw-bolder">Sales Representative Details</span>
+                </a>
+              </h6>
+            </div>
+            <div id="collapse-4" class="collapse" role="tabpanel" aria-labelledby="heading-4"
+              data-bs-parent="#accordion">
+              <div class="card-body">
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="SALES_NAME" class="form-control">
+                      <label class="form-label">Name </label>
                     </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="SALES_CODE" class="form-control">
+                      <label class="form-label">Code </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="SALES_LOC" class="form-control">
+                      <label class="form-label">Location </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="date" formControlName="SALES_EFFECTIVE_DATE" onkeypress="return false"
+                        class="form-control">
+                      <label class="form-label">Effective From </label>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label2">GST No<span class="text-danger"> *</span></label>
-                  <input maxlength="15" type="text" id="gstin" [ngClass]="{'invalid':submitted && f.GSTIN.errors}" formControlName="GSTIN" class="form-control2">
-                  <div *ngIf="submitted && f.GSTIN.errors?.pattern" class="invalid-feedback">GST No is invalid
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" role="tab" id="heading-5">
+              <h6 class="mb-0">
+                <a data-bs-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5"
+                  data-abc="true" class="collapsed">
+                  <span class="fw-bolder">Branch Details</span>
+                </a>
+              </h6>
+            </div>
+            <div id="collapse-5" class="collapse" role="tabpanel" aria-labelledby="heading-5"
+              data-bs-parent="#accordion">
+              <div class="card-body">
+                <div class="col-md-3 offset-md-9 text-end mb-3">
+                  <button (click)="addNewBranch()" class="form-btn-primary">Add New Branch <i
+                      class="fa fa-plus"></i></button>
+                </div>
+                <div *ngFor="let item of f1;let i = index" [formGroup]="item">
+                  <hr class="text-success" style="height:2px;">
+                  <h6>Branch {{i+1}}</h6>
+                  <div class="row mt-4">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('BRANCH_NAME').errors}"
+                          formControlName="BRANCH_NAME" class="form-control">
+                        <label class="form-label">Name <span class="text-danger"> *</span></label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('BRANCH_NAME').errors"
+                          class="invalid-feedback">Name is required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <ng-select formControlName="COUNTRY"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('COUNTRY').errors}">
+                          <ng-option disabled="true">--Select--</ng-option>
+                          <ng-option value="IND">India</ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('COUNTRY').errors"
+                          class="invalid-feedback">Country is required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="STATE" class="form-control">
+                        <label class="form-label">State</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="CITY" class="form-control">
+                        <label class="form-label">City </label>
+                      </div>
+                    </div>
                   </div>
-                  <div *ngIf="submitted && f.GSTIN.errors?.required" class="invalid-feedback">GST No is required
+                  <div class="row mt-4">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="TAN" class="form-control">
+                        <label class="form-label">TAN No</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="PIC_NAME" class="form-control">
+                        <label class="form-label">Person In Charge (PIC)</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="PIC_CONTACT" class="form-control">
+                        <label class="form-label">PIC Contact </label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="PIC_EMAIL" class="form-control">
+                        <label class="form-label">Email </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-4">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <ng-select formControlName="TAX_TYPE"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('TAX_TYPE').errors}">
+                          <ng-option disabled="true">--Select--</ng-option>
+                          <ng-option value="GST">GST</ng-option>
+                          <ng-option value="VAT">VAT</ng-option>
+                        </ng-select>
+                        <label class="form-label-ddl">Tax Type</label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('TAX_TYPE').errors"
+                          class="invalid-feedback">Tax Type is required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('TAX_NO').errors}"
+                          formControlName="TAX_NO" class="form-control">
+                        <label class="form-label">Tax No</label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('TAX_NO').errors"
+                          class="invalid-feedback">Tax No is required
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-4">
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <textarea type="text"
+                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('ADDRESS').errors}"
+                          formControlName="ADDRESS" class="form-control addressbox"></textarea>
+                        <label class="form-label">Address <span class="text-danger"> *</span></label>
+                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('ADDRESS').errors"
+                          class="invalid-feedback">Address is required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-7 text-end">
+                      <button *ngIf="i > 0" (click)="deleteBranch(i)" class="form-btn-primary rounded"><i
+                          class="fa fa-trash"></i></button>
+                    </div>
                   </div>
                 </div>
-                <!-- <div class="form-group">
-                  <label class="form-label2">Vat No/ License No<span class="text-danger"> *</span></label>
-                  <input maxlength="30" type="text" id="gstin"[ngClass]="{'invalid':submitted && f.VAT_NO.errors}" formControlName="VAT_NO" class="form-control2">
-                  <div *ngIf="submitted && f.VAT_NO.errors?.required" class="invalid-feedback">Vat No is required
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" role="tab" id="heading-6">
+              <h6 class="mb-0">
+                <a data-bs-toggle="collapse" href="#collapse-6" aria-expanded="false" aria-controls="collapse-6"
+                  data-abc="true" class="collapsed">
+                  <span class="fw-bolder">Bank Details</span>
+                </a>
+              </h6>
+            </div>
+            <div id="collapse-6" class="collapse" role="tabpanel" aria-labelledby="heading-6"
+              data-bs-parent="#accordion">
+              <div class="card-body">
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" [ngClass]="{'invalid':submitted && f.BANK_NAME.errors}"
+                        formControlName="BANK_NAME" class="form-control">
+                      <label class="form-label">Bank Name<span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.BANK_NAME.errors" class="invalid-feedback">Bank Name is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="BANK_ACC_NO"
+                        [ngClass]="{'invalid':submitted && f.BANK_ACC_NO.errors}" class="form-control">
+                      <label class="form-label">Account No<span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.BANK_ACC_NO.errors" class="invalid-feedback">Account No is required
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" [ngClass]="{'invalid':submitted && f.BANK_IFSC.errors}"
+                        formControlName="BANK_IFSC" class="form-control">
+                      <label class="form-label">IFSC Code<span class="text-danger"> *</span></label>
+                      <div *ngIf="submitted && f.BANK_IFSC.errors" class="invalid-feedback">IFSC Code is required
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--  -->
+                <div class="row mt-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="text" formControlName="SWIFT_CODE" class="form-control">
+                      <label class="form-label">Swift Code</label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <textarea formControlName="BANK_REMARKS" type="text" class="form-control addressbox"></textarea>
+                      <label class="form-label">Remarks</label>
+                    </div>
+                  </div>
+                </div>
+                <!--  -->
+                <!-- <div class="row mt-4">
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      <textarea formControlName="BANK_REMARKS" type="text" class="form-control addressbox"></textarea>
+                      <label class="form-label">Remarks</label>
+                    </div>
                   </div>
                 </div> -->
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label2" style="z-index: 1;">Type <span class="text-danger"> *</span></label>
-                     <select formControlName="VENDOR_TYPE_CODE" class="form-control2">
-                    <option disabled value="">--Select--</option>
-                    <option>testing</option>
-
-                 </select>
-                 <div *ngIf="submitted && f.VENDOR_TYPE_CODE.errors" class="invalid-feedback">Vendor Type Code is required
-                </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label class="form-label2">Contact No</label>
-                  <input  maxlength="10" type="text" formControlName="VENDOR_CONTACT" class="form-control2">
-                </div>
-              </div>
+          </div>
+          <div class="card">
+            <div class="card-header" role="tab" id="heading-7">
+              <h6 class="mb-0">
+                <a data-bs-toggle="collapse" href="#collapse-7" aria-expanded="false" aria-controls="collapse-7"
+                  data-abc="true" class="collapsed">
+                  <span class="fw-bolder">KYC Details</span>
+                </a>
+              </h6>
             </div>
-            <div class="row">
-              <div class="col-md-6 mt-4">
-                <div class="form-group">
-                  <div class="form-check form-switch">
-                    <input formControlName="STATUS" class="form-check-input" type="checkbox" role="switch" />
-                    <label class="form-check-label">Status</label>
+            <div id="collapse-7" class="collapse" role="tabpanel" aria-labelledby="heading-7"
+              data-bs-parent="#accordion">
+              <div class="card-body">
+                <div class="col-md-6 mt-4">
+                  <div class="form-group">
+                    <div class="form-check form-switch">
+                      <input (change)="onchangeKYC($event)" class="form-check-input" type="checkbox" role="switch" />
+                      <label class="form-check-label">Is KYC </label>
+                    </div>
                   </div>
-                  <div *ngIf="submitted && f.STATUS.errors" class="invalid-feedback">Status is required </div>
+                </div>
+                <div class="col-md-3 mb-3" *ngIf="isKYC">
+                  <button (click)="addNewFile()" class="form-btn-primary">Add New <i class="fa fa-plus"></i></button>
+                </div>
+                <div class="row" *ngIf="isKYC">
+                  <div class="col-md-4" *ngFor="let item of fileList;let i = index;">
+                    <div class="formbold-mb-5 formbold-file-input" *ngIf="fileList[i].FILE_NAME == ''">
+                      <input (change)="fileUpload($event,i)" type="file" name="{{'file' + i}}" id="{{'file' + i}}" />
+                      <label for="{{'file' + i}}">
+                        <div>
+                          <h3><i class="fa fa-file-pdf-o"></i></h3>
+                          <span class="formbold-drop-file">Upload</span>
+                          <small class="fw-bold">KYC FILE {{i + 1}}</small>
+                        </div>
+                      </label>
+                    </div>
+                    <div class="formbold-file-list formbold-mb-5" *ngIf="fileList[i].FILE_NAME != ''">
+                      <div class="formbold-file-item">
+                        <span class="formbold-file-name">{{item.FILE_NAME}}</span>
+                        <small class="formbold-file-size">{{item.FILE_SIZE}} Kb</small>
+                        <button><span class="bx bx-x-circle" (click)="removeFile(i)"></span></button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="col-md-6">
-               <div class="form-group">
-                  <label class="form-label2">Vat No/ License No<span class="text-danger"> *</span></label>
-                  <input maxlength="30" type="text" id="gstin"[ngClass]="{'invalid':submitted && f.VAT_NO.errors}" formControlName="VAT_NO" class="form-control2">
-                  <div *ngIf="submitted && f.VAT_NO.errors?.required" class="invalid-feedback">Vat No is required
-                  </div>
-                </div>
-                </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
       <div class="modal-footer">
-        <button (click)="InsertVendor()" class="form-btn">Save</button>
-        <button class="form-btn">Update</button>
-        <button class="form-btn">Clear</button>
+        <button class="form-btn-light me-2" (click)="ClearForm()">Clear</button>
+        <button *ngIf="!isUpdate" (click)="InsertPartyMaster()" class="form-btn">Save</button>
+        <button *ngIf="isUpdate" (click)="UpdatePartyMaster()" class="form-btn">Update</button>
       </div>
     </div>
   </div>
 </div>
-

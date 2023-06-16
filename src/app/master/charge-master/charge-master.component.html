@@ -4,23 +4,12 @@
 </div>
 <div class="mb-4">
   <div class="col-md-6 offset-md-6 text-end">
-      <button (click)="openModal()" class="form-btn-primary"><i class="fa fa-plus me-1"></i>New Master</button>
-      <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#chargeModal">New
+      <button (click)="openModal()" class="form-btn-primary"><i class="fa fa-plus me-1"></i>New Charge Master</button>
+      <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#chargeModal">New Charge
         Master</button>
   </div>
   <form [formGroup]="chargeForm1">
       <div class="row">
-          <!-- <div class="col-md-2">
-              <div class="form-group">
-                  <label class="form-label2">Status </label>
-                  <select class="form-control2" formControlName="STATUS">
-                      <option value="" selected="true" disabled>--Select--</option>
-                      <option value="true">Active</option>
-                      <option value="false">InActive</option>
-                  </select>
-                  <div *ngIf="submitted && f.STATUS.errors" class="invalid-feedback">Please Select Status  </div>
-              </div>
-          </div> -->
           <div class="col-md-2">
               <div class="form-group">
                   <label class="form-label2">From Date</label>
@@ -49,14 +38,14 @@
       <thead>
           <tr>
               <th width="1%">No</th>
-              <th width="12%">CHARGE NAME</th>
-              <th width="14%">CHARGE HEADER</th>
+              <th width="12%">Charge Name</th>
+              <th width="14%">Charge Header</th>
               <th width="14%">Charge Type</th>
-              <th width="14%">GST PERCENTAGE</th>
+              <th width="14%">Gst Percentage</th>
               <th width="14%">Currency</th>
               <th width="14%">HSN Code</th>
               <th width="14%">Charge Amount</th>
-              <th width="14%">APPLICABLE FOR</th>
+              <th width="14%">Applicable For</th>
               <th width="14%">Action</th>
           </tr>
       </thead>
@@ -167,8 +156,8 @@
                           <label class="form-label2" >Applicable For<span class="text-danger"> *</span></label>
                         <select formControlName="APPLICABLE_FOR" class="form-control2" [ngClass]="{'invalid':submitted && f.APPLICABLE_FOR.errors}" >
                         <option disabled value="">--Select--</option>
-                        <option> Import</option>
-                        <option> Export</option>
+                        <option> IMPORT</option>
+                        <option> EXPORT</option>
                         <option> BOTH</option>
 
 
