@@ -54,6 +54,7 @@ export class PartyService {
   }
 
   postParty(party: any) {
+    console.log("part service", party)
     return this._http.post<any>(
       this.BASE_URL + 'Master/InsertPartyMaster',
       party,
