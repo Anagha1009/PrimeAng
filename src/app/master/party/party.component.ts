@@ -94,11 +94,8 @@ export class PartyComponent implements OnInit {
       SALES_CODE: [''],
       SALES_LOC: [''],
       SALES_EFFECTIVE_DATE: [''],
-      BANK_NAME: ['', Validators.required],
-      BANK_ACC_NO: ['', Validators.required],
-      BANK_IFSC: ['', Validators.required],
-      BANK_REMARKS: [''],
       BRANCH_LIST: new FormArray([]),
+      BANK_LIST: new FormArray([]),
     });
 
     this.custForm = this._formBuilder.group({
@@ -129,8 +126,8 @@ export class PartyComponent implements OnInit {
 
     add.push(
       this._formBuilder.group({
-        ID: [''],
-        CUST_ID: [''],
+        ID: [0],
+        CUST_ID: [0],
         BRANCH_NAME: ['', Validators.required],
         COUNTRY: ['', Validators.required],
         STATE: [''],
@@ -146,12 +143,31 @@ export class PartyComponent implements OnInit {
     );
   }
 
+  addNewBank() {
+    const add = this.partyForm.get('BANK_LIST') as FormArray;
+
+    add.push(
+      this._formBuilder.group({
+        ID: [0],
+        BANK_NAME: ['', Validators.required],
+        BANK_ACC_NO: ['', Validators.required],
+        BANK_IFSC: ['', Validators.required],
+        BANK_REMARKS: [''],
+      })
+    );
+  }
+
   get f() {
     return this.partyForm.controls;
   }
 
   get f1() {
     const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    return add.controls;
+  }
+
+  get f2() {
+    const add = this.partyForm.get('BANK_LIST') as FormArray;
     return add.controls;
   }
 
@@ -187,6 +203,11 @@ export class PartyComponent implements OnInit {
 
   deleteBranch(i: number) {
     const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    add.removeAt(i);
+  }
+
+  deleteBank(i: number) {
+    const add = this.partyForm.get('BANK_LIST') as FormArray;
     add.removeAt(i);
   }
 
@@ -289,8 +310,7 @@ export class PartyComponent implements OnInit {
   }
 
   fileUpload(event: any, index: number) {
-    if (
-      event.target.files[0].type == 'application/pdf') {
+    if (event.target.files[0].type == 'application/pdf') {
     } else {
       alert('Please Select PDF or Excel or Word Format only');
       return;
@@ -336,6 +356,51 @@ export class PartyComponent implements OnInit {
       if (res.ResponseCode == 200) {
         this.partyForm.patchValue(res.Data);
         this.getDropdown('1');
+        const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+        add.clear();
+
+        res.Data.BRANCH_LIST.forEach((element: any) => {
+          add.push(this._formBuilder.group(element));
+        });
+
+        add.controls.forEach(function (element: any, i) {
+          Object.keys(element.controls).forEach(function (control: any) {
+            add.at(i).get(control).setValidators(Validators.required);
+            add.at(i).get(control).updateValueAndValidity();
+            var x = [
+              'STATE',
+              'CITY',
+              'TAN',
+              'PIC_NAME',
+              'PIC_CONTACT',
+              'PIC_EMAIL',
+            ];
+            x.forEach((element) => {
+              if (control == element) {
+                add.at(i).get(element).setValidators(null);
+                add.at(i).get(element).updateValueAndValidity();
+              }
+            });
+          });
+        });
+
+        const add1 = this.partyForm.get('BANK_LIST') as FormArray;
+        add1.clear();
+
+        res.Data.BANK_LIST.forEach((element: any) => {
+          add1.push(this._formBuilder.group(element));
+        });
+
+        add1.controls.forEach(function (element: any, i) {
+          Object.keys(element.controls).forEach(function (control: any) {
+            add1.at(i).get(control).setValidators(Validators.required);
+            add1.at(i).get(control).updateValueAndValidity();
+            if (control == 'BANK_REMARKS') {
+              add1.at(i).get('BANK_REMARKS').setValidators(null);
+              add1.at(i).get('BANK_REMARKS').updateValueAndValidity();
+            }
+          });
+        });
       }
     });
   }
@@ -387,8 +452,8 @@ export class PartyComponent implements OnInit {
     add.clear();
     add.push(
       this._formBuilder.group({
-        ID: [''],
-        CUST_ID: [''],
+        ID: [0],
+        CUST_ID: [0],
         BRANCH_NAME: ['', Validators.required],
         COUNTRY: ['', Validators.required],
         STATE: [''],
@@ -400,6 +465,18 @@ export class PartyComponent implements OnInit {
         PIC_CONTACT: [''],
         PIC_EMAIL: [''],
         ADDRESS: ['', Validators.required],
+      })
+    );
+
+    const add1 = this.partyForm.get('BANK_LIST') as FormArray;
+    add1.clear();
+    add1.push(
+      this._formBuilder.group({
+        ID: [0],
+        BANK_NAME: ['', Validators.required],
+        BANK_ACC_NO: ['', Validators.required],
+        BANK_IFSC: ['', Validators.required],
+        BANK_REMARKS: [''],
       })
     );
 
