@@ -11,11 +11,10 @@ import { CommonService } from 'src/app/services/common.service';
 import { PartyService } from 'src/app/services/party.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-vendor',
   templateUrl: './vendor.component.html',
-  styleUrls: ['./vendor.component.scss']
+  styleUrls: ['./vendor.component.scss'],
 })
 export class VendorComponent implements OnInit {
   submitted: boolean = false;
@@ -32,7 +31,6 @@ export class VendorComponent implements OnInit {
   selectedItems: any[] = [];
   isKYC: boolean = false;
   fileList: any[] = [];
-
 
   @ViewChild('closeBtn') closeBtn: ElementRef;
   @ViewChild('openModalPopup') openModalPopup: ElementRef;
@@ -96,14 +94,9 @@ export class VendorComponent implements OnInit {
       SALES_CODE: [''],
       SALES_LOC: [''],
       SALES_EFFECTIVE_DATE: [''],
-      BANK_NAME: ['', Validators.required],
-      BANK_ACC_NO: ['', Validators.required],
-      BANK_IFSC: ['', Validators.required],
-      SWIFT_CODE:[''],
-      BANK_REMARKS: [''],
       IS_VENDOR: [true],
       BRANCH_LIST: new FormArray([]),
-
+      BANK_LIST: new FormArray([]),
     });
 
     this.custForm = this._formBuilder.group({
@@ -134,8 +127,8 @@ export class VendorComponent implements OnInit {
 
     add.push(
       this._formBuilder.group({
-        ID: [''],
-        CUST_ID: [''],
+        ID: [0],
+        CUST_ID: [0],
         BRANCH_NAME: ['', Validators.required],
         COUNTRY: ['', Validators.required],
         STATE: [''],
@@ -151,12 +144,31 @@ export class VendorComponent implements OnInit {
     );
   }
 
+  addNewBank() {
+    const add = this.partyForm.get('BANK_LIST') as FormArray;
+
+    add.push(
+      this._formBuilder.group({
+        ID: [0],
+        BANK_NAME: ['', Validators.required],
+        BANK_ACC_NO: ['', Validators.required],
+        BANK_IFSC: ['', Validators.required],
+        BANK_REMARKS: [''],
+      })
+    );
+  }
+
   get f() {
     return this.partyForm.controls;
   }
 
   get f1() {
     const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    return add.controls;
+  }
+
+  get f2() {
+    const add = this.partyForm.get('BANK_LIST') as FormArray;
     return add.controls;
   }
 
@@ -192,6 +204,11 @@ export class VendorComponent implements OnInit {
 
   deleteBranch(i: number) {
     const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    add.removeAt(i);
+  }
+
+  deleteBank(i: number) {
+    const add = this.partyForm.get('BANK_LIST') as FormArray;
     add.removeAt(i);
   }
 
@@ -243,6 +260,7 @@ export class VendorComponent implements OnInit {
 
   GetPartyMasterList() {
     this.customer.AGENT_CODE = '';
+    this.customer.IS_VENDOR = true;
     this._commonService.destroyDT();
     this._partyService.getPartyList(this.customer).subscribe((res: any) => {
       this.isLoading = false;
@@ -257,6 +275,7 @@ export class VendorComponent implements OnInit {
   InsertPartyMaster() {
     this.submitted = true;
 
+    debugger;
     if (this.isKYC) {
       if (this.fileList[0].FILE_NAME == '') {
         this._commonService.warnMsg('Please Upload atleast 1 file !');
@@ -277,10 +296,10 @@ export class VendorComponent implements OnInit {
     add.value.forEach((element: any) => {
       custType += element.CODE + ',';
     });
+
     this.partyForm.get('CUST_TYPE').setValue(custType);
     this.partyForm.get('IS_VENDOR').setValue(true);
 
-console.log("form value", JSON.stringify(this.partyForm.value))
     this._partyService
       .postParty(JSON.stringify(this.partyForm.value))
       .subscribe((res: any) => {
@@ -342,6 +361,51 @@ console.log("form value", JSON.stringify(this.partyForm.value))
       if (res.ResponseCode == 200) {
         this.partyForm.patchValue(res.Data);
         this.getDropdown('1');
+        const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+        add.clear();
+
+        res.Data.BRANCH_LIST.forEach((element: any) => {
+          add.push(this._formBuilder.group(element));
+        });
+
+        add.controls.forEach(function (element: any, i) {
+          Object.keys(element.controls).forEach(function (control: any) {
+            add.at(i).get(control).setValidators(Validators.required);
+            add.at(i).get(control).updateValueAndValidity();
+            var x = [
+              'STATE',
+              'CITY',
+              'TAN',
+              'PIC_NAME',
+              'PIC_CONTACT',
+              'PIC_EMAIL',
+            ];
+            x.forEach((element) => {
+              if (control == element) {
+                add.at(i).get(element).setValidators(null);
+                add.at(i).get(element).updateValueAndValidity();
+              }
+            });
+          });
+        });
+
+        const add1 = this.partyForm.get('BANK_LIST') as FormArray;
+        add1.clear();
+
+        res.Data.BANK_LIST.forEach((element: any) => {
+          add1.push(this._formBuilder.group(element));
+        });
+
+        add1.controls.forEach(function (element: any, i) {
+          Object.keys(element.controls).forEach(function (control: any) {
+            add1.at(i).get(control).setValidators(Validators.required);
+            add1.at(i).get(control).updateValueAndValidity();
+            if (control == 'BANK_REMARKS') {
+              add1.at(i).get('BANK_REMARKS').setValidators(null);
+              add1.at(i).get('BANK_REMARKS').updateValueAndValidity();
+            }
+          });
+        });
       }
     });
   }
@@ -393,8 +457,8 @@ console.log("form value", JSON.stringify(this.partyForm.value))
     add.clear();
     add.push(
       this._formBuilder.group({
-        ID: [''],
-        CUST_ID: [''],
+        ID: [0],
+        CUST_ID: [0],
         BRANCH_NAME: ['', Validators.required],
         COUNTRY: ['', Validators.required],
         STATE: [''],
@@ -406,6 +470,18 @@ console.log("form value", JSON.stringify(this.partyForm.value))
         PIC_CONTACT: [''],
         PIC_EMAIL: [''],
         ADDRESS: ['', Validators.required],
+      })
+    );
+
+    const add1 = this.partyForm.get('BANK_LIST') as FormArray;
+    add1.clear();
+    add1.push(
+      this._formBuilder.group({
+        ID: [0],
+        BANK_NAME: ['', Validators.required],
+        BANK_ACC_NO: ['', Validators.required],
+        BANK_IFSC: ['', Validators.required],
+        BANK_REMARKS: [''],
       })
     );
 
@@ -439,4 +515,3 @@ console.log("form value", JSON.stringify(this.partyForm.value))
       });
   }
 }
-
