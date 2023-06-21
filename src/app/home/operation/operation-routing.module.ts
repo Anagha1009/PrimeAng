@@ -19,6 +19,8 @@ import { SurrenderedListComponent } from './surrendered-list/surrendered-list.co
 import { TdrListComponent } from './tdr-list/tdr-list.component';
 import { TdrComponent } from './tdr/tdr.component';
 import { NewInvoice2Component } from './new-invoice2/new-invoice2.component';
+import { InvoiceList2Component } from './invoice-list2/invoice-list2.component';
+
 
 const routes: Routes = [
   {
@@ -100,18 +102,6 @@ const routes: Routes = [
     data: { roles: [Role.Agent] },
   },
   {
-    path: 'new-invoice',
-    component: NewInvoiceComponent,
-    canActivate: [AuthGuard],
-    data: { roles: [Role.Agent] },
-  },
-  {
-    path: 'invoice-list',
-    component: InvoiceListComponent,
-    canActivate: [AuthGuard],
-    data: { roles: [Role.Agent] },
-  },
-  {
     path: 'change-password',
     component: ForgotPwdComponent,
     canActivate: [AuthGuard],
@@ -124,8 +114,14 @@ const routes: Routes = [
     data: { roles: [Role.Agent] },
   },
   {
-    path: 'new-invoice2',
+    path: 'new-invoice',
     component: NewInvoice2Component,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Agent] },
+  },
+  {
+    path: 'invoice-list/:BL_NO',
+    component: InvoiceList2Component,
     canActivate: [AuthGuard],
     data: { roles: [Role.Agent] },
   },

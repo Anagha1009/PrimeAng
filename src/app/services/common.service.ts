@@ -4,6 +4,9 @@ import { environment } from 'src/environments/environment.prod';
 import * as jquery from 'jquery';
 import Swal from 'sweetalert2';
 
+
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -287,4 +290,6 @@ export class CommonService {
 
     return true;
   }
+
+
 }
