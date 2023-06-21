@@ -96,8 +96,8 @@
     </tbody>
   </table>
 </div>
-<div class="modal fade" #customerModal id="customerModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" #customerModal id="customerModal"
+  tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
@@ -294,188 +294,40 @@
                   <button (click)="addNewBranch()" class="form-btn-primary">Add New Branch <i
                       class="fa fa-plus"></i></button>
                 </div>
-                <div *ngFor="let item of f1;let i = index" [formGroup]="item">
-                  <hr class="text-success" style="height:2px;">
-                  <h6>Branch {{i+1}}</h6>
-                  <div class="row mt-4">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text"
-                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('BRANCH_NAME').errors}"
-                          formControlName="BRANCH_NAME" class="form-control">
-                        <label class="form-label">Name <span class="text-danger"> *</span></label>
-                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('BRANCH_NAME').errors"
-                          class="invalid-feedback">Name is required
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <ng-select formControlName="COUNTRY"
-                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('COUNTRY').errors}">
-                          <ng-option disabled="true">--Select--</ng-option>
-                          <ng-option value="IND">India</ng-option>
-                        </ng-select>
-                        <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
-                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('COUNTRY').errors"
-                          class="invalid-feedback">Country is required
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text" formControlName="STATE" class="form-control">
-                        <label class="form-label">State</label>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text" formControlName="CITY" class="form-control">
-                        <label class="form-label">City </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row mt-4">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text" formControlName="TAN" class="form-control">
-                        <label class="form-label">TAN No</label>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text" formControlName="PIC_NAME" class="form-control">
-                        <label class="form-label">Person In Charge (PIC)</label>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text" formControlName="PIC_CONTACT" class="form-control">
-                        <label class="form-label">PIC Contact </label>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text" formControlName="PIC_EMAIL" class="form-control">
-                        <label class="form-label">Email </label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row mt-4">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <ng-select formControlName="TAX_TYPE"
-                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('TAX_TYPE').errors}">
-                          <ng-option disabled="true">--Select--</ng-option>
-                          <ng-option value="GST">GST</ng-option>
-                          <ng-option value="VAT">VAT</ng-option>
-                        </ng-select>
-                        <label class="form-label-ddl">Tax Type</label>
-                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('TAX_TYPE').errors"
-                          class="invalid-feedback">Tax Type is required
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text"
-                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('TAX_NO').errors}"
-                          formControlName="TAX_NO" class="form-control">
-                        <label class="form-label">Tax No</label>
-                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('TAX_NO').errors"
-                          class="invalid-feedback">Tax No is required
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row mt-4">
-                    <div class="col-md-5">
-                      <div class="form-group">
-                        <textarea type="text"
-                          [ngClass]="{'invalid': submitted && f.BRANCH_LIST.controls[i].get('ADDRESS').errors}"
-                          formControlName="ADDRESS" class="form-control addressbox"></textarea>
-                        <label class="form-label">Address <span class="text-danger"> *</span></label>
-                        <div *ngIf="submitted && f.BRANCH_LIST.controls[i].get('ADDRESS').errors"
-                          class="invalid-feedback">Address is required
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-7 text-end">
-                      <button *ngIf="i > 0" (click)="deleteBranch(i)" class="form-btn-primary rounded"><i
-                          class="fa fa-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header" role="tab" id="heading-6">
-              <h6 class="mb-0">
-                <a data-bs-toggle="collapse" href="#collapse-6" aria-expanded="false" aria-controls="collapse-6"
-                  data-abc="true" class="collapsed">
-                  <span class="fw-bolder">Bank Details</span>
-                </a>
-              </h6>
-            </div>
-            <div id="collapse-6" class="collapse" role="tabpanel" aria-labelledby="heading-6"
-              data-bs-parent="#accordion">
-              <div class="card-body">
-                <div class="col-md-3 offset-md-9 text-end mb-3">
-                  <button (click)="addNewBank()" class="form-btn-primary">Add New Bank <i
-                      class="fa fa-plus"></i></button>
-                </div>
-                <div *ngFor="let item of f2;let i = index" [formGroup]="item">
-                  <hr class="text-success" style="height:2px;">
-                  <h6>Bank {{i+1}}</h6>
-                  <div class="row mt-4">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text"
-                          [ngClass]="{'invalid':submitted && f.BANK_LIST.controls[i].get('BANK_NAME').errors}"
-                          formControlName="BANK_NAME" class="form-control">
-                        <label class="form-label">Bank Name<span class="text-danger"> *</span></label>
-                        <div *ngIf="submitted && f.BANK_LIST.controls[i].get('BANK_NAME').errors"
-                          class="invalid-feedback">Bank Name is required
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text" formControlName="BANK_ACC_NO"
-                          [ngClass]="{'invalid':submitted && f.BANK_LIST.controls[i].get('BANK_ACC_NO').errors}"
-                          class="form-control">
-                        <label class="form-label">Account No<span class="text-danger"> *</span></label>
-                        <div *ngIf="submitted && f.BANK_LIST.controls[i].get('BANK_ACC_NO').errors"
-                          class="invalid-feedback">Account No is required
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input type="text"
-                          [ngClass]="{'invalid':submitted && f.BANK_LIST.controls[i].get('BANK_IFSC').errors}"
-                          formControlName="BANK_IFSC" class="form-control">
-                        <label class="form-label">IFSC Code<span class="text-danger"> *</span></label>
-                        <div *ngIf="submitted && f.BANK_LIST.controls[i].get('BANK_IFSC').errors"
-                          class="invalid-feedback">IFSC Code is required
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row mt-4">
-                    <div class="col-md-5">
-                      <div class="form-group">
-                        <textarea formControlName="BANK_REMARKS" type="text" class="form-control addressbox"></textarea>
-                        <label class="form-label">Remarks</label>
-                      </div>
-                    </div>
-                    <div class="col-md-7 text-end">
-                      <button *ngIf="i > 0" (click)="deleteBank(i)" class="form-btn-primary rounded"><i
-                          class="fa fa-trash"></i></button>
-                    </div>
-                  </div>
-                </div>
+                <table class="table" *ngIf="f1?.length > 0">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Name</th>
+                      <th>TAN No</th>
+                      <th>Country</th>
+                      <th>Address</th>
+                      <th>SEZ</th>
+                      <th>TAX</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let items of f1;let i = index">
+                      <td>{{i+1}}</td>
+                      <td>{{items.value.BRANCH_NAME}} ({{items.value.BRANCH_CODE}})</td>
+                      <td>{{items.value.TAN_NO}}</td>
+                      <td>{{items.value.COUNTRY}} {{items.value.STATE}}</td>
+                      <td>{{items.value.ADDRESS}}</td>
+                      <td><i
+                          [class]="items.value.IS_SEZ ? 'fs-5 bx bxs-check-circle text-success' : 'fs-5 bx bxs-x-circle text-danger'"></i>
+                      </td>
+                      <td><i
+                          [class]="items.value.IS_TAX_APPLICABLE ? 'fs-5 bx bxs-check-circle text-success' : 'fs-5 bx bxs-x-circle text-danger'"></i>
+                      </td>
+                      <td>
+                        <i class="fa fa-edit text-success pointer me-2"
+                          (click)="editBranch(items.value.BRANCH_CODE)"></i>
+                        <i class="fa fa-trash text-danger pointer"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -532,6 +384,198 @@
         <button class="form-btn-light me-2" (click)="ClearForm()">Clear</button>
         <button *ngIf="!isUpdate" (click)="InsertPartyMaster()" class="form-btn">Save</button>
         <button *ngIf="isUpdate" (click)="UpdatePartyMaster()" class="form-btn">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="d-none" #openBtn data-bs-toggle="modal" href="#branchModal"></button>
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" #branchModal id="branchModal" tabindex="-1"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Branch Details</h5>
+        <button type="button" class="btn-close" (click)="closeBranchModal()"></button>
+        <button type="button" class="d-none" data-bs-dismiss="modal" aria-label="Close" #closeBtn1></button>
+      </div>
+      <div class="modal-body">
+        <div [formGroup]="branchForm">
+          <div class="row mt-4">
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" [ngClass]="{'invalid': submitted1 && f3.BRANCH_NAME.errors}"
+                  formControlName="BRANCH_NAME" class="form-control">
+                <label class="form-label">Branch Name <span class="text-danger"> *</span></label>
+                <div *ngIf="submitted1 && f3.BRANCH_NAME.errors" class="invalid-feedback">
+                  Branch Name is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" [ngClass]="{'invalid': submitted1 && f3.BRANCH_CODE.errors}"
+                  formControlName="BRANCH_CODE" class="form-control">
+                <label class="form-label">Branch Code <span class="text-danger"> *</span></label>
+                <div *ngIf="submitted1 && f3.BRANCH_CODE.errors" class="invalid-feedback">
+                  Branch Code is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <ng-select formControlName="COUNTRY" [ngClass]="{'invalid': submitted1 &&  f3.COUNTRY.errors}">
+                  <ng-option disabled="true">--Select--</ng-option>
+                  <ng-option value="IND">India</ng-option>
+                </ng-select>
+                <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
+                <div *ngIf="submitted1 && f3.COUNTRY.errors" class="invalid-feedback">
+                  Country is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" formControlName="STATE" class="form-control">
+                <label class="form-label">State</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" formControlName="CITY" class="form-control">
+                <label class="form-label">City </label>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" formControlName="TAN" class="form-control">
+                <label class="form-label">TAN No</label>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" formControlName="PIC_NAME" class="form-control">
+                <label class="form-label">Person In Charge (PIC)</label>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" formControlName="PIC_CONTACT" class="form-control">
+                <label class="form-label">PIC Contact </label>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" formControlName="PIC_EMAIL" class="form-control">
+                <label class="form-label">Email </label>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <ng-select formControlName="TAX_TYPE" [ngClass]="{'invalid': submitted1 && f3.TAX_TYPE.errors}">
+                  <ng-option disabled="true">--Select--</ng-option>
+                  <ng-option value="GST">GST</ng-option>
+                  <ng-option value="VAT">VAT</ng-option>
+                </ng-select>
+                <label class="form-label-ddl">Tax Type</label>
+                <div *ngIf="submitted1 && f3.TAX_TYPE.errors" class="invalid-feedback">Tax
+                  Type is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="text" [ngClass]="{'invalid': submitted1 && f3.TAX_NO.errors}" formControlName="TAX_NO"
+                  class="form-control">
+                <label class="form-label">Tax No</label>
+                <div *ngIf="submitted1 && f3.TAX_NO.errors" class="invalid-feedback">Tax
+                  No
+                  is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-1 mt-4">
+              <div class="row ms-1">
+                <label class="checkbox-wrap checkbox-primary">
+                  <input formControlName="IS_SEZ" class="chck" type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+                <label>SEZ</label>
+              </div>
+            </div>
+            <div class="col-md-2 mt-4">
+              <div class="row ms-1">
+                <label class="checkbox-wrap checkbox-primary">
+                  <input formControlName="IS_TAX_APPLICABLE" class="chck" type="checkbox">
+                  <span class="checkmark"></span>
+                </label>
+                <label>TAX Applicable</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-5">
+              <div class="form-group">
+                <textarea type="text" [ngClass]="{'invalid': submitted1 && f3.ADDRESS.errors}" formControlName="ADDRESS"
+                  class="form-control addressbox"></textarea>
+                <label class="form-label">Address <span class="text-danger"> *</span></label>
+                <div *ngIf="submitted1 && f3.ADDRESS.errors" class="invalid-feedback">
+                  Address is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="col-md-3 offset-md-9 text-end mb-3">
+            <button (click)="addNewBank()" class="form-btn-primary">Add New Bank <i class="fa fa-plus"></i></button>
+          </div>
+          <table class="table" *ngIf="f2?.length > 0">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Bank Name</th>
+                <th>Acc No</th>
+                <th>IFSC Code</th>
+                <th>SWIFT Code</th>
+                <th>Address</th>
+                <th>#</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of f2;let j = index" [formGroup]="item">
+                <td>{{j+1}}</td>
+                <td><input type="text"
+                    [ngClass]="{'invalid':submitted2 && f.BANK_LIST2.controls[j].get('BANK_NAME').errors}"
+                    class="form-control3" formControlName="BANK_NAME"></td>
+                <td><input type="text" formControlName="BANK_ACC_NO"
+                    [ngClass]="{'invalid':submitted2 && f.BANK_LIST2.controls[j].get('BANK_ACC_NO').errors}"
+                    class="form-control3"></td>
+                <td><input type="text"
+                    [ngClass]="{'invalid':submitted2 && f.BANK_LIST2.controls[j].get('BANK_IFSC').errors}"
+                    formControlName="BANK_IFSC" class="form-control3"></td>
+                <td>
+                  <div class="form-group">
+                    <input type="text" formControlName="BANK_SWIFT" class="form-control3" />
+                  </div>
+                </td>
+                <td>
+                  <textarea formControlName="BANK_REMARKS" type="text" class="form-control3 addressbox"></textarea>
+                </td>
+                <td><i class="fa fa-trash text-danger pointer" (click)="deleteBank(j)"></i></td>
+              </tr>
+            </tbody>
+          </table>
+          <hr>
+          <div *ngIf="f2?.length > 0" class="col-md-2 offset-md-10 text-end mb-3">
+            <button *ngIf="!isBranchUpdate" (click)="saveBranch()" class="form-btn-primary w-100">Save Branch</button>
+            <button *ngIf="isBranchUpdate" (click)="updateBranch()" class="form-btn-primary w-100">Update
+              Branch</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

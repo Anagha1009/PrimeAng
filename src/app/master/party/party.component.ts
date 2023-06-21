@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
+  Form,
   FormArray,
   FormBuilder,
   FormControl,
@@ -30,10 +31,16 @@ export class PartyComponent implements OnInit {
   dropdownSettings = {};
   selectedItems: any[] = [];
   isKYC: boolean = false;
+  submitted1: boolean = false;
+  submitted2: boolean;
   fileList: any[] = [];
+  branchForm: FormGroup;
+  isBranchUpdate: boolean = false;
 
   @ViewChild('closeBtn') closeBtn: ElementRef;
+  @ViewChild('closeBtn1') closeBtn1: ElementRef;
   @ViewChild('openModalPopup') openModalPopup: ElementRef;
+  @ViewChild('openBtn') openBtn: ElementRef;
 
   constructor(
     private _partyService: PartyService,
@@ -42,6 +49,12 @@ export class PartyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.onLoad();
+    this.GetPartyMasterList();
+    this.getDropdown();
+  }
+
+  onLoad() {
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'CODE',
@@ -95,7 +108,9 @@ export class PartyComponent implements OnInit {
       SALES_LOC: [''],
       SALES_EFFECTIVE_DATE: [''],
       BRANCH_LIST: new FormArray([]),
-      BANK_LIST: new FormArray([]),
+      BANK_LIST: new FormArray([]), // For Insert
+      BANK_LIST2: new FormArray([]),
+      BANK_LIST3: new FormArray([]), // For Update,
     });
 
     this.custForm = this._formBuilder.group({
@@ -106,8 +121,24 @@ export class PartyComponent implements OnInit {
       TO_DATE: [''],
     });
 
-    this.GetPartyMasterList();
-    this.getDropdown();
+    this.branchForm = this._formBuilder.group({
+      ID: [0],
+      CUST_ID: [0],
+      BRANCH_NAME: ['', Validators.required],
+      COUNTRY: ['', Validators.required],
+      STATE: [''],
+      CITY: [''],
+      TAN: [''],
+      TAX_NO: ['', Validators.required],
+      TAX_TYPE: ['', Validators.required],
+      PIC_NAME: [''],
+      PIC_CONTACT: [''],
+      PIC_EMAIL: [''],
+      ADDRESS: ['', Validators.required],
+      IS_SEZ: [false],
+      IS_TAX_APPLICABLE: [false],
+      BRANCH_CODE: ['', Validators.required],
+    });
 
     this.fileList = [];
     this.fileList.push({
@@ -122,39 +153,89 @@ export class PartyComponent implements OnInit {
   }
 
   addNewBranch() {
-    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    this.branchForm.reset();
+    this.branchForm.get('IS_SEZ').setValue(false);
+    this.branchForm.get('IS_TAX_APPLICABLE').setValue(false);
+    this.branchForm.get('ID').setValue(0);
+    this.branchForm.get('CUST_ID').setValue(0);
 
-    add.push(
-      this._formBuilder.group({
-        ID: [0],
-        CUST_ID: [0],
-        BRANCH_NAME: ['', Validators.required],
-        COUNTRY: ['', Validators.required],
-        STATE: [''],
-        CITY: [''],
-        TAN: [''],
-        TAX_NO: ['', Validators.required],
-        TAX_TYPE: ['', Validators.required],
-        PIC_NAME: [''],
-        PIC_CONTACT: [''],
-        PIC_EMAIL: [''],
-        ADDRESS: ['', Validators.required],
-      })
-    );
+    this.submitted1 = false;
+    this.submitted2 = false;
+    const add = this.partyForm.get('BANK_LIST2') as FormArray;
+    add.clear();
+
+    this.isBranchUpdate = false;
+    this.openBtn.nativeElement.click();
   }
 
   addNewBank() {
-    const add = this.partyForm.get('BANK_LIST') as FormArray;
+    this.submitted1 = true;
 
-    add.push(
+    if (this.branchForm.invalid) {
+      return;
+    }
+
+    const add1 = this.partyForm.get('BANK_LIST2') as FormArray;
+    add1.push(
       this._formBuilder.group({
         ID: [0],
         BANK_NAME: ['', Validators.required],
         BANK_ACC_NO: ['', Validators.required],
         BANK_IFSC: ['', Validators.required],
+        BANK_SWIFT: [''],
         BANK_REMARKS: [''],
+        BRANCH_CODE: [
+          this.branchForm.get('BRANCH_CODE').value,
+          Validators.required,
+        ],
       })
     );
+  }
+
+  saveBranch() {
+    this.submitted2 = true;
+
+    const add1 = this.partyForm.get('BANK_LIST2') as FormArray;
+    if (add1.invalid) {
+      return;
+    }
+
+    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    add.push(this._formBuilder.group(this.branchForm.value));
+
+    var add2 = this.partyForm.get('BANK_LIST') as FormArray;
+
+    add1.controls.forEach((element) => {
+      add2.push(element);
+    });
+
+    this.closeBtn1.nativeElement.click();
+    this.openModalPopup.nativeElement.click();
+  }
+
+  updateBranch() {
+    this.submitted2 = true;
+
+    const add1 = this.partyForm.get('BANK_LIST2') as FormArray;
+    if (add1.invalid) {
+      return;
+    }
+
+    var add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    var branch = add.controls.findIndex(
+      (x) => x.value.BRANCH_CODE === this.branchForm.get('BRANCH_CODE').value
+    );
+    add.removeAt(branch);
+    add.push(this._formBuilder.group(this.branchForm.value));
+
+    var add2 = this.partyForm.get('BANK_LIST') as FormArray;
+
+    add1.controls.forEach((element) => {
+      add2.push(element);
+    });
+
+    this.closeBtn1.nativeElement.click();
+    this.openModalPopup.nativeElement.click();
   }
 
   get f() {
@@ -167,8 +248,12 @@ export class PartyComponent implements OnInit {
   }
 
   get f2() {
-    const add = this.partyForm.get('BANK_LIST') as FormArray;
+    const add = this.partyForm.get('BANK_LIST2') as FormArray;
     return add.controls;
+  }
+
+  get f3() {
+    return this.branchForm.controls;
   }
 
   addNewFile() {
@@ -207,8 +292,31 @@ export class PartyComponent implements OnInit {
   }
 
   deleteBank(i: number) {
-    const add = this.partyForm.get('BANK_LIST') as FormArray;
+    const add = this.partyForm.get('BANK_LIST2') as FormArray;
     add.removeAt(i);
+  }
+
+  editBranch(branchCode: string) {
+    var add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    var branch = add.controls.find((x) => x.value.BRANCH_CODE === branchCode);
+    this.branchForm.reset();
+    this.branchForm.patchValue(branch.value);
+
+    debugger;
+    var add1 = this.partyForm.get('BANK_LIST3') as FormArray;
+    var add2 = this.partyForm.get('BANK_LIST2') as FormArray;
+    if (add1.length > 0) {
+      var bankList = add1.controls.filter(
+        (x) => x.value.BRANCH_CODE === branchCode
+      );
+      add2.clear();
+      bankList.forEach((element) => {
+        add2.push(element);
+      });
+    }
+
+    this.isBranchUpdate = true;
+    this.openBtn.nativeElement.click();
   }
 
   Search() {
@@ -273,7 +381,6 @@ export class PartyComponent implements OnInit {
 
   InsertPartyMaster() {
     this.submitted = true;
-
     if (this.isKYC) {
       if (this.fileList[0].FILE_NAME == '') {
         this._commonService.warnMsg('Please Upload atleast 1 file !');
@@ -282,6 +389,12 @@ export class PartyComponent implements OnInit {
     }
 
     if (this.partyForm.invalid) {
+      return;
+    }
+
+    const branchList = this.partyForm.get('BRANCH_LIST') as FormArray;
+    if (branchList.length == 0) {
+      this._commonService.errorMsg('Please add atleast 1 Branch !');
       return;
     }
 
@@ -377,15 +490,13 @@ export class PartyComponent implements OnInit {
               'PIC_EMAIL',
             ];
             x.forEach((element) => {
-              if (control == element) {
-                add.at(i).get(element).setValidators(null);
-                add.at(i).get(element).updateValueAndValidity();
-              }
+              add.at(i).get(element).setValidators(null);
+              add.at(i).get(element).updateValueAndValidity();
             });
           });
         });
 
-        const add1 = this.partyForm.get('BANK_LIST') as FormArray;
+        const add1 = this.partyForm.get('BANK_LIST3') as FormArray;
         add1.clear();
 
         res.Data.BANK_LIST.forEach((element: any) => {
@@ -396,10 +507,11 @@ export class PartyComponent implements OnInit {
           Object.keys(element.controls).forEach(function (control: any) {
             add1.at(i).get(control).setValidators(Validators.required);
             add1.at(i).get(control).updateValueAndValidity();
-            if (control == 'BANK_REMARKS') {
-              add1.at(i).get('BANK_REMARKS').setValidators(null);
-              add1.at(i).get('BANK_REMARKS').updateValueAndValidity();
-            }
+            var x = ['BANK_REMARKS', 'BANK_SWIFT'];
+            x.forEach((element) => {
+              add1.at(i).get(element).setValidators(null);
+              add1.at(i).get(element).updateValueAndValidity();
+            });
           });
         });
       }
@@ -408,6 +520,7 @@ export class PartyComponent implements OnInit {
 
   UpdatePartyMaster() {
     this.submitted = true;
+
     if (this.partyForm.invalid) {
       return;
     }
@@ -437,6 +550,12 @@ export class PartyComponent implements OnInit {
     this.partyForm.get('CUST_TYPE')?.setValue('');
     this.partyForm.get('CUST_ID')?.setValue(0);
     this.partyForm.get('IS_GROUP_COMPANIES')?.setValue(false);
+    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    const add1 = this.partyForm.get('BANK_LIST') as FormArray;
+    const add2 = this.partyForm.get('BANK_LIST2') as FormArray;
+    add.clear();
+    add1.clear();
+    add2.clear();
   }
 
   openModal(custID: any = 0) {
@@ -448,38 +567,6 @@ export class PartyComponent implements OnInit {
       this.isUpdate = true;
       this.GetPartyMasterDetails(custID);
     }
-
-    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
-    add.clear();
-    add.push(
-      this._formBuilder.group({
-        ID: [0],
-        CUST_ID: [0],
-        BRANCH_NAME: ['', Validators.required],
-        COUNTRY: ['', Validators.required],
-        STATE: [''],
-        CITY: [''],
-        TAN: [''],
-        TAX_NO: ['', Validators.required],
-        TAX_TYPE: ['', Validators.required],
-        PIC_NAME: [''],
-        PIC_CONTACT: [''],
-        PIC_EMAIL: [''],
-        ADDRESS: ['', Validators.required],
-      })
-    );
-
-    const add1 = this.partyForm.get('BANK_LIST') as FormArray;
-    add1.clear();
-    add1.push(
-      this._formBuilder.group({
-        ID: [0],
-        BANK_NAME: ['', Validators.required],
-        BANK_ACC_NO: ['', Validators.required],
-        BANK_IFSC: ['', Validators.required],
-        BANK_REMARKS: [''],
-      })
-    );
 
     this.openModalPopup.nativeElement.click();
   }
@@ -509,5 +596,10 @@ export class PartyComponent implements OnInit {
           }
         }
       });
+  }
+
+  closeBranchModal() {
+    this.closeBtn1.nativeElement.click();
+    this.openModalPopup.nativeElement.click();
   }
 }
