@@ -1,193 +1,314 @@
-
 <div class="container">
-
-
-<div class="section-title pt-3">
-  <h2>New Invoice</h2>
-</div>
-<div class="mb-4">
-  <div class="col-md-6 offset-md-6 text-end">
-      <button (click)="openModal()" class="form-btn-primary"><i class="fa fa-plus me-1"></i>New Invoice</button>
-      <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#modal-2" >New
-        Invoice</button>
+  <div class="section-title pt-3">
+    <h2>New Invoice</h2>
   </div>
-  <form [formGroup]="invoiceForm1">
+  <div class="mb-4">
+    <div class="col-md-6 offset-md-6 text-end">
+      <button (click)="openModal()" class="form-btn-primary">
+        <i class="fa fa-plus me-1"></i>New Invoice
+      </button>
+      <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#modal-BL">
+        New Invoice
+      </button>
+    </div>
+    <form [formGroup]="invoiceForm1">
       <div class="row">
-          <div class="col-md-2">
-              <div class="form-group">
-                  <label class="form-label2">From Date</label>
-                  <input (change)="invoiceForm1.get('TO_DATE')?.setValue('')" onkeypress="return false;"
-                      formControlName="FROM_DATE" type="date" class="form-control2">
-              </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="form-label2">From Date</label>
+            <input (change)="invoiceForm1.get('TO_DATE')?.setValue('')" onkeypress="return false;"
+              formControlName="FROM_DATE" type="date" class="form-control2" />
           </div>
-          <div class="col-md-2">
-              <div class="form-group">
-                  <label class="form-label2">To Date</label>
-                  <input onkeypress="return false;" [min]="invoiceForm1.get('FROM_DATE')?.value"
-                      formControlName="TO_DATE" type="date" class="form-control2">
-              </div>
-          </div>
-          <div class="col-md-3 mt-4">
-              <button class="form-btn me-2"(click)="Search()"  >Search
-                  <!-- <span   class="fa fa-spinner fa-spin"></span> -->
-                </button>
-              <button class="form-btn-light me-2"  (click)="Clear()">Clear
-                <!-- <span  class="fa fa-spinner fa-spin"></span> -->
-              </button>
-          </div>
-      </div>
-  </form>
-  <table class="ratetable table-bordered" id="data-table-config">
-      <thead>
-          <tr>
-              <th width="4%">Sr No</th>
-              <th width="10%">Invoice Type</th>
-              <th width="12%">Bill To</th>
-              <th width="10%">BL No</th>
-              <th width="10%">Shipper Name</th>
-              <th width="10%">Bill From</th>
-              <th width="12%">Invoice Date</th>
-              <th width="10%">Payment Taken</th>
-              <th width="10%">Action</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr >
-              <td width="1%"></td>
-              <td width="10%"></td>
-              <td width="12%"></td>
-              <td width="12%"></td>
-              <td width="12%"></td>
-              <td width="10%"></td>
-              <td width="12%"></td>
-              <td width="10%"></td>
-
-              <td width="10%">
-                <i class="fa fa-pencil mx-2 pointer text-success" (click)="openModal()"></i>
-                <i class="fa fa-trash ms-2 pointer text-danger" (click)="DeleteInvoice()"></i></td>
-          </tr>
-      </tbody>
-  </table>
-</div>
-
-
-
-<!-- modal open for bill -->
-<div class="modal fade" id="modal-2">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Invoice Details</h5>
-
         </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="form-label2">To Date</label>
+            <input onkeypress="return false;" [min]="invoiceForm1.get('FROM_DATE')?.value" formControlName="TO_DATE"
+              type="date" class="form-control2" />
+          </div>
+        </div>
+        <div class="col-md-3 mt-4">
+          <button class="form-btn me-2" (click)="Search()">
+            Search
+          </button>
+          <button class="form-btn-light me-2" (click)="Clear()">
+            Clear
+          </button>
+        </div>
+      </div>
+    </form>
 
+    <div class="mb-5">
+      <table class="ratetable table-bordered" id="data-table-config" #TABLE #table>
+        <thead>
+          <tr>
+            <th >Sr No</th>
+            <th >Invoice No</th>
+            <th >Invoice Type</th>
+            <th >Bill To</th>
+            <th >BL No</th>
+            <th >Shipper Name</th>
+            <th >Bill From</th>
+            <!-- <th >Invoice Date</th> -->
+            <th >Payment Term</th>
+            <th >Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of BLLIST let i = index">
+            <td >{{i +1}}</td>
+            <td >{{item.INVOICE_NO}}</td>
+            <td >{{item.INVOICE_TYPE}}</td>
+            <td >{{item.BILL_TO}}</td>
+            <td >{{item.BL_NO}}</td>
+            <td >{{item.SHIPPER_NAME}}</td>
+            <td >{{item.BILL_FROM}}</td>
+            <td >{{item.PAYMENT_TERM}}</td>
+
+            <td >
+              <i class="fa fa-pencil ms-2 pointer text-danger" (click)="openModal2()"></i>
+
+              <i class="fa fa-file-pdf-o mx-2 pointer text-success" (click)="downloadpdf()"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- modal open for bill -->
+  <div class="modal fade" id="modal-BL">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">BL No</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-center">Enter BL No</p>
+          <div class="form-group col-md-8 mx-auto">
+            <label class="form-label2">BL No.</label>
+            <input class="form-control2" [(ngModel)]="swicthBlNo" />
+            <div *ngIf="!swicthBlNo && swicthBlNo == ''" class="invalid-feedback">
+              Please Enter BL No.
+            </div>
+          </div>
+          <form [formGroup]="invoiceForm">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                    <input type="radio" value="FREIGHT" formControlName="radio"(click)="CheckBox($event)">
+                    <label>FREIGHT</label>
+                    </div>
+                    </div>
+
+                    <div class="col-md-3">
+                      <div class="form-group">
+                    <input type="radio" value="POL" formControlName="radio" (click)="CheckBox($event)">
+                    <label>POL</label>
+                  </div>
+                </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="radio" value="POD" formControlName="radio"(click)="CheckBox($event)">
+                        <label>POD</label>
+                      </div>
+                         </div>
+              </div>
+            </form>
+          <!-- <div class="row">
+            <input type="radio" value="FREIGHT" formControlName="gender">
+            <label>FREIGHT</label>
+          </div> -->
+
+          <div class="col-md-6 offset-md-6 text-end">
+          <button class="form-btn-primary" (click)="Submit(swicthBlNo)"> Submit </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- closed -->
+  <!-- <div class="modal fade bd-example-modal-xl" id="chargeModal" aria-labelledby="exampleModalLabel" tabindex="-1"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">
+            New Invoice Details
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
+        </div>
         <div class="modal-body">
           <form [formGroup]="invoiceForm">
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-6">
-                  <div class="form-group" >
-                    <label class="form-label2">BL No<span class="text-danger"> *</span></label>
-                    <input type="text" formControlName="BL_NO"
-                        class="form-control2" maxlength="20">
-                    </div>
-                    </div>
-                    </div>
-                    </div>
-                    </form>
-                    <div class="col-md-6 offset-md-6 text-end">
-                    <button class="form-btn-primary"  data-bs-toggle="modal" href="#chargeModal">New
-                      Invoice</button>
-                      </div>
-          </div>
-    </div>
-    </div>
-</div>
-<!-- closed -->
-<div class="modal fade" id="chargeModal" aria-labelledby="exampleModalLabel" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">New Invoice Details</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
-          </div>
-          <div class="modal-body">
-              <form [formGroup]="invoiceForm">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group" >
-                      <label class="form-label2">Invoice Type<span class="text-danger"> *</span></label>
-                      <input type="text" formControlName="INVOICE_TYPE"
-                          class="form-control2" maxlength="20">
-                    </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="form-group" >
-                      <label class="form-label2">Bill To<span class="text-danger"> *</span></label>
-                      <select formControlName="BILL_TO" class="form-control2">
-                        <option disabled value="">--Select--</option>
-                      </select>
-                    </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group" >
-                      <label class="form-label2">Bill From<span class="text-danger"> *</span></label>
-                      <select formControlName="BILL_FROM" class="form-control2">
-                        <option disabled value="">--Select--</option>
-                        <option> PRINCIPAL</option>
-                        <option> AGENT</option>
-
+                  <div class="form-group">
+                    <label class="form-label2">Invoice Type<span class="text-danger"> *</span></label>
+                    <select formControlName="INVOICE_TYPE" class="form-control2">
+                      <option disabled value="">--Select--</option>
+                      <option >FREIGHT</option>
+                      <option >LOCAL</option>
                     </select>
-                    </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group ">
-                        <label class="form-label2">Shipper Name<span class="text-danger"> *</span></label>
-                        <input type="text" formControlName="SHIPPER_NAME"
-                            class="form-control2" maxlength="20">
-
-
-                      </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group" >
-                          <label class="form-label2">BL No<span class="text-danger"> *</span></label>
-                        <input type="text" formControlName="BL_NO"
-                            class="form-control2" maxlength="20">
-                      </div>
-                      </div>
-
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label class="form-label2">Payment Taken<span class="text-danger"> *</span></label>
-                        <input type="text" formControlName="PAYMENT_TAKEN"
-                            class="form-control2" maxlength="20">
-                      </div>
-                      </div>
-                      </div>
+                  </div>
                 </div>
-              </form>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label2">Bill To<span class="text-danger"> *</span></label>
+                    <select formControlName="BILL_TO" class="form-control2">
+                      <option disabled value="">--Select--</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label2">Bill From<span class="text-danger"> *</span></label>
+                    <select formControlName="BILL_FROM" class="form-control2">
+                      <option disabled value="">--Select--</option>
+                      <option>PRINCIPAL</option>
+                      <option>AGENT</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label2">Shipper Name<span class="text-danger" readonly>
+                        *</span></label>
+                    <input type="text" formControlName="SHIPPER_NAME" class="form-control2" maxlength="20" readonly />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label2">Payment Term<span class="text-danger"> *</span></label>
+                    <input type="text" formControlName="PAYMENT_TERM" class="form-control2" maxlength="20" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="col-md-6 offset-md-6 text-end">
+            <button (click)="addRow()" class="form-btn me-2">Add Row</button>
           </div>
-          <div class="modal-footer">
-              <button  class="form-btn me-2">Save</button>
-              <button  class="form-btn-light me-2">Clear</button>
-              <button  class="form-btn">Update</button>
+
+          <div class="col-md-12">
+            <h6>Charge List</h6>
+            <div class="table-responsive">
+              <table  class="table table-bordered">
+                <thead>
+                  <tr >
+                    <th>Sr No</th>
+                    <th>Charge Name</th>
+                    <th>Exchange Rate</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>HSN Code</th>
+                    <th>Requested Amount</th>
+                    <th>Currency</th>
+                    <th>Exempt Flag</th>
+                  </tr>
+                </thead>
+                <tbody >
+                  <tr *ngFor="let item of f1; let i = index" [formGroup]="item">
+                    <td>{{ i + 1 }}</td>
+                        <td>
+                      <ng-select *ngIf="!item.value.IS_SRRCHARGE" formControlName="CHARGE_NAME" [ngClass]="{'invalid': submitted && f.BL_LIST.controls[i].get('CHARGE_NAME').errors}">
+                      <ng-option disabled="true">--Select--</ng-option>
+                      <ng-option *ngFor="let item of ChargeMasterList" value="{{item.CHARGE_NAME}}">{{item.CHARGE_NAME}}</ng-option>
+
+                    </ng-select>
+                    <span *ngIf="item.value.IS_SRRCHARGE">{{item.value.CHARGE_NAME}}</span>
+                    <div *ngIf="submitted && f.BL_LIST.controls[i].get('CHARGE_NAME').errors"
+                      class="invalid-feedback">Charge Name is required
+                    </div>
+                       </td>
+
+                    <td>  <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text" [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('EXCHANE_RATE').errors}"
+                      formControlName="EXCHANE_RATE" class="form-control"  />
+                      <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.EXCHANE_RATE}}</span>
+
+                      <div *ngIf=" submitted && f.BL_LIST.controls[i].get('EXCHANE_RATE').errors" class="invalid-feedback">
+                        Exchange Rate is required
+                      </div>
+                      </td>
+
+                      <td>
+                        <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text" [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('QUANTITY').errors}"
+                        formControlName="QUANTITY" class="form-control" />
+                        <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.QUANTITY}}</span>
+                      <div *ngIf="submitted && f.BL_LIST.controls[i].get('QUANTITY').errors"
+                         class="invalid-feedback"> Quantity is required
+                          </div>
+                             </td>
+
+                      <td>
+                        <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text" [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('AMOUNT').errors }"
+                        formControlName="AMOUNT" class="form-control" />
+                        <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.AMOUNT}}</span>
+                        <div *ngIf="submitted && f.BL_LIST.controls[i].get('AMOUNT').errors" class="invalid-feedback">
+                          Amount is required
+                        </div>
+                          </td>
+
+                      <td>
+                        <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text" [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors}"
+                        formControlName="HSN_CODE" class="form-control" />
+                        <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.HSN_CODE}}</span>
+                       <div *ngIf=" submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors"
+                       class="invalid-feedback"> HSN Code is required </div>
+                        </td>
+
+                      <td>
+                        <input type="text" *ngIf="item.value.IS_SRRCHARGE != '1'" [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('REQUESTED_AMOUNT').errors}"
+                        formControlName="REQUESTED_AMOUNT" class="form-control" />
+                         <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.REQUESTED_AMOUNT}}</span>
+                        <div *ngIf="submitted && f.BL_LIST.controls[i].get('REQUESTED_AMOUNT').errors" class="invalid-feedback">
+                          Requested Amount is required
+                        </div>
+                          </td>
+
+                      <td>
+                        <ng-select *ngIf="item.value.IS_SRRCHARGE != '1'" formControlName="CURRENCY" [ngClass]="{'invalid': submitted && f.BL_LIST.controls[i].get('CURRENCY').errors}">
+                          <ng-option disabled="true">--Select--</ng-option>
+                          <ng-option *ngFor="let item of CurrencyList" value="{{item.CODE}}">{{item.CODE}}</ng-option>
+                        </ng-select>
+                        <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CURRENCY}}</span>
+                        <div *ngIf="submitted && f.BL_LIST.controls[i].get('CURRENCY').errors"
+                          class="invalid-feedback">Currency is required
+                        </div>
+                          </td>
+
+                      <td>
+                        <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text" [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('EXEMPT_FLAG').errors}"
+                            formControlName="EXEMPT_FLAG" class="form-control" />
+                        <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.EXEMPT_FLAG}}</span>
+                        <div *ngIf="submitted && f.BL_LIST.controls[i].get('EXEMPT_FLAG').errors" class="invalid-feedback">
+                          Exempt Flag is required
+                        </div>
+                          </td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+              <div class="col-md-6 offset-md-5 text-end">
+              <button (click)="SubmitList()" class="form-btn-primary rounded">
+                Submit
+              </button>
+              </div>
+            </div>
           </div>
+        </div>
+
       </div>
-  </div>
+    </div>
+  </div> -->
 </div>
-
-
-
-
-</div>
-

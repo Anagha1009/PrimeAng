@@ -184,6 +184,7 @@ export class NewBlComponent implements OnInit {
     BL.AGENT_CODE = this._commonService.getUserCode();
 
     this._blService.getBLDetails(BL).subscribe((res: any) => {
+      console.log("res bl", res)
       if (res.ResponseCode == 200) {
         var blDetails = res.Data;
 

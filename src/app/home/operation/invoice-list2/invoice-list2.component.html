@@ -1,0 +1,180 @@
+<div class="section-title pt-3">
+  <h2>Create Invoice</h2>
+</div>
+<div class="container mt-4">
+  <div class="row">
+    <form [formGroup]="listForm">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label2" readonly>Invoice Type<span class="text-danger"> *</span></label>
+              <input type="text" formControlName="INVOICE_TYPE" class="form-control2" maxlength="20" readonly />
+
+              <!-- <select formControlName="INVOICE_TYPE" class="form-control2">
+                <option disabled value="">--Select--</option>
+                <option>FREIGHT</option>
+                <option>LOCAL</option>
+              </select> -->
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label2">Bill To<span class="text-danger"> *</span></label>
+              <select formControlName="BILL_TO" class="form-control2">
+                <option disabled value="">--Select--</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="pull-right">
+              <label class="form-label2">Bill From<span class="text-danger"> *</span></label>
+              <!-- <select formControlName="BILL_FROM" class="form-control2">
+                <option disabled value="">--Select--</option>
+                <option>PRINCIPAL</option>
+                <option>AGENT</option>
+              </select> -->
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label2">Shipper Name<span class="text-danger" readonly>
+                  *</span></label>
+              <input type="text" formControlName="SHIPPER_NAME" class="form-control2" maxlength="20" readonly />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label2">Payment Term<span class="text-danger"> *</span></label>
+              <input type="text" formControlName="PAYMENT_TERM" class="form-control2" maxlength="20" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="col-md-6 offset-md-6 text-end">
+      <button (click)="addRow()" class="form-btn me-2">Add Row</button>
+    </div>
+  </div>
+  <h6>Charge List</h6>
+<div class="table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Sr No</th>
+        <th>Charge Name</th>
+        <th>Exchange Rate</th>
+        <th>Quantity</th>
+        <th>Amount</th>
+        <th>HSN Code</th>
+        <th>Requested Amount</th>
+        <th>Currency</th>
+        <th>Exempt Flag</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of f1; let i = index" [formGroup]="item">
+        <td>{{ i + 1 }}</td>
+        <td>
+          <ng-select *ngIf="!item.value.IS_SRRCHARGE" formControlName="CHARGE_NAME"
+            [ngClass]="{'invalid': submitted && f.BL_LIST.controls[i].get('CHARGE_NAME').errors}">
+            <ng-option disabled="true">--Select--</ng-option>
+            <ng-option *ngFor="let item of ChargeMasterList"
+              value="{{item.CHARGE_NAME}}">{{item.CHARGE_NAME}}</ng-option>
+
+          </ng-select>
+          <span *ngIf="item.value.IS_SRRCHARGE">{{item.value.CHARGE_NAME}}</span>
+          <div *ngIf="submitted && f.BL_LIST.controls[i].get('CHARGE_NAME').errors" class="invalid-feedback">Charge
+            Name is required
+          </div>
+        </td>
+
+        <td> <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
+            [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('EXCHANE_RATE').errors}"
+            formControlName="EXCHANE_RATE" class="form-control" />
+          <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.EXCHANE_RATE}}</span>
+
+          <div *ngIf=" submitted && f.BL_LIST.controls[i].get('EXCHANE_RATE').errors" class="invalid-feedback">
+            Exchange Rate is required
+          </div>
+        </td>
+
+        <td>
+          <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
+            [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('QUANTITY').errors}"
+            formControlName="QUANTITY" class="form-control" />
+          <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.QUANTITY}}</span>
+          <div *ngIf="submitted && f.BL_LIST.controls[i].get('QUANTITY').errors" class="invalid-feedback"> Quantity is
+            required
+          </div>
+        </td>
+
+        <td>
+          <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
+            [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('AMOUNT').errors }" formControlName="AMOUNT"
+            class="form-control" />
+          <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.AMOUNT}}</span>
+          <div *ngIf="submitted && f.BL_LIST.controls[i].get('AMOUNT').errors" class="invalid-feedback">
+            Amount is required
+          </div>
+        </td>
+
+        <td>
+          <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
+            [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors}" formControlName="HSN_CODE"
+            class="form-control" />
+          <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.HSN_CODE}}</span>
+          <div *ngIf=" submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors" class="invalid-feedback"> HSN Code
+            is required </div>
+        </td>
+
+        <td>
+          <input type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
+            [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('REQUESTED_AMOUNT').errors}"
+            formControlName="REQUESTED_AMOUNT" class="form-control" />
+          <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.REQUESTED_AMOUNT}}</span>
+          <div *ngIf="submitted && f.BL_LIST.controls[i].get('REQUESTED_AMOUNT').errors" class="invalid-feedback">
+            Requested Amount is required
+          </div>
+        </td>
+
+        <td>
+          <ng-select *ngIf="item.value.IS_SRRCHARGE != '1'" formControlName="CURRENCY"
+            [ngClass]="{'invalid': submitted && f.BL_LIST.controls[i].get('CURRENCY').errors}">
+            <ng-option disabled="true">--Select--</ng-option>
+            <ng-option *ngFor="let item of CurrencyList" value="{{item.CODE}}">{{item.CODE}}</ng-option>
+          </ng-select>
+          <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CURRENCY}}</span>
+          <div *ngIf="submitted && f.BL_LIST.controls[i].get('CURRENCY').errors" class="invalid-feedback">Currency is
+            required
+          </div>
+        </td>
+
+        <td>
+          <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
+            [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('EXEMPT_FLAG').errors}"
+            formControlName="EXEMPT_FLAG" class="form-control" />
+          <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.EXEMPT_FLAG}}</span>
+          <div *ngIf="submitted && f.BL_LIST.controls[i].get('EXEMPT_FLAG').errors" class="invalid-feedback">
+            Exempt Flag is required
+          </div>
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+  <div class="col-md-6 offset-md-5 text-end">
+    <button (click)="SubmitList()" class="form-btn me-2">
+      Submit
+    </button>
+  </div>
+</div>
+</div>
+
+
