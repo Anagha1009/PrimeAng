@@ -26,6 +26,8 @@ import { TooltipModule } from 'ng2-tooltip-directive';
 import { ForgotPwdComponent } from 'src/app/auth/forgot-pwd/forgot-pwd.component';
 import { SurrenderedListComponent } from './surrendered-list/surrendered-list.component';
 import { NewInvoice2Component } from './new-invoice2/new-invoice2.component';
+import { InvoiceList2Component } from './invoice-list2/invoice-list2.component';
+
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { NewInvoice2Component } from './new-invoice2/new-invoice2.component';
     ForgotPwdComponent,
     SurrenderedListComponent,
     NewInvoice2Component,
+    InvoiceList2Component,
+
   ],
   imports: [
     CommonModule,

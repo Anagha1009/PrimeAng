@@ -389,4 +389,13 @@ export class MasterService {
   DeleteChargeMaster(ID: number) {
     return this._http.delete<any>(this.BASE_URL + 'Master/DeleteChargesMaster?ID=' + ID, this.httpOptions);
   }
+
+  InsertInvoice(data:any){
+    console.log("data is here=>", data)
+    return this._http.post<any>(this.BASE_URL + 'Master/InsertInvoice',data , this.httpOptions)
+  }
+
+  GetBLLISt(){
+    return this._http.get<any>(this.BASE_URL + 'Master/GetBLLIST',this.httpOptions)
+  }
 }
