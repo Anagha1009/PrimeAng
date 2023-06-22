@@ -41,6 +41,7 @@ export class NewInvoice2Component implements OnInit {
   ChargeMasterList:any[]=[];
   BLLIST:any[]=[]
   myItems: any[] = [{ index: 0 }];
+
   master: MASTER = new MASTER();
 
 
@@ -70,11 +71,11 @@ export class NewInvoice2Component implements OnInit {
     this.invoiceForm = this._formBuilder.group({
       ID: [0],
       INVOICE_NO:[''],
-      INVOICE_TYPE: ['',Validators.required],
+      INVOICE_TYPE: [''],
       BILL_TO: [''],
-      BILL_FROM: ['', Validators.required],
+      BILL_FROM: [''],
       SHIPPER_NAME: [''],
-      PAYMENT_TERM:['', Validators.required],
+      PAYMENT_TERM:[''],
       BL_NO:[''],
       radio:[''],
       BL_LIST: new FormArray([]),
@@ -103,23 +104,24 @@ Submit(BLNO:any){
     var BL = new Bl();
     BL.AGENT_CODE = this._commonService.getUserCode();
     BL.BL_NO = BLNO;
-    this._blService.getBLDetails(BL).subscribe((res:any)=>{
-      console.log("res", res.Data);
-      this.invoiceForm.get('SHIPPER_NAME')?.setValue(res.Data.SHIPPER)
+    // this._blService.getBLDetails(BL).subscribe((res:any)=>{
+      // console.log("res", res.Data);
       this.router.navigateByUrl('/home/operations/invoice-list/' + BLNO);
 
-})
+// });
+
+
 }
 
   // download pdf
   downloadpdf(){
 
-      let PDF = new jsPDF('p', 'pt', 'a2');
-      PDF.html(this.TABLE.nativeElement,{
-        callback:(pdf)=>{
-          PDF.save('BL_LIST.pdf');
-        }
-      })
+      // let PDF = new jsPDF('p', 'pt', 'a2');
+      // PDF.html(this.TABLE.nativeElement,{
+      //   callback:(pdf)=>{
+      //     PDF.save('BL_LIST.pdf');
+      //   }
+      // })
 
   }
 
@@ -136,11 +138,11 @@ Submit(BLNO:any){
 
 
   CheckBox(event:any){
-    if(event.target.value){
      console.log("hi",event.target.value)
-     localStorage.setItem('value',event.target.value)
 
-  }
+      localStorage.setItem('value',event.target.value)
+
+
 }
 
 
