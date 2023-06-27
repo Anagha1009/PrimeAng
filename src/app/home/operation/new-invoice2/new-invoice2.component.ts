@@ -25,6 +25,7 @@ export class NewInvoice2Component implements OnInit {
   isLoading1: boolean = false;
   invoiceForm1: FormGroup;
   invoiceForm: FormGroup;
+  chargeList: any[] = [];
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -619,46 +620,236 @@ export class NewInvoice2Component implements OnInit {
               if (i === 0 || i === node.table.body.length) {
                 return 1;
               }
-              return 0;
+              return i === node.table.headerRows
+                ? 1
+                : i === node.table.body.length - 1
+                ? 1
+                : 0;
+            },
+            vLineWidth: function () {
+              return 1;
+            },
+            paddingTop: function (i: any) {
+              return i === 1 ? 50 : 7;
+            },
+            paddingBottom: function (i: any, node: any) {
+              return i === node.table.body.length - 2 ? 50 : 7;
+            },
+            paddingLeft: function () {
+              return 7;
+            },
+            paddingRight: function () {
+              return 7;
+            },
+          },
+
+          table: {
+            widths: [70, 15, 20, 35, 35, 35, 20, 35, 20, 35, 40],
+            headerRows: 1,
+            body: [
+              [
+                {
+                  text: 'Charges',
+                  fontSize: 9,
+                  bold: true,
+                },
+
+                {
+                  text: 'Qty',
+                  fontSize: 9,
+                  bold: true,
+                },
+
+                {
+                  text: 'Curr',
+                  fontSize: 9,
+                  bold: true,
+                },
+                {
+                  text: 'Chrg Amount',
+                  fontSize: 9,
+                  bold: true,
+                },
+                {
+                  text: 'Amount',
+                  fontSize: 9,
+                  bold: true,
+                },
+
+                {
+                  text: 'Tax Amount',
+                  fontSize: 9,
+                  bold: true,
+                },
+                {
+                  text: 'Rate %',
+                  fontSize: 9,
+                  bold: true,
+                },
+                {
+                  text: 'SGST',
+                  fontSize: 9,
+                  bold: true,
+                },
+                {
+                  text: 'Rate %',
+                  fontSize: 9,
+                  bold: true,
+                },
+                {
+                  text: 'CGST',
+                  fontSize: 9,
+                  bold: true,
+                },
+                {
+                  text: 'Amount in INR',
+                  fontSize: 9,
+                  bold: true,
+                },
+              ],
+              [
+                {
+                  text: 'CMC',
+                  fontSize: 8,
+                },
+
+                { text: 56, fontSize: 8 },
+
+                { text: 'INR', fontSize: 8 },
+                { text: 56, fontSize: 8 },
+                { text: 565 * 5654, fontSize: 8 },
+
+                {
+                  text: 45 ? 56 * 56 : 0,
+                  fontSize: 8,
+                },
+                {
+                  text: 45 ? 9 : 0,
+                  fontSize: 8,
+                },
+                {
+                  text: 565,
+                  fontSize: 8,
+                },
+                {
+                  text: 454 ? 9 : 0,
+                  fontSize: 8,
+                },
+                {
+                  text: 56,
+                  fontSize: 8,
+                },
+                {
+                  text: 56 * 5 + 566 * 2,
+                  fontSize: 8,
+                },
+              ],
+              [
+                {
+                  colSpan: 5,
+                  text: 'Total : Seven Thousand and Eight Only',
+                  fontSize: 8,
+                },
+
+                {
+                  text: '',
+                },
+                {
+                  text: '',
+                },
+                {
+                  text: '',
+                },
+                {
+                  text: '',
+                },
+                {
+                  text: 4 ? 656 : 0,
+                  fontSize: 9,
+                },
+                {
+                  text: '',
+                },
+                {
+                  text: 56,
+                  fontSize: 9,
+                },
+                {
+                  text: '',
+                },
+                {
+                  text: 546,
+                  fontSize: 9,
+                },
+                {
+                  text: 454 + 5656 * 2,
+                  fontSize: 9,
+                },
+              ],
+            ],
+          },
+        },
+        {
+          layout: {
+            hLineWidth: function (i: any, node: any) {
+              return i === node.table.body.length ? 1 : 0;
             },
             vLineWidth: function (i: any) {
-              return i === 1;
+              return i === 1 ? 0 : 1;
             },
           },
           table: {
             headerRows: 1,
-            widths: [
-              '20%',
-              '10%',
-              '10%',
-              '5%',
-              '5%',
-              '10%',
-              '5%',
-              '5%',
-              '5%',
-              '5%',
-              '5%',
-              '5%',
-              '5%',
-              '9%',
-            ],
+            widths: [150, 358],
             body: [
               [
-                { text: 'Description', bold: true, fontSize: 7 },
-                { text: 'HSN', bold: true, fontSize: 7 },
-                { text: 'Cntr Size/ Type', bold: true, fontSize: 7 },
-                { text: 'Qty', bold: true, fontSize: 7 },
-                { text: 'Curr', bold: true, fontSize: 7 },
-                { text: 'Chargeable Amount', bold: true, fontSize: 7 },
-                { text: 'Amount', bold: true, fontSize: 7 },
-                { text: 'Ex Rate', bold: true, fontSize: 7 },
-                { text: 'Taxable Amount', bold: true, fontSize: 7 },
-                { text: 'Rate %', bold: true, fontSize: 7 },
-                { text: 'SGST', bold: true, fontSize: 7 },
-                { text: 'Rate %', bold: true, fontSize: 7 },
-                { text: 'CGST', bold: true, fontSize: 7 },
-                { text: 'Amount In INR', bold: true, fontSize: 7 },
+                {
+                  text: 'PAN No : SFTDT55687',
+                  fontSize: 7,
+                  margin: [0, 5, 0, 0],
+                },
+                {
+                  text:
+                    'In case of any discrepancy on above invoice amount, please notify ' +
+                    'within 5 \ndays. If not this invoice will be presumed to be in order.',
+                  fontSize: 7,
+                },
+              ],
+              [
+                {
+                  text: 'For ' + this.invoiceDetails.ORG_NAME,
+                  fontSize: 8,
+                  bold: true,
+                },
+                {
+                  text:
+                    'Please make NEFT/RTGS transfer in favour of ' +
+                    this.invoiceDetails.ORG_NAME,
+                  fontSize: 7,
+                  bold: true,
+                  italics: true,
+                },
+              ],
+              [
+                {},
+                {
+                  text:
+                    'Account Holder Name: PRIME MARITIME\n' +
+                    'Payment in Favour: \n' +
+                    'Bank Name: \n' +
+                    'Account Number:\n' +
+                    'IFSC Code:\n' +
+                    'Bank Address:',
+                  fontSize: 8,
+                },
+              ],
+              [
+                {
+                  text: 'As Agents, \n Prime Maritime DWC LLC',
+                  bold: true,
+                  fontSize: 8,
+                },
+                {},
               ],
             ],
           },
