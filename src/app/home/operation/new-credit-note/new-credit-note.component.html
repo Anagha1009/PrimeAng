@@ -1,0 +1,95 @@
+<div class="section-title pt-3">
+    <h2>New Credit Note</h2>
+</div>
+<div class="container">
+    <div class="col-md-10 mx-auto mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="label-header">Invoice No</label>
+                        <label class="label-subheader">INV7889787</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-header">Vessel / Voyage</label>
+                        <label class="label-subheader">Cerus / 500</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-header">Credit Note To</label>
+                        <label class="label-subheader">Aqua Pharma Chemicals Pvt Ltd</label>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <label class="label-header">Place of Supply</label>
+                        <label class="label-subheader">MH</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-header">GSTIN No</label>
+                        <label class="label-subheader">5658545454445</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-header">GST State Code</label>
+                        <label class="label-subheader">27</label>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <label class="label-header">Tax Applied</label>
+                        <label class="label-subheader">SGST</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-header">Invoice Party</label>
+                        <label class="label-subheader">Aqua Pharma Chemicals Pvt Ltd</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="ratetable" id="data-table-config">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Charge Name</th>
+                    <th>Container</th>
+                    <th>Collect Port</th>
+                    <th>Ex Rate</th>
+                    <th>Qty</th>
+                    <th>Rate</th>
+                    <th>HSN</th>
+                    <th>Taxable Amount</th>
+                    <th>IGST</th>
+                    <th>SGST</th>
+                    <th>CGST</th>
+                    <th>Tax Amount</th>
+                    <th>Total Rate</th>
+                    <th>Credit Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of chargeList">
+                    <td>No</td>
+                    <td>Charge Name</td>
+                    <td>Container</td>
+                    <td>Collect Port</td>
+                    <td>Ex Rate</td>
+                    <td>Qty</td>
+                    <td>Rate</td>
+                    <td>HSN</td>
+                    <td>Taxable Amount in INR</td>
+                    <td>IGST</td>
+                    <td>SGST</td>
+                    <td>CGST</td>
+                    <td>Tax Amount</td>
+                    <td>Total Rate</td>
+                    <td>Credit Note</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <div class="col-md-2 offset-md-10 mt-4">
+        <button class="form-btn-primary">Create Credit Note</button>
+    </div>
+</div>

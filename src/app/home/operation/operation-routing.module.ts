@@ -20,7 +20,8 @@ import { TdrListComponent } from './tdr-list/tdr-list.component';
 import { TdrComponent } from './tdr/tdr.component';
 import { NewInvoice2Component } from './new-invoice2/new-invoice2.component';
 import { InvoiceList2Component } from './invoice-list2/invoice-list2.component';
-
+import { CreditNoteComponent } from './credit-note/credit-note.component';
+import { NewCreditNoteComponent } from './new-credit-note/new-credit-note.component';
 
 const routes: Routes = [
   {
@@ -122,6 +123,18 @@ const routes: Routes = [
   {
     path: 'invoice-list/:BL_NO',
     component: InvoiceList2Component,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Agent] },
+  },
+  {
+    path: 'credit-note',
+    component: CreditNoteComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Agent] },
+  },
+  {
+    path: 'new-credit-note',
+    component: NewCreditNoteComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Agent] },
   },
