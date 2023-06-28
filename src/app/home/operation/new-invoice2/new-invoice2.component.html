@@ -74,39 +74,39 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
         </div>
         <div class="modal-body">
-          <div class="form-group col-md-8 mx-auto">
-            <label class="form-label2">BL No.</label>
-            <input class="form-control2" />
-            <div class="invalid-feedback">
-              Please Enter BL No.
+          <div class="col-md-10 mx-auto">
+            <form [formGroup]="invoiceForm">
+              <div class="form-group">
+                <label class="form-label2">BL No</label>
+                <input formControlName="BL_NO" [ngClass]="{'invalid':submitted && f.BL_NO.errors}"
+                  class="form-control2" />
+              </div>
+              <label class="mb-2">Invoice Type</label>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input type="radio" value="FREIGHT" formControlName="radio">
+                    <label class="ms-2">FREIGHT</label>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input type="radio" value="POL" formControlName="radio">
+                    <label class="ms-2">POL</label>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input type="radio" value="POD" formControlName="radio">
+                    <label class="ms-2">POD</label>
+                  </div>
+                </div>
+              </div>
+              <small *ngIf="submitted && f.radio.errors" class="text-danger">This is required</small>
+            </form>
+            <div class="col-md-6 offset-md-6 text-end">
+              <button class="form-btn-primary" (click)="Submit()"> Submit </button>
             </div>
-          </div>
-          <form [formGroup]="invoiceForm">
-            <label>Invoice Type<span class="text-danger">*</span></label><br><br>
-            <div class="row">
-              <div class="col-md-3">
-                <div class="form-group">
-                  <input type="radio" value="FREIGHT" formControlName="radio" (click)="CheckBox($event)">
-                  <label>FREIGHT</label>
-                </div>
-              </div>
-
-              <div class="col-md-3">
-                <div class="form-group">
-                  <input type="radio" value="POL" formControlName="radio" (click)="CheckBox($event)">
-                  <label>POL</label>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="form-group">
-                  <input type="radio" value="POD" formControlName="radio" (click)="CheckBox($event)">
-                  <label>POD</label>
-                </div>
-              </div>
-            </div>
-          </form>
-          <div class="col-md-6 offset-md-6 text-end">
-            <button class="form-btn-primary" (click)="Submit('')"> Submit </button>
           </div>
         </div>
       </div>

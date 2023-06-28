@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BlService } from 'src/app/services/bl.service';
 import { Bl } from 'src/app/models/bl';
 import { CommonService } from 'src/app/services/common.service';
@@ -15,9 +15,6 @@ const pdfMake = require('pdfmake/build/pdfmake.js');
   styleUrls: ['./new-invoice2.component.scss'],
 })
 export class NewInvoice2Component implements OnInit {
-  blNo: any;
-  BLNO: string = '';
-  //------------------------------------------//
   invoiceList: any[] = [];
   invoiceDetails: any;
   invoice: Bl = new Bl();
@@ -26,6 +23,7 @@ export class NewInvoice2Component implements OnInit {
   invoiceForm1: FormGroup;
   invoiceForm: FormGroup;
   chargeList: any[] = [];
+  submitted: boolean = false;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -34,9 +32,12 @@ export class NewInvoice2Component implements OnInit {
     private router: Router
   ) {}
 
+  @ViewChild('closeBtn') closeBtn: ElementRef;
+
   ngOnInit(): void {
     this.invoiceForm = this._formBuilder.group({
-      radio: [''],
+      radio: ['', Validators.required],
+      BL_NO: ['', Validators.required],
     });
 
     this.invoiceForm1 = this._formBuilder.group({
@@ -63,14 +64,16 @@ export class NewInvoice2Component implements OnInit {
     });
   }
 
-  Submit(BLNO: any) {
-    var BL = new Bl();
-    BL.AGENT_CODE = this._commonService.getUserCode();
-    BL.BL_NO = BLNO;
-    this._blService.getBLDetails(BL).subscribe((res: any) => {
-      this.invoiceForm.get('SHIPPER_NAME')?.setValue(res.Data.SHIPPER);
-      this.router.navigateByUrl('/home/operations/invoice-list/' + BLNO);
-    });
+  Submit() {
+    this.submitted = true;
+    if (this.invoiceForm.invalid) {
+      return;
+    }
+    this.closeBtn.nativeElement.click();
+    localStorage.setItem('value', this.invoiceForm.get('radio').value);
+    this.router.navigateByUrl(
+      '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
+    );
   }
 
   getInvoiceDetails(invoiceNo: string) {
@@ -867,12 +870,6 @@ export class NewInvoice2Component implements OnInit {
     pdfMake.createPdf(docDefinition).open();
   }
 
-  CheckBox(event: any) {
-    if (event.target.value) {
-      localStorage.setItem('value', event.target.value);
-    }
-  }
-
   Search() {
     var FROM_DATE = this.invoiceForm1.value.FROM_DATE;
     var TO_DATE = this.invoiceForm1.value.TO_DATE;
@@ -898,5 +895,9 @@ export class NewInvoice2Component implements OnInit {
 
     this.isLoading1 = true;
     this.getInvoiceList();
+  }
+
+  get f() {
+    return this.invoiceForm.controls;
   }
 }
