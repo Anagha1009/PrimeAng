@@ -45,11 +45,11 @@
             <th >Sr No</th>
             <th >Invoice No</th>
             <th >Invoice Type</th>
-            <th >Bill To</th>
             <th >BL No</th>
-            <th >Shipper Name</th>
             <th >Bill From</th>
-            <!-- <th >Invoice Date</th> -->
+            <th >Bill To</th>
+            <!-- <th >Shipper Name</th> -->
+            <th >Invoice Date</th>
             <th >Payment Term</th>
             <th >Action</th>
           </tr>
@@ -81,11 +81,10 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">BL No</h5>
+          <h5 class="modal-title" id="exampleModalLabel">BL Details</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
         </div>
         <div class="modal-body">
-          <p class="text-center">Enter BL No</p>
           <div class="form-group col-md-8 mx-auto">
             <label class="form-label2">BL No.</label>
             <input class="form-control2" [(ngModel)]="swicthBlNo" />
@@ -94,6 +93,7 @@
             </div>
           </div>
           <form [formGroup]="invoiceForm">
+            <label>Invoice Type<span class="text-danger">*</span></label><br><br>
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
@@ -116,11 +116,6 @@
                          </div>
               </div>
             </form>
-          <!-- <div class="row">
-            <input type="radio" value="FREIGHT" formControlName="gender">
-            <label>FREIGHT</label>
-          </div> -->
-
           <div class="col-md-6 offset-md-6 text-end">
           <button class="form-btn-primary" (click)="Submit(swicthBlNo)"> Submit </button>
           </div>
@@ -312,3 +307,7 @@
     </div>
   </div> -->
 </div>
+
+
+
+

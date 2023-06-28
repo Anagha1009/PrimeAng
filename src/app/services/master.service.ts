@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { MASTER } from '../models/master';
+import { Bl, MergeBl } from '../models/bl';
 
 @Injectable({
   providedIn: 'root',
@@ -390,12 +391,16 @@ export class MasterService {
     return this._http.delete<any>(this.BASE_URL + 'Master/DeleteChargesMaster?ID=' + ID, this.httpOptions);
   }
 
-  InsertInvoice(data:any){
-    console.log("data is here=>", data)
-    return this._http.post<any>(this.BASE_URL + 'Master/InsertInvoice',data , this.httpOptions)
+  InsertHsnCode(data:any){
+    return this._http.post<any>(this.BASE_URL + 'Master/InsertHsnCode',data, this.httpOptions);
+
   }
 
-  GetBLLISt(){
-    return this._http.get<any>(this.BASE_URL + 'Master/GetBLLIST',this.httpOptions)
+  getHsnList(){
+    return this._http.get<any>(this.BASE_URL + 'Master/GetHsnMaster', this.httpOptions)
+  }
+
+  DeleteHsnMaster(ID:number){
+    return this._http.delete<any>(this.BASE_URL + 'Master/DeleteHsnMaster?ID=' + ID, this.httpOptions)
   }
 }

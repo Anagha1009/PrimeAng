@@ -10,10 +10,9 @@ import { CommonService } from 'src/app/services/common.service';
 import { PartyService } from 'src/app/services/party.service';
 import { MasterService } from 'src/app/services/master.service';
 
-import { jsPDF } from "jspdf";
+
 import { Router } from '@angular/router';
-// import html2canvas from 'html2canvas';
-// import { pdfMake } from 'pdfmake/build/vfs_fonts';
+
 
 
 @Component({
@@ -25,32 +24,32 @@ export class NewInvoice2Component implements OnInit {
   invoiceForm1:FormGroup;
   invoiceForm:FormGroup;
   invoiceForm2:FormGroup;
-  blList : FormGroup;
+  // blList : FormGroup;
   blNo: any;
   BLNO: string = ''
   submitted:boolean=false
-  hideHistory:boolean=false
+
 
   swicthBlNo: string;
 
   customer: PARTY = new PARTY();
-  SrrList:any[]=[];
-  array:any[]=[]
+  // SrrList:any[]=[];
+  // array:any[]=[]
   add:any[]=[];
-  CurrencyList:any[]=[];
-  ChargeMasterList:any[]=[];
+  // CurrencyList:any[]=[];
+  // ChargeMasterList:any[]=[];
   BLLIST:any[]=[]
   myItems: any[] = [{ index: 0 }];
+
   master: MASTER = new MASTER();
 
 
 
 
-  @ViewChild('openBtn') openBtn: ElementRef;
+  // @ViewChild('openBtn') openBtn: ElementRef;
   @ViewChild('closeBtn') closeBtn: ElementRef;
   @ViewChild('openModalPopup') openModalPopup: ElementRef;
-  @ViewChild('openModalPopup1') openModalPopup1: ElementRef
-  @ViewChild('closeBtn1') closeBtn1: ElementRef;
+
 
   @ViewChild('TABLE',{ static : false }) TABLE: ElementRef;
 
@@ -70,11 +69,11 @@ export class NewInvoice2Component implements OnInit {
     this.invoiceForm = this._formBuilder.group({
       ID: [0],
       INVOICE_NO:[''],
-      INVOICE_TYPE: ['',Validators.required],
+      INVOICE_TYPE: [''],
       BILL_TO: [''],
-      BILL_FROM: ['', Validators.required],
+      BILL_FROM: [''],
       SHIPPER_NAME: [''],
-      PAYMENT_TERM:['', Validators.required],
+      PAYMENT_TERM:[''],
       BL_NO:[''],
       radio:[''],
       BL_LIST: new FormArray([]),
@@ -103,23 +102,29 @@ Submit(BLNO:any){
     var BL = new Bl();
     BL.AGENT_CODE = this._commonService.getUserCode();
     BL.BL_NO = BLNO;
-    this._blService.getBLDetails(BL).subscribe((res:any)=>{
-      console.log("res", res.Data);
-      this.invoiceForm.get('SHIPPER_NAME')?.setValue(res.Data.SHIPPER)
-      this.router.navigateByUrl('/home/operations/invoice-list/' + BLNO);
+    // this._blService.getBLDetails(BL).subscribe((res:any)=>{
+      // console.log("res", res.Data);
 
-})
+      this.router.navigateByUrl('/home/operations/invoice-list/' + BLNO);
+      this.closeBtn.nativeElement.click();
+
+
+
+
+// });
+
+
 }
 
   // download pdf
   downloadpdf(){
 
-      let PDF = new jsPDF('p', 'pt', 'a2');
-      PDF.html(this.TABLE.nativeElement,{
-        callback:(pdf)=>{
-          PDF.save('BL_LIST.pdf');
-        }
-      })
+      // let PDF = new jsPDF('p', 'pt', 'a2');
+      // PDF.html(this.TABLE.nativeElement,{
+      //   callback:(pdf)=>{
+      //     PDF.save('BL_LIST.pdf');
+      //   }
+      // })
 
   }
 
@@ -129,18 +134,18 @@ Submit(BLNO:any){
 
 
   // chargeModal
-  openModal2(){
-    this.openModalPopup1.nativeElement.click()
+  // openModal2(){
+  //   this.openModalPopup1.nativeElement.click()
 
-  }
+  // }
 
 
   CheckBox(event:any){
-    if(event.target.value){
      console.log("hi",event.target.value)
-     localStorage.setItem('value',event.target.value)
 
-  }
+      localStorage.setItem('value',event.target.value)
+
+
 }
 
 

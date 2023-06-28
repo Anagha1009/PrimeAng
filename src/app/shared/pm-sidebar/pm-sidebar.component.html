@@ -204,6 +204,11 @@
                             <div data-i18n="Alerts">vendor</div>
                         </a>
                     </li>
+                    <li [class]="submenu == 'hsn-code' ? 'menu-item active' : 'menu-item'">
+                      <a (click)="redirectToSubMenu('hsn-code')" class="menu-link pointer">
+                          <div data-i18n="Alerts">hsn-code</div>
+                      </a>
+                  </li>
                         <!--  -->
                     </ul>
                 </li>
