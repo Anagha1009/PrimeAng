@@ -18,6 +18,7 @@ export class ChargeMasterComponent implements OnInit {
   currencyList:any[]=[];
   ChargeMasterList:any[]=[];
   ArrayList:any[]=[];
+  HsnCodeList:any[]=[];
   isUpdate: boolean = false;
   submitted: boolean = false;
   isLoading: boolean = false;
@@ -58,8 +59,8 @@ export class ChargeMasterComponent implements OnInit {
 
     this.dropdown();
 
-    this.chargeForm.get('HSN_CODE').disable()
-    this.chargeForm.get('GST_PERCENTAGE').disable()
+    // this.chargeForm.get('HSN_CODE').disable()
+    // this.chargeForm.get('GST_PERCENTAGE').disable()
    this.GetChargeMasterList()
 
 
@@ -105,7 +106,7 @@ export class ChargeMasterComponent implements OnInit {
          this._masterService.InsertChargeMaster(JSON.stringify(this.chargeForm.value)).subscribe((res:any)=>{
         if (res.responseCode == 200) {
           this._commonService.successMsg('Your record has been inserted successfully !');
-          this.dropdown()
+          // this.dropdown()
           this.GetChargeMasterList();
           this.closeBtn.nativeElement.click();
         }
@@ -122,7 +123,7 @@ export class ChargeMasterComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.responseCode == 200) {
           this._commonService.successMsg('Your record has been Updated successfully !');
-          this.dropdown();
+          // this.dropdown();
           this.GetChargeMasterList();
           this.closeBtn.nativeElement.click();
         }
@@ -143,7 +144,7 @@ export class ChargeMasterComponent implements OnInit {
         this._masterService.DeleteChargeMaster(ID).subscribe((res: any) => {
           if (res.ResponseCode == 200) {
             Swal.fire('Deleted!', 'Your record has been deleted.', 'success');
-            this.dropdown();
+            // this.dropdown();
           this.GetChargeMasterList();
 
           }
@@ -153,22 +154,36 @@ export class ChargeMasterComponent implements OnInit {
   }
 
   dropdown(){
-    this._commonService.destroyDT();
+
     this.master.KEY_NAME = 'CURRENCY';
     this._masterService.GetMasterList( this.master).subscribe((res:any)=>{
       if(res.ResponseCode == 200){
         this.currencyList = res.Data
       }
-      this._commonService.getDT();
+
     });
+
+    // GET hsn code from hsn master
+    this._masterService.getHsnList().subscribe((res:any)=>{
+      if(res.ResponseCode == 200){
+        this.HsnCodeList = res.Data
+      }
+    })
   }
+
+
+
 GetChargeMasterList(){
+  this._commonService.destroyDT();
   this._masterService.GetChargeMasterList().subscribe((res:any)=>{
     if(res.ResponseCode == 200){
       this.ChargeMasterList = res.Data
     }
+    this._commonService.getDT();
   })
 }
+
+
   ClearForm() {
     this.chargeForm.reset();
     this.chargeForm.get('ID')?.setValue(0);
@@ -185,18 +200,18 @@ GetChargeMasterList(){
 
   }
 
-  IsGST(event:any){
-    if(event.target.checked){
+  // IsGST(event:any){
+  //   if(event.target.checked){
 
-      this.chargeForm.get('HSN_CODE').enable();
-      this.chargeForm.get('GST_PERCENTAGE').enable()
+  //     this.chargeForm.get('HSN_CODE').enable();
+  //     this.chargeForm.get('GST_PERCENTAGE').enable()
 
-    }else{
-      this.chargeForm.get('HSN_CODE').disable();
-      this.chargeForm.get('GST_PERCENTAGE').disable()
+  //   }else{
+  //     this.chargeForm.get('HSN_CODE').disable();
+  //     this.chargeForm.get('GST_PERCENTAGE').disable()
 
-     }
-  }
+  //    }
+  // }
 
   Search(){
      var FROM_DATE =  this.chargeForm1.value.FROM_DATE == null   ? ''  : this.chargeForm1.value.FROM_DATE;
@@ -204,18 +219,25 @@ GetChargeMasterList(){
 
   if ( FROM_DATE == '' && TO_DATE == '') {
     alert('Please enter atleast one filter to search !');
-  }
-  this.master.FROM_DATE = FROM_DATE;
-  this.master.TO_DATE = TO_DATE;
+  this.isLoading = false;
 
-  this.isLoading = true;
-  this.dropdown();
+  }else{
+    this.master.FROM_DATE = FROM_DATE;
+    this.master.TO_DATE = TO_DATE;
+
+    this.isLoading = true;
+    // this.dropdown();
+    this.GetChargeMasterList();
+  }
+
   }
 
   Clear(){
     this.chargeForm1.reset();
     this.master = new MASTER();
     this.isLoading1 = true;
-    this.dropdown();
+    // this.dropdown();
+    this.GetChargeMasterList();
+
   }
 }

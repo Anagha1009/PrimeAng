@@ -70,11 +70,10 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">BL No</h5>
+          <h5 class="modal-title" id="exampleModalLabel">BL Details</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
         </div>
         <div class="modal-body">
-          <p class="text-center">Enter BL No</p>
           <div class="form-group col-md-8 mx-auto">
             <label class="form-label2">BL No.</label>
             <input class="form-control2" />
@@ -83,6 +82,7 @@
             </div>
           </div>
           <form [formGroup]="invoiceForm">
+            <label>Invoice Type<span class="text-danger">*</span></label><br><br>
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">

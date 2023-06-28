@@ -1,0 +1,233 @@
+<div class="section-title pt-3">
+  <h2>Hsn Master</h2>
+</div>
+<div class="mb-4">
+  <div class="col-md-6 offset-md-6 text-end">
+      <button (click)="openModal()" class="form-btn-primary"><i class="fa fa-plus me-1"></i>
+          Add Hsn Code</button>
+      <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#hsnModal">Add Hsn Code</button>
+  </div>
+  <form [formGroup]="hsnForm1">
+      <div class="row">
+          <div class="col-md-2">
+              <div class="form-group">
+                  <!-- <label class="form-label2">Status </label>
+                  <select class="form-control2" formControlName="STATUS">
+                      <option value="" selected="true" disabled>--Select--</option>
+                      <option value="true">Active</option>
+                      <option value="false">InActive</option>
+                  </select> -->
+                  <!-- <div *ngIf="submitted && f.STATUS.errors" class="invalid-feedback">Please Select Status  </div> -->
+              </div>
+          </div>
+          <div class="col-md-2">
+              <div class="form-group">
+                  <label class="form-label2">From Date</label>
+                  <input (change)="hsnForm1.get('TO_DATE')?.setValue('')" onkeypress="return false;"
+                      formControlName="FROM_DATE" type="date" class="form-control2">
+              </div>
+          </div>
+          <div class="col-md-2">
+              <div class="form-group">
+                  <label class="form-label2">To Date</label>
+                  <input onkeypress="return false;" [min]="hsnForm1.get('FROM_DATE')?.value"
+                      formControlName="TO_DATE" type="date" class="form-control2">
+              </div>
+          </div>
+          <div class="col-md-3 mt-4">
+              <button class="form-btn me-2" (click)="Search()" >Search
+                  <!-- <span *ngIf="isLoading" class="fa fa-spinner fa-spin"></span> -->
+                </button>
+              <button class="form-btn-light me-2" (click)="Clear()">Clear
+                <!-- <span *ngIf="isLoading1" class="fa fa-spinner fa-spin"></span> -->
+              </button>
+          </div>
+      </div>
+  </form>
+  <table class="ratetable table-bordered" id="data-table-config">
+      <thead>
+          <tr>
+              <th>No</th>
+              <th>HSN Code</th>
+              <th>HSN Description</th>
+              <th>Created By</th>
+              <th>Created Date</th>
+              <th>Action</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor=" let item of HsnList let i = index">
+              <td >{{i + 1}}</td>
+              <td >{{item.HSN_CODE}}</td>
+              <td >{{item.HSN_DESC}}</td>
+              <td>{{item.CREATED_BY}}</td>
+              <td>{{item.CREATED_DATE}}</td>
+              <!-- <td width="25%" class="status"><span
+                      [class]="!item.STATUS ? 'rejected' : 'active'">{{item.STATUS ? 'Active'
+                      :
+                      'In-Active'}}</span></td> -->
+              <td >
+                  <!-- <i class="fa fa-pencil mx-2 pointer text-success" (click)="openModal(item.ID)"></i> -->
+                  <i class="fa fa-trash ms-2 pointer text-danger" (click)="DeleteHSnMaster(item.ID)"></i>
+          </tr>
+      </tbody>
+  </table>
+</div>
+<div class="modal fade bd-example-modal-xl" id="hsnModal" aria-labelledby="exampleModalLabel" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">HSN Code Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
+          </div>
+          <div class="modal-body">
+              <form [formGroup]="hsnForm">
+                <div class="row">
+                  <div class=" col-md-3">
+                  <div class="form-group">
+                    <label class="form-label2">HSN Code<span class="text-danger"> *</span></label>
+                    <input type="text" [ngClass]="{'invalid':submitted && f.HSN_CODE.errors}" formControlName="HSN_CODE"
+                    class="form-control2" maxlength="20">
+                    <div *ngIf="submitted && f.HSN_CODE.errors" class="invalid-feedback">HSN Code is required</div>
+
+                      </div>
+                      </div>
+
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label class="form-label2">HSN Description</label>
+                          <input type="text" [ngClass]="{'invalid':submitted && f.HSN_DESC.errors}" formControlName="HSN_DESC"
+                          class="form-control2" maxlength="20">
+                          <div *ngIf="submitted && f.HSN_DESC.errors" class="invalid-feedback">HSN Code is required</div>
+                            </div>
+                            </div>
+                 </div>
+              </form>
+              <div class="col-md-6 offset-md-6 text-end">
+                <button (click)="addRow()" class="form-btn me-2">Add Row</button>
+              </div>
+              <div class="col-md-12">
+                <h6>HSN Code</h6>
+                <div class="table-responsive">
+                  <table  class="table table-bordered">
+                    <thead>
+                      <tr >
+                        <th>No</th>
+                        <!-- <th>Country</th> -->
+                        <th>Rate %</th>
+                        <!-- <th>IS GST EXEMPTION</th>
+                        <th>IS VAT EXEMPTION</th> -->
+                        <th>EFFECTIVE FROM</th>
+                        <th>EFFECTIVE TO</th>
+                        <th>IGST</th>
+                        <th>CGST</th>
+                        <th>SGST</th>
+                        <th>DELETE</th>
+                      </tr>
+                    </thead>
+                         <tbody >
+                             <tr *ngFor="let item of f1; let i = index" [formGroup]="item">
+                              <td>{{ i + 1 }}</td>
+
+                                <!-- <td>
+                                  <ng-select formControlName="COUNTRY" [ngClass]="{'invalid': submitted && f.CODE_LIST.controls[i].get('COUNTRY').errors}">
+                                    <ng-option disabled="true">--Select--</ng-option>
+                                    <ng-option value=""></ng-option>
+
+                                  </ng-select>
+
+                                  <div *ngIf=" submitted && f.CODE_LIST.controls[i].get('COUNTRY').errors" class="invalid-feedback">
+                                    Country Rate is required
+                                  </div>
+                                 </td> -->
+
+                                 <td><input  type="text" [ngClass]="{ invalid: submitted && f.CODE_LIST.controls[i].get('RATE').errors}"
+                                  formControlName="RATE" class="form-control"  />
+
+                                  <div *ngIf=" submitted && f.CODE_LIST.controls[i].get('RATE').errors" class="invalid-feedback">
+                                     Rate is required
+                                  </div>
+                                 </td>
+<!--
+                                 <td><input  type="text" [ngClass]="{ invalid: submitted && f.CODE_LIST.controls[i].get('IS_GST_EXEMPTION').errors}"
+                                  formControlName="IS_GST_EXEMPTION" class="form-control"  />
+
+                                  <div *ngIf=" submitted && f.CODE_LIST.controls[i].get('IS_GST_EXEMPTION').errors" class="invalid-feedback">
+                                    Is GST Exemption is required
+                                  </div>
+                                 </td>
+
+                                 <td><input  type="text" [ngClass]="{ invalid: submitted && f.CODE_LIST.controls[i].get('IS_VAT_EXEMPTION').errors}"
+                                  formControlName="IS_VAT_EXEMPTION" class="form-control"  />
+
+                                  <div *ngIf=" submitted && f.CODE_LIST.controls[i].get('IS_VAT_EXEMPTION').errors" class="invalid-feedback">
+                                    Is VAT Exemption is required
+                                  </div>
+                                 </td> -->
+
+                                 <td><input  type="date" [ngClass]="{ invalid: submitted && f.CODE_LIST.controls[i].get('EFFECTIVE_FROM').errors}"
+                                  formControlName="EFFECTIVE_FROM" class="form-control"  />
+
+                                  <div *ngIf=" submitted && f.CODE_LIST.controls[i].get('EFFECTIVE_FROM').errors" class="invalid-feedback">
+                                   Effective From is required
+                                  </div>
+                                 </td>
+
+                                 <td><input  type="date" [ngClass]="{ invalid: submitted && f.CODE_LIST.controls[i].get('EFFECTIVE_TO').errors}"
+                                  formControlName="EFFECTIVE_TO" class="form-control"  />
+
+                                  <div *ngIf=" submitted && f.CODE_LIST.controls[i].get('EFFECTIVE_TO').errors" class="invalid-feedback">
+                                    Effective Due is required
+                                  </div>
+                                 </td>
+
+                                 <td><input  type="text" [ngClass]="{ invalid: submitted && f.CODE_LIST.controls[i].get('IGST').errors}"
+                                  formControlName="IGST" class="form-control"  />
+
+                                  <div *ngIf=" submitted && f.CODE_LIST.controls[i].get('IGST').errors" class="invalid-feedback">
+                                    IGST is required
+                                  </div>
+                                 </td>
+
+                                 <td><input  type="text" [ngClass]="{ invalid: submitted && f.CODE_LIST.controls[i].get('CGST').errors}"
+                                  formControlName="CGST" class="form-control"  />
+
+                                  <div *ngIf=" submitted && f.CODE_LIST.controls[i].get('CGST').errors" class="invalid-feedback">
+                                    CGST is required
+                                  </div>
+                                 </td>
+
+                                 <td><input  type="text" [ngClass]="{ invalid: submitted && f.CODE_LIST.controls[i].get('SGST').errors}"
+                                  formControlName="SGST" class="form-control"  />
+
+                                  <div *ngIf=" submitted && f.CODE_LIST.controls[i].get('SGST').errors" class="invalid-feedback">
+                                    SGST is required
+                                  </div>
+                                 </td>
+
+                                 <td>
+                                  <i class="fa fa-trash mx-2 pointer text-success" (click)="Delete(i)"></i>
+
+                                 </td>
+
+                              </tr>
+                          </tbody>
+                    </table>
+                    <div class="col-md-6 offset-md-5 text-end">
+                      <button (click)="SubmitHSN()" class="form-btn">
+                        Submit
+                      </button>
+                      </div>
+
+                  </div>
+                </div>
+          </div>
+
+
+
+      </div>
+  </div>
+
+</div>
+
+

@@ -33,6 +33,7 @@ import { DetentionComponent } from './detention/detention.component';
 import { MandatoryComponent } from './mandatory/mandatory.component';
 import { ChargeMasterComponent } from './charge-master/charge-master.component';
 import { VendorComponent } from './vendor/vendor.component';
+import { HsnCodeComponent } from './hsn-code/hsn-code.component';
 
 @NgModule({
     declarations: [
@@ -60,7 +61,8 @@ import { VendorComponent } from './vendor/vendor.component';
         DetentionComponent,
         MandatoryComponent,
         ChargeMasterComponent,
-        VendorComponent
+        VendorComponent,
+        HsnCodeComponent
     ],
     imports: [
         CommonModule,
