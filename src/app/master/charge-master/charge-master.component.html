@@ -1,217 +1,157 @@
-
 <div class="section-title pt-3">
   <h2>Charge Master</h2>
 </div>
 <div class="mb-4">
   <div class="col-md-6 offset-md-6 text-end">
-      <button (click)="openModal()" class="form-btn-primary"><i class="fa fa-plus me-1"></i>New Charge Master</button>
-      <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#chargeModal">New Charge
-        Master</button>
+    <button (click)="openModal()" class="form-btn-primary"><i class="fa fa-plus me-1"></i>New Charge Master</button>
+    <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#chargeModal">New Charge
+      Master</button>
   </div>
   <form [formGroup]="chargeForm1">
-      <div class="row">
-          <div class="col-md-2">
-              <div class="form-group">
-                  <label class="form-label2">From Date</label>
-                  <input (change)="chargeForm1.get('TO_DATE')?.setValue('')" onkeypress="return false;"
-                      formControlName="FROM_DATE" type="date" class="form-control2">
-              </div>
-          </div>
-          <div class="col-md-2">
-              <div class="form-group">
-                  <label class="form-label2">To Date</label>
-                  <input onkeypress="return false;" [min]="chargeForm1.get('FROM_DATE')?.value"
-                      formControlName="TO_DATE" type="date" class="form-control2">
-              </div>
-          </div>
-          <div class="col-md-3 mt-4">
-              <button class="form-btn me-2"(click)="Search()" [disabled]="isLoading" >Search
-                  <span  *ngIf="isLoading" class="fa fa-spinner fa-spin"></span>
-                </button>
-              <button class="form-btn-light me-2"  (click)="Clear()" [disabled]="isLoading1" >Clear
-                <span *ngIf="isLoading1" class="fa fa-spinner fa-spin"></span>
-              </button>
-          </div>
+    <div class="row">
+      <div class="col-md-2">
+        <div class="form-group">
+          <label class="form-label2">From Date</label>
+          <input (change)="chargeForm1.get('TO_DATE')?.setValue('')" onkeypress="return false;"
+            formControlName="FROM_DATE" type="date" class="form-control2">
+        </div>
       </div>
+      <div class="col-md-2">
+        <div class="form-group">
+          <label class="form-label2">To Date</label>
+          <input onkeypress="return false;" [min]="chargeForm1.get('FROM_DATE')?.value" formControlName="TO_DATE"
+            type="date" class="form-control2">
+        </div>
+      </div>
+      <div class="col-md-3 mt-4">
+        <button class="form-btn me-2" (click)="Search()" [disabled]="isLoading">Search
+          <span *ngIf="isLoading" class="fa fa-spinner fa-spin"></span>
+        </button>
+        <button class="form-btn-light me-2" (click)="Clear()" [disabled]="isLoading1">Clear
+          <span *ngIf="isLoading1" class="fa fa-spinner fa-spin"></span>
+        </button>
+      </div>
+    </div>
   </form>
   <table class="ratetable table-bordered" id="data-table-config">
-      <thead>
-          <tr>
-              <th width="1%">No</th>
-              <th width="12%">Charge Name</th>
-              <th width="14%">Charge Header</th>
-              <th width="14%">Charge Type</th>
-              <th width="14%">Gst Percentage</th>
-              <th width="14%">Currency</th>
-              <th width="14%">HSN Code</th>
-              <th width="14%">Charge Amount</th>
-              <th width="14%">Applicable For</th>
-              <th width="14%">Action</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr *ngFor="let item of ChargeMasterList; let i = index">
-              <td width="1%">{{i+1}}</td>
-              <td width="12%">{{item.CHARGE_NAME}}</td>
-              <td width="14%">{{item.CHARGE_HEADER}}</td>
-              <td width="14%">{{item.CHARGE_TYPE}}</td>
-              <td width="14%">{{item.GST_PERCENTAGE}}</td>
-              <td width="14%">{{item.CURRENCY}}</td>
-              <td width="14%">{{item.HSN_CODE}}</td>
-              <td width="14%">{{item.CHARGE_AMOUNT}}</td>
-              <td width="14%">{{item.APPLICABLE_FOR}}</td>
-
-              <td width="25%">
-                <i class="fa fa-pencil mx-2 pointer text-success" (click)="openModal(item.ID)"></i>
-                <i class="fa fa-trash ms-2 pointer text-danger" (click)="DeleteChargeMaster(item.ID)"></i></td>
-          </tr>
-      </tbody>
+    <thead>
+      <tr>
+        <th width="1%">No</th>
+        <th width="20%">Charge Name</th>
+        <th width="15%">Charge Header</th>
+        <th width="15%">Charge Type</th>
+        <th width="20%">HSN Code</th>
+        <th width="20%">Applicable</th>
+        <th width="9%">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of ChargeMasterList; let i = index">
+        <td width="1%">{{i+1}}</td>
+        <td width="20%">{{item.CHARGE_NAME}}</td>
+        <td width="15%">{{item.CHARGE_HEADER}}</td>
+        <td width="15%">{{item.CHARGE_TYPE}}</td>
+        <td width="20%">{{item.HSN_CODE}}</td>
+        <td width="20%">{{item.APPLICABLE_FOR}}</td>
+        <td width="9%">
+          <i class="fa fa-pencil mx-2 pointer text-success" (click)="openModal(item.ID)"></i>
+          <i class="fa fa-trash ms-2 pointer text-danger" (click)="DeleteChargeMaster(item.ID)"></i>
+        </td>
+      </tr>
+    </tbody>
   </table>
 </div>
 <div class="modal fade" id="chargeModal" aria-labelledby="exampleModalLabel" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Charge Master Details</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
-          </div>
-          <div class="modal-body">
-              <form [formGroup]="chargeForm">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group" >
-                      <label class="form-label2">Charge Name<span class="text-danger"> *</span></label>
-                      <input type="text" [ngClass]="{'invalid':submitted && f.CHARGE_NAME.errors}"    formControlName="CHARGE_NAME"
-                          class="form-control2" maxlength="20">
-                          <div *ngIf="submitted && f.CHARGE_NAME.errors" class="invalid-feedback">Charge Name is required</div>
-
-                    </div>
-                    </div>
-
-                    <div class="col-md-6">
-                      <div class="form-group" >
-                      <label class="form-label2">Charge Header<span class="text-danger"> *</span></label>
-                      <select formControlName="CHARGE_HEADER" class="form-control2" [ngClass]="{'invalid':submitted && f.CHARGE_HEADER.errors}">
-                        <option disabled value="">--Select--</option>
-                        <option> GROUND</option>
-                        <option> DETENTION</option>
-                        <option> LUMP SUM</option>
-                        <option> FREIGHT</option>
-                        <option> LOCAL</option>
-                        <option> STORAGE</option>
-                        <option> TERMINAL</option>
-                        <option> OTHER</option>
-                        <option> SURVEY</option>
-                        <option> CHA</option>
-                        <option> TRANSPORTER</option>
-                        <option> DEPOT</option>
-                        <option> CARRIER</option>
-                    </select>
-                          <div *ngIf="submitted && f.CHARGE_HEADER.errors" class="invalid-feedback">Charge Header is required</div>
-
-                    </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group" >
-                      <label class="form-label2">Charge Type<span class="text-danger"> *</span></label>
-                      <select formControlName="CHARGE_TYPE" class="form-control2" [ngClass]="{'invalid':submitted && f.CHARGE_TYPE.errors}">
-                        <option disabled value="">--Select--</option>
-                        <option> CONTAINER</option>
-                        <option> BL</option>
-
-                    </select>
-                          <div *ngIf="submitted && f.CHARGE_TYPE.errors" class="invalid-feedback">Charge Type is required</div>
-
-                    </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group ">
-                        <label class="form-label2">Charge Amount<span class="text-danger"> *</span></label>
-                        <input type="text" [ngClass]="{'invalid':submitted && f.CHARGE_AMOUNT.errors}"  formControlName="CHARGE_AMOUNT"
-                            class="form-control2" maxlength="20">
-                            <div *ngIf="submitted && f.CHARGE_AMOUNT.errors" class="invalid-feedback">Charge Amount is required</div>
-
-                      </div>
-                      </div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group" >
-                        <label class="form-label2">Currency<span class="text-danger"> *</span></label>
-                            <select formControlName="CURRENCY" class="form-control2" >
-                              <option disabled value="">--Select--</option>
-                              <option  *ngFor="let item of currencyList" value="{{item.CODE}}"> {{item.CODE}}</option>
-                          </select>
-                      </div>
-                      </div>
-
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label class="form-label2" >Applicable For<span class="text-danger"> *</span></label>
-                        <select formControlName="APPLICABLE_FOR" class="form-control2" [ngClass]="{'invalid':submitted && f.APPLICABLE_FOR.errors}" >
-                        <option disabled value="">--Select--</option>
-                        <option> IMPORT</option>
-                        <option> EXPORT</option>
-                        <option> BOTH</option>
-
-
-                    </select>
-                    <div *ngIf="submitted && f.APPLICABLE_FOR.errors" class="invalid-feedback">Applicable For is required</div>
-
-                      </div>
-                      </div>
-                      </div>
-
-                      <div class="row">
-                        <div class="col-md-6">
-                        <!-- <div class="form-check form-switch" >
-                          <input formControlName="IS_GST" (change)="IsGST($event)" class="form-check-input" type="checkbox"
-                              role="switch" />
-                          <label class="form-check-label">Is GST <span class="text-danger"> *</span></label>
-                      </div> -->
-                      </div>
-                      </div>
-
-                      <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                  <label class="form-label2">HSN Code<span class="text-danger"> *</span></label>
-                                  <select formControlName="HSN_CODE" class="form-control2" >
-                                    <option disabled value="">--Select--</option>
-                                    <option  *ngFor="let item of HsnCodeList" value="{{item.HSN_CODE}}"> {{item.HSN_CODE}}</option>
-                                </select>
-                                    <!-- <label class="form-label2">HSN Code<span class="text-danger"> *</span></label>
-                                    <input type="text" [ngClass]="{'invalid':submitted && f.HSN_CODE.errors}"  formControlName="HSN_CODE"
-                                        class="form-control2" maxlength="20">
-                                        <div *ngIf="submitted && f.HSN_CODE.errors" class="invalid-feedback">HSN Code is
-                                          required</div> -->
-                                </div>
-                             </div>
-                             <!-- <div class="col-md-6">
-                                <div class="form-group" >
-                                <label class="form-label2">GST Percentage<span class="text-danger"> *</span></label>
-                                <input type="text" [ngClass]="{'invalid':submitted && f.GST_PERCENTAGE.errors}" formControlName="GST_PERCENTAGE"
-                                    class="form-control2" maxlength="20">
-                                    <div *ngIf="submitted && f.GST_PERCENTAGE.errors" class="invalid-feedback">GST Percentage is
-                                      required</div>
-                              </div>
-                              </div> -->
-                      </div>
-
-                </div>
-              </form>
-          </div>
-          <div class="modal-footer">
-              <button *ngIf="!isUpdate" class="form-btn me-2"(click)="InsertChargeMaster()" class="form-btn me-2">Save</button>
-              <button (click)="ClearForm()" class="form-btn-light me-2">Clear</button>
-              <button *ngIf="isUpdate"  (click)="updateMaster()" class="form-btn">Update</button>
-          </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Charge Master Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
       </div>
+      <div class="modal-body">
+        <form [formGroup]="chargeForm">
+          <div class="col-md-12">
+            <div class="row mt-4">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input type="text" [ngClass]="{'invalid':submitted && f.CHARGE_NAME.errors}"
+                    formControlName="CHARGE_NAME" class="form-control" maxlength="20">
+                  <label class="form-label">Charge Name<span class="text-danger"> *</span></label>
+                  <div *ngIf="submitted && f.CHARGE_NAME.errors" class="invalid-feedback">Charge Name is required</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <ng-select formControlName="CHARGE_HEADER"
+                    [ngClass]="{'invalid':submitted && f.CHARGE_HEADER.errors}">
+                    <ng-option disabled value="">--Select--</ng-option>
+                    <ng-option value="GROUND"> GROUND</ng-option>
+                    <ng-option value="DETENTION"> DETENTION</ng-option>
+                    <ng-option value="LUMP SUM"> LUMP SUM</ng-option>
+                    <ng-option value="FREIGHT"> FREIGHT</ng-option>
+                    <ng-option value="LOCAL"> LOCAL</ng-option>
+                    <ng-option value="STORAGE"> STORAGE</ng-option>
+                    <ng-option value="TERMINAL"> TERMINAL</ng-option>
+                    <ng-option value="OTHER"> OTHER</ng-option>
+                    <ng-option value="SURVEY"> SURVEY</ng-option>
+                    <ng-option value="CHA"> CHA</ng-option>
+                    <ng-option value="TRANSPORTER"> TRANSPORTER</ng-option>
+                    <ng-option value="DEPOT"> DEPOT</ng-option>
+                    <ng-option value="CARRIER"> CARRIER</ng-option>
+                  </ng-select>
+                  <label class="form-label-ddl">Charge Header<span class="text-danger"> *</span></label>
+                  <div *ngIf="submitted && f.CHARGE_HEADER.errors" class="invalid-feedback">Charge Header is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <ng-select formControlName="CHARGE_TYPE" [ngClass]="{'invalid':submitted && f.CHARGE_TYPE.errors}">
+                    <ng-option disabled value="">--Select--</ng-option>
+                    <ng-option value="CONTAINER">Container</ng-option>
+                    <ng-option value="BL">BL</ng-option>
+                  </ng-select>
+                  <label class="form-label-ddl">Charge Type<span class="text-danger"> *</span></label>
+                  <div *ngIf="submitted && f.CHARGE_TYPE.errors" class="invalid-feedback">Charge Type is required</div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <ng-select formControlName="APPLICABLE_FOR"
+                    [ngClass]="{'invalid':submitted && f.APPLICABLE_FOR.errors}">
+                    <ng-option disabled value="">--Select--</ng-option>
+                    <ng-option value="Import">Import</ng-option>
+                    <ng-option value="Export">Export</ng-option>
+                    <ng-option value="Both">Both</ng-option>
+                  </ng-select>
+                  <label class="form-label-ddl">Applicable For<span class="text-danger"> *</span></label>
+                  <div *ngIf="submitted && f.APPLICABLE_FOR.errors" class="invalid-feedback">Applicable For is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <ng-select formControlName="HSN_CODE">
+                    <ng-option disabled value="">--Select--</ng-option>
+                    <ng-option *ngFor="let item of HsnCodeList" value="{{item.HSN_CODE}}"> {{item.HSN_CODE}}</ng-option>
+                  </ng-select>
+                  <label class="form-label-ddl">HSN Code</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button (click)="ClearForm()" class="form-btn-light me-2">Clear</button>
+        <button *ngIf="!isUpdate" class="form-btn me-2" (click)="InsertChargeMaster()"
+          class="form-btn me-2">Save</button>
+        <button *ngIf="isUpdate" (click)="updateMaster()" class="form-btn">Update</button>
+      </div>
+    </div>
   </div>
 </div>

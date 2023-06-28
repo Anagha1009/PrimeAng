@@ -195,20 +195,20 @@
 
                         <!--  -->
                         <li [class]="submenu == 'charges-master' ? 'menu-item active' : 'menu-item'">
-                          <a (click)="redirectToSubMenu('charges-master')" class="menu-link pointer">
-                              <div data-i18n="Alerts">charge master</div>
-                          </a>
-                      </li>
-                      <li [class]="submenu == 'vendor' ? 'menu-item active' : 'menu-item'">
-                        <a (click)="redirectToSubMenu('vendor')" class="menu-link pointer">
-                            <div data-i18n="Alerts">vendor</div>
-                        </a>
-                    </li>
-                    <li [class]="submenu == 'hsn-code' ? 'menu-item active' : 'menu-item'">
-                      <a (click)="redirectToSubMenu('hsn-code')" class="menu-link pointer">
-                          <div data-i18n="Alerts">hsn-code</div>
-                      </a>
-                  </li>
+                            <a (click)="redirectToSubMenu('charges-master')" class="menu-link pointer">
+                                <div data-i18n="Alerts">Charge Master</div>
+                            </a>
+                        </li>
+                        <li [class]="submenu == 'vendor' ? 'menu-item active' : 'menu-item'">
+                            <a (click)="redirectToSubMenu('vendor')" class="menu-link pointer">
+                                <div data-i18n="Alerts">Vendor</div>
+                            </a>
+                        </li>
+                        <li [class]="submenu == 'hsn-code' ? 'menu-item active' : 'menu-item'">
+                            <a (click)="redirectToSubMenu('hsn-code')" class="menu-link pointer">
+                                <div data-i18n="Alerts">HSN Code</div>
+                            </a>
+                        </li>
                         <!--  -->
                     </ul>
                 </li>

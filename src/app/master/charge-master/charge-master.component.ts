@@ -1,54 +1,43 @@
-import { Component, OnInit ,ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MASTER } from 'src/app/models/master';
 import { CommonService } from 'src/app/services/common.service';
 import { MasterService } from 'src/app/services/master.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-charge-master',
   templateUrl: './charge-master.component.html',
-  styleUrls: ['./charge-master.component.scss']
+  styleUrls: ['./charge-master.component.scss'],
 })
 export class ChargeMasterComponent implements OnInit {
   chargeForm: FormGroup;
   chargeForm1: FormGroup;
-  currencymasterForm: FormGroup;
-  currencyList:any[]=[];
-  ChargeMasterList:any[]=[];
-  ArrayList:any[]=[];
-  HsnCodeList:any[]=[];
+  ChargeMasterList: any[] = [];
+  ArrayList: any[] = [];
+  HsnCodeList: any[] = [];
   isUpdate: boolean = false;
   submitted: boolean = false;
   isLoading: boolean = false;
   isLoading1: boolean = false;
-  isGST: boolean = false;
   master: MASTER = new MASTER();
-
-
 
   @ViewChild('closeBtn') closeBtn: ElementRef;
   @ViewChild('openModalPopup') openModalPopup: ElementRef;
-  constructor( private _formBuilder: FormBuilder,
+  constructor(
+    private _formBuilder: FormBuilder,
     private _commonService: CommonService,
-    private _masterService: MasterService,
-
-    ) { }
+    private _masterService: MasterService
+  ) {}
 
   ngOnInit(): void {
-
     this.chargeForm = this._formBuilder.group({
       ID: [0],
-      CHARGE_NAME: ['',Validators.required],
+      CHARGE_NAME: ['', Validators.required],
       CHARGE_HEADER: ['', Validators.required],
       APPLICABLE_FOR: ['', Validators.required],
-      GST_PERCENTAGE: [''],
-      CURRENCY: ['',Validators.required],
-      HSN_CODE:[''],
-      CHARGE_AMOUNT: ['',Validators.required],
-      CHARGE_TYPE: [''],
-      IS_GST: ['']
+      HSN_CODE: [''],
+      CHARGE_TYPE: ['', Validators.required],
     });
 
     this.chargeForm1 = this._formBuilder.group({
@@ -58,36 +47,25 @@ export class ChargeMasterComponent implements OnInit {
     });
 
     this.dropdown();
-
-    // this.chargeForm.get('HSN_CODE').disable()
-    // this.chargeForm.get('GST_PERCENTAGE').disable()
-   this.GetChargeMasterList()
-
-
+    this.GetChargeMasterList();
   }
-
 
   get f() {
     return this.chargeForm.controls;
   }
 
-
-
-  ChargeMastersDetails(ID: number){
-    this._masterService.GetChargeMastersDetails(ID).subscribe((res:any)=>{
+  ChargeMastersDetails(ID: number) {
+    this._masterService.GetChargeMastersDetails(ID).subscribe((res: any) => {
       if (res.ResponseCode == 200) {
-        res.Data.forEach((element:any) => {
-          this.ArrayList = element
+        res.Data.forEach((element: any) => {
+          this.ArrayList = element;
         });
-        this.chargeForm.patchValue( this.ArrayList);
-
-
-
+        this.chargeForm.patchValue(this.ArrayList);
       }
-    })
+    });
   }
 
-  openModal(ID: any = 0){
+  openModal(ID: any = 0) {
     this.submitted = false;
     this.isUpdate = false;
     this.ClearForm();
@@ -98,31 +76,39 @@ export class ChargeMasterComponent implements OnInit {
     this.openModalPopup.nativeElement.click();
   }
 
-  InsertChargeMaster(){
+  InsertChargeMaster() {
     this.submitted = true;
     if (this.chargeForm.invalid) {
       return;
-    }else{
-         this._masterService.InsertChargeMaster(JSON.stringify(this.chargeForm.value)).subscribe((res:any)=>{
-        if (res.responseCode == 200) {
-          this._commonService.successMsg('Your record has been inserted successfully !');
-          // this.dropdown()
-          this.GetChargeMasterList();
-          this.closeBtn.nativeElement.click();
-        }
-      })
+    } else {
+      console.log(JSON.stringify(this.chargeForm.value));
+      this._masterService
+        .InsertChargeMaster(JSON.stringify(this.chargeForm.value))
+        .subscribe((res: any) => {
+          if (res.responseCode == 200) {
+            this._commonService.successMsg(
+              'Your record has been inserted successfully !'
+            );
+            // this.dropdown()
+            this.GetChargeMasterList();
+            this.closeBtn.nativeElement.click();
+          }
+        });
     }
   }
 
-  updateMaster(){
+  updateMaster() {
     this.submitted = true;
     if (this.chargeForm.invalid) {
       return;
     }
-    this._masterService.UpdateChargeMaster(JSON.stringify(this.chargeForm.value))
+    this._masterService
+      .UpdateChargeMaster(JSON.stringify(this.chargeForm.value))
       .subscribe((res: any) => {
         if (res.responseCode == 200) {
-          this._commonService.successMsg('Your record has been Updated successfully !');
+          this._commonService.successMsg(
+            'Your record has been Updated successfully !'
+          );
           // this.dropdown();
           this.GetChargeMasterList();
           this.closeBtn.nativeElement.click();
@@ -130,7 +116,7 @@ export class ChargeMasterComponent implements OnInit {
       });
   }
 
-  DeleteChargeMaster(ID: number){
+  DeleteChargeMaster(ID: number) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -145,44 +131,31 @@ export class ChargeMasterComponent implements OnInit {
           if (res.ResponseCode == 200) {
             Swal.fire('Deleted!', 'Your record has been deleted.', 'success');
             // this.dropdown();
-          this.GetChargeMasterList();
-
+            this.GetChargeMasterList();
           }
         });
       }
     });
   }
 
-  dropdown(){
-
-    this.master.KEY_NAME = 'CURRENCY';
-    this._masterService.GetMasterList( this.master).subscribe((res:any)=>{
-      if(res.ResponseCode == 200){
-        this.currencyList = res.Data
-      }
-
-    });
-
+  dropdown() {
     // GET hsn code from hsn master
-    this._masterService.getHsnList().subscribe((res:any)=>{
-      if(res.ResponseCode == 200){
-        this.HsnCodeList = res.Data
+    this._masterService.getHsnList().subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this.HsnCodeList = res.Data;
       }
-    })
+    });
   }
 
-
-
-GetChargeMasterList(){
-  this._commonService.destroyDT();
-  this._masterService.GetChargeMasterList().subscribe((res:any)=>{
-    if(res.ResponseCode == 200){
-      this.ChargeMasterList = res.Data
-    }
-    this._commonService.getDT();
-  })
-}
-
+  GetChargeMasterList() {
+    this._commonService.destroyDT();
+    this._masterService.GetChargeMasterList().subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this.ChargeMasterList = res.Data;
+      }
+      this._commonService.getDT();
+    });
+  }
 
   ClearForm() {
     this.chargeForm.reset();
@@ -190,54 +163,38 @@ GetChargeMasterList(){
     this.chargeForm.get('CHARGE_NAME')?.setValue('');
     this.chargeForm.get('CHARGE_HEADER')?.setValue('');
     this.chargeForm.get('APPLICABLE_FOR')?.setValue('');
-    this.chargeForm.get('GST_PERCENTAGE')?.setValue('');
-    this.chargeForm.get('CURRENCY')?.setValue('');
     this.chargeForm.get('HSN_CODE')?.setValue('');
     this.chargeForm.get('CHARGE_AMOUNT')?.setValue('');
-    this.chargeForm.get('CHARGE_TYPE')?.setValue('');
-    this.chargeForm.get('GST')?.setValue('');
-
-
   }
 
-  // IsGST(event:any){
-  //   if(event.target.checked){
+  Search() {
+    var FROM_DATE =
+      this.chargeForm1.value.FROM_DATE == null
+        ? ''
+        : this.chargeForm1.value.FROM_DATE;
+    var TO_DATE =
+      this.chargeForm1.value.TO_DATE == null
+        ? ''
+        : this.chargeForm1.value.TO_DATE;
 
-  //     this.chargeForm.get('HSN_CODE').enable();
-  //     this.chargeForm.get('GST_PERCENTAGE').enable()
+    if (FROM_DATE == '' && TO_DATE == '') {
+      alert('Please enter atleast one filter to search !');
+      this.isLoading = false;
+    } else {
+      this.master.FROM_DATE = FROM_DATE;
+      this.master.TO_DATE = TO_DATE;
 
-  //   }else{
-  //     this.chargeForm.get('HSN_CODE').disable();
-  //     this.chargeForm.get('GST_PERCENTAGE').disable()
-
-  //    }
-  // }
-
-  Search(){
-     var FROM_DATE =  this.chargeForm1.value.FROM_DATE == null   ? ''  : this.chargeForm1.value.FROM_DATE;
-     var TO_DATE =  this.chargeForm1.value.TO_DATE == null  ? ''  : this.chargeForm1.value.TO_DATE;
-
-  if ( FROM_DATE == '' && TO_DATE == '') {
-    alert('Please enter atleast one filter to search !');
-  this.isLoading = false;
-
-  }else{
-    this.master.FROM_DATE = FROM_DATE;
-    this.master.TO_DATE = TO_DATE;
-
-    this.isLoading = true;
-    // this.dropdown();
-    this.GetChargeMasterList();
+      this.isLoading = true;
+      // this.dropdown();
+      this.GetChargeMasterList();
+    }
   }
 
-  }
-
-  Clear(){
+  Clear() {
     this.chargeForm1.reset();
     this.master = new MASTER();
     this.isLoading1 = true;
     // this.dropdown();
     this.GetChargeMasterList();
-
   }
 }
