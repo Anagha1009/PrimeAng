@@ -10,10 +10,9 @@ import { CommonService } from 'src/app/services/common.service';
 import { PartyService } from 'src/app/services/party.service';
 import { MasterService } from 'src/app/services/master.service';
 
-import { jsPDF } from "jspdf";
+
 import { Router } from '@angular/router';
-// import html2canvas from 'html2canvas';
-// import { pdfMake } from 'pdfmake/build/vfs_fonts';
+
 
 
 @Component({
@@ -25,20 +24,20 @@ export class NewInvoice2Component implements OnInit {
   invoiceForm1:FormGroup;
   invoiceForm:FormGroup;
   invoiceForm2:FormGroup;
-  blList : FormGroup;
+  // blList : FormGroup;
   blNo: any;
   BLNO: string = ''
   submitted:boolean=false
-  hideHistory:boolean=false
+
 
   swicthBlNo: string;
 
   customer: PARTY = new PARTY();
-  SrrList:any[]=[];
-  array:any[]=[]
+  // SrrList:any[]=[];
+  // array:any[]=[]
   add:any[]=[];
-  CurrencyList:any[]=[];
-  ChargeMasterList:any[]=[];
+  // CurrencyList:any[]=[];
+  // ChargeMasterList:any[]=[];
   BLLIST:any[]=[]
   myItems: any[] = [{ index: 0 }];
 
@@ -47,11 +46,10 @@ export class NewInvoice2Component implements OnInit {
 
 
 
-  @ViewChild('openBtn') openBtn: ElementRef;
+  // @ViewChild('openBtn') openBtn: ElementRef;
   @ViewChild('closeBtn') closeBtn: ElementRef;
   @ViewChild('openModalPopup') openModalPopup: ElementRef;
-  @ViewChild('openModalPopup1') openModalPopup1: ElementRef
-  @ViewChild('closeBtn1') closeBtn1: ElementRef;
+
 
   @ViewChild('TABLE',{ static : false }) TABLE: ElementRef;
 
@@ -106,7 +104,12 @@ Submit(BLNO:any){
     BL.BL_NO = BLNO;
     // this._blService.getBLDetails(BL).subscribe((res:any)=>{
       // console.log("res", res.Data);
+
       this.router.navigateByUrl('/home/operations/invoice-list/' + BLNO);
+      this.closeBtn.nativeElement.click();
+
+
+
 
 // });
 
@@ -131,10 +134,10 @@ Submit(BLNO:any){
 
 
   // chargeModal
-  openModal2(){
-    this.openModalPopup1.nativeElement.click()
+  // openModal2(){
+  //   this.openModalPopup1.nativeElement.click()
 
-  }
+  // }
 
 
   CheckBox(event:any){

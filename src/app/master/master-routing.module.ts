@@ -28,6 +28,7 @@ import { VoyageComponent } from './voyage/voyage.component';
 
 import {ChargeMasterComponent } from './charge-master/charge-master.component'
 import { VendorComponent } from './vendor/vendor.component';
+import { HsnCodeComponent } from './hsn-code/hsn-code.component';
 
 const routes: Routes = [
   {
@@ -177,6 +178,18 @@ const routes: Routes = [
   {
     path: 'vendor',
     component: VendorComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Principal, Role.Admin] },
+  },
+  {
+    path: 'vendor',
+    component: VendorComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Principal, Role.Admin] },
+  },
+  {
+    path: 'hsn-code',
+    component: HsnCodeComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Principal, Role.Admin] },
   },

@@ -391,5 +391,16 @@ export class MasterService {
     return this._http.delete<any>(this.BASE_URL + 'Master/DeleteChargesMaster?ID=' + ID, this.httpOptions);
   }
 
+  InsertHsnCode(data:any){
+    return this._http.post<any>(this.BASE_URL + 'Master/InsertHsnCode',data, this.httpOptions);
 
+  }
+
+  getHsnList(){
+    return this._http.get<any>(this.BASE_URL + 'Master/GetHsnMaster', this.httpOptions)
+  }
+
+  DeleteHsnMaster(ID:number){
+    return this._http.delete<any>(this.BASE_URL + 'Master/DeleteHsnMaster?ID=' + ID, this.httpOptions)
+  }
 }

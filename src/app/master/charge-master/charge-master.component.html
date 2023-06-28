@@ -1,4 +1,4 @@
-<!-- <p>charge-master works!</p> -->
+
 <div class="section-title pt-3">
   <h2>Charge Master</h2>
 </div>
@@ -170,25 +170,30 @@
 
                       <div class="row">
                         <div class="col-md-6">
-                        <div class="form-check form-switch" >
+                        <!-- <div class="form-check form-switch" >
                           <input formControlName="IS_GST" (change)="IsGST($event)" class="form-check-input" type="checkbox"
                               role="switch" />
                           <label class="form-check-label">Is GST <span class="text-danger"> *</span></label>
-                      </div>
+                      </div> -->
                       </div>
                       </div>
 
                       <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="form-label2">HSN Code<span class="text-danger"> *</span></label>
+                                  <label class="form-label2">HSN Code<span class="text-danger"> *</span></label>
+                                  <select formControlName="HSN_CODE" class="form-control2" >
+                                    <option disabled value="">--Select--</option>
+                                    <option  *ngFor="let item of HsnCodeList" value="{{item.HSN_CODE}}"> {{item.HSN_CODE}}</option>
+                                </select>
+                                    <!-- <label class="form-label2">HSN Code<span class="text-danger"> *</span></label>
                                     <input type="text" [ngClass]="{'invalid':submitted && f.HSN_CODE.errors}"  formControlName="HSN_CODE"
                                         class="form-control2" maxlength="20">
                                         <div *ngIf="submitted && f.HSN_CODE.errors" class="invalid-feedback">HSN Code is
-                                          required</div>
+                                          required</div> -->
                                 </div>
                              </div>
-                             <div class="col-md-6">
+                             <!-- <div class="col-md-6">
                                 <div class="form-group" >
                                 <label class="form-label2">GST Percentage<span class="text-danger"> *</span></label>
                                 <input type="text" [ngClass]="{'invalid':submitted && f.GST_PERCENTAGE.errors}" formControlName="GST_PERCENTAGE"
@@ -196,7 +201,7 @@
                                     <div *ngIf="submitted && f.GST_PERCENTAGE.errors" class="invalid-feedback">GST Percentage is
                                       required</div>
                               </div>
-                              </div>
+                              </div> -->
                       </div>
 
                 </div>

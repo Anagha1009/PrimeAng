@@ -1,3 +1,6 @@
+
+
+
 <div class="section-title pt-3">
   <h2>Create Invoice</h2>
 </div>
@@ -22,8 +25,10 @@
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <label class="label-header">Shipper</label>
+              <label *ngIf="POL" class="label-header">Shipper/CHA</label>
+              <label *ngIf="!POL" class="label-header">Consignee/CHA</label>
               <label class="label-subheader">{{f.SHIPPER_NAME.value}}</label>
+
             </div>
           </div>
           <div class="col-md-3">
@@ -41,6 +46,8 @@
                 <ng-option *ngFor="let item of BillFromList" value="{{item.CODE}}">{{item.CODE}}</ng-option>
               </ng-select>
               <label class="form-label-ddl">Bill To<span class="text-danger"> *</span></label>
+              <!-- <label class="label-header">Bill To</label>
+              <label class="label-subheader">{{f.SHIPPER_NAME.value}}</label> -->
             </div>
           </div>
           <div class="col-md-3">
@@ -52,20 +59,25 @@
           <div class="col-md-3">
             <form [formGroup]="containerForm">
               <div class="form-group">
-                <!-- <label class="form-label2" style="z-index: 1;">Container</label> -->
                 <ng-multiselect-dropdown (onSelectAll)="saveContainer($event,1)"
                   (onDeSelectAll)="saveContainer($event,2)" (onSelect)="saveContainer($event)"
                   (onDeSelect)="saveContainer($event)" #multiSelect [placeholder]="'Select Container'"
                   [settings]="dropdownSettings" [formControl]="f.CONTAINER_LIST1" [data]="containerDropdownList">
                 </ng-multiselect-dropdown>
-                <!-- <ng-select formControlName="CONTAINER">
-                <ng-option disabled value="">--Select--</ng-option>
-                <ng-option></ng-option>
-              </ng-select> -->
                 <label class="form-label-ddl">Container No<span class="text-danger"> *</span></label>
               </div>
             </form>
           </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <ng-select formControlName="ADDRESS">
+                <ng-option disabled value="">--Select--</ng-option>
+                <ng-option *ngFor="let item of AddressList" value="{{item.ADDRESS}}">{{item.ADDRESS}}</ng-option>
+              </ng-select>
+              <label class="form-label-ddl">Address<span class="text-danger"> *</span></label>
+            </div>
+          </div>
+
         </div>
       </div>
     </form>
@@ -93,6 +105,7 @@
           <th>CGST</th>
           <th>Tax Amount</th>
           <th>Total Amount</th>
+          <th>Action</th>
 
 
         </tr>
@@ -156,10 +169,11 @@
           </td>
 
           <td>
-            <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="checkbox"
+            <input  type="checkbox"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('EXEMPT_FLAG').errors}"
               formControlName="EXEMPT_FLAG" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.EXEMPT_FLAG}}</span>
+              <!-- *ngIf="item.value.IS_SRRCHARGE != '1'" -->
+            <!-- <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.EXEMPT_FLAG}}</span> -->
           </td>
 
           <td>
@@ -194,6 +208,9 @@
               formControlName="TOTAL_AMOUNT" />
 
           </td>
+          <td>
+            <i class="fa fa-trash ms-2 pointer text-danger" (click)="Delete()"></i>
+          </td>
 
         </tr>
 
@@ -203,7 +220,7 @@
   </div>
   <div class="col-md-2 offset-md-10 mt-4 text-end">
     <button (click)="SubmitList()" class="form-btn w-100">
-      Submit
+      Save As Draft
     </button>
   </div>
 </div>
