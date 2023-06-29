@@ -22,7 +22,6 @@ export class NewInvoice2Component implements OnInit {
   isLoading1: boolean = false;
   invoiceForm1: FormGroup;
   invoiceForm: FormGroup;
-  chargeList: any[] = [];
   submitted: boolean = false;
 
   constructor(
@@ -165,7 +164,7 @@ export class NewInvoice2Component implements OnInit {
               ],
               [
                 {
-                  text: 'RD SHIPPING & LOGISTICS',
+                  text: this.invoiceDetails?.SHIPPER_NAME.toUpperCase(),
                   bold: true,
                   fontSize: 8,
                 },
@@ -175,23 +174,26 @@ export class NewInvoice2Component implements OnInit {
                       text: 'Invoice No',
                       bold: true,
                       fontSize: 8,
+                      width: 80,
                     },
                     {
                       text: ':',
                       bold: true,
                       fontSize: 8,
+                      width: 10,
                     },
                     {
-                      text: '48578577',
+                      text: this.invoiceDetails?.INVOICE_NO.toUpperCase(),
                       bold: true,
                       fontSize: 8,
+                      width: 200,
                     },
                   ],
                 },
               ],
               [
                 {
-                  text: '509, 5TH FLOOR, NIRMAL PLAZA, MAKWANA ROAD, MAROL \nNAKA, ANDHERI EAST, MUMBAI, 400059',
+                  text: this.invoiceDetails?.ADDRESS.toUpperCase(),
                   bold: false,
                   fontSize: 7,
                 },
@@ -201,23 +203,28 @@ export class NewInvoice2Component implements OnInit {
                       text: 'Invoice Date',
                       bold: true,
                       fontSize: 8,
+                      width: 80,
                     },
                     {
                       text: ':',
                       bold: true,
                       fontSize: 8,
+                      width: 10,
                     },
                     {
-                      text: '48578577',
+                      text: this._commonService.getIndianDate(
+                        new Date(this.invoiceDetails?.INVOICE_DATE)
+                      ),
                       bold: true,
                       fontSize: 8,
+                      width: 200,
                     },
                   ],
                 },
               ],
               [
                 {
-                  text: 'GSTN NO : ' + '767676876876786786',
+                  text: 'GSTN NO : ' + this.invoiceDetails?.TAX_NO,
                   bold: true,
                   fontSize: 7,
                 },
@@ -225,7 +232,7 @@ export class NewInvoice2Component implements OnInit {
               ],
               [
                 {
-                  text: 'PAN NO : ' + 'AWYYU7837J',
+                  text: 'PAN NO : ' + this.invoiceDetails?.PAN,
                   bold: true,
                   fontSize: 7,
                 },
@@ -247,7 +254,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: 'RD Shipping & Logistics Services',
+                      text: this.invoiceDetails?.SHIPPER_NAME,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -269,7 +276,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: 'INIXY',
+                      text: this.invoiceDetails?.PLACE_OF_RECEIPT,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -293,7 +300,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: 'Ankitraj expo Pvt Ltd',
+                      text: this.invoiceDetails?.SHIPPER_NAME,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -315,7 +322,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: 'INIXY',
+                      text: this.invoiceDetails?.PORT_OF_LOADING,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -339,7 +346,10 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: 'Cerus/500',
+                      text:
+                        this.invoiceDetails?.VESSEL_NAME +
+                        '/' +
+                        this.invoiceDetails?.VOYAGE_NO,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -361,7 +371,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: 'AEJEA',
+                      text: this.invoiceDetails?.PORT_OF_DISCHARGE,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -407,7 +417,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: 'AEJEA',
+                      text: this.invoiceDetails?.PLACE_OF_DELIVERY,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -431,7 +441,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: 'BL8687874545458',
+                      text: this.invoiceDetails?.BL_NO,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -477,7 +487,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: '02 May 2023',
+                      text: '',
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -499,7 +509,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: '45465461',
+                      text: '',
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -524,7 +534,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: '27/ Maharashtra',
+                      text: '',
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -575,7 +585,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: '50 X 20GP',
+                      text: '20GP X ' + this.invoiceDetails?.CONTAINERS,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -601,7 +611,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: 'TGYR7563231, UHYT7654897, UJNH67674567',
+                      text: this.invoiceDetails?.CONTAINER_LIST,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -710,47 +720,59 @@ export class NewInvoice2Component implements OnInit {
                   bold: true,
                 },
               ],
-              [
+              ...this.invoiceDetails.BL_LIST.map((p: any) => [
                 {
-                  text: 'CMC',
+                  text: p.CHARGE_NAME,
                   fontSize: 8,
                 },
 
-                { text: 56, fontSize: 8 },
+                {
+                  text: p.QUANTITY,
+                  fontSize: 8,
+                },
 
-                { text: 'INR', fontSize: 8 },
-                { text: 56, fontSize: 8 },
-                { text: 565 * 5654, fontSize: 8 },
+                {
+                  text: p.CURRENCY,
+                  fontSize: 8,
+                },
+                {
+                  text: '',
+                  fontSize: 8,
+                },
+                {
+                  text: p.AMOUNT,
+                  fontSize: 8,
+                },
 
                 {
-                  text: 45 ? 56 * 56 : 0,
+                  text: '',
                   fontSize: 8,
                 },
                 {
-                  text: 45 ? 9 : 0,
+                  text: '',
                   fontSize: 8,
                 },
                 {
-                  text: 565,
+                  text: '',
                   fontSize: 8,
                 },
                 {
-                  text: 454 ? 9 : 0,
+                  text: '',
                   fontSize: 8,
                 },
                 {
-                  text: 56,
+                  text: '',
                   fontSize: 8,
                 },
                 {
-                  text: 56 * 5 + 566 * 2,
+                  text: '',
                   fontSize: 8,
                 },
-              ],
+              ]),
               [
                 {
                   colSpan: 5,
-                  text: 'Total : Seven Thousand and Eight Only',
+                  text: 'Total : ',
                   fontSize: 8,
                 },
 
@@ -767,25 +789,25 @@ export class NewInvoice2Component implements OnInit {
                   text: '',
                 },
                 {
-                  text: 4 ? 656 : 0,
+                  text: '',
                   fontSize: 9,
                 },
                 {
                   text: '',
                 },
                 {
-                  text: 56,
+                  text: '',
                   fontSize: 9,
                 },
                 {
                   text: '',
                 },
                 {
-                  text: 546,
+                  text: '',
                   fontSize: 9,
                 },
                 {
-                  text: 454 + 5656 * 2,
+                  text: '',
                   fontSize: 9,
                 },
               ],
@@ -807,7 +829,7 @@ export class NewInvoice2Component implements OnInit {
             body: [
               [
                 {
-                  text: 'PAN No : SFTDT55687',
+                  text: 'PAN No : ',
                   fontSize: 7,
                   margin: [0, 5, 0, 0],
                 },
