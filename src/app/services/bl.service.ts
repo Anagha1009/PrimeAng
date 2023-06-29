@@ -221,7 +221,9 @@ export class BlService {
         '&ORG_CODE=' +
         bl.ORG_CODE +
         '&PORT=' +
-        bl.PORT,
+        bl.PORT +
+        '&BL_NO=' +
+        bl.BL_NO,
       this.httpOptions
     );
   }

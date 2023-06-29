@@ -4,43 +4,63 @@
 <div class="container">
     <div class="col-md-10 mx-auto mb-4">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body" [formGroup]="creditForm">
+                <div class="row mt-4">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <ng-select (change)="getInvoiceList($event)" formControlName="BL_NO">
+                                <ng-option value="">--Select--</ng-option>
+                                <ng-option *ngFor="let item of blList" value="{{item.BL_NO}}">{{item.BL_NO}}</ng-option>
+                            </ng-select>
+                            <label class="form-label-ddl">BL No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <ng-select (change)="getInvoiceDetails($event)" formControlName="INVOICE_NO">
+                                <ng-option value="">--Select--</ng-option>
+                                <ng-option *ngFor="let item of invoiceList"
+                                    value="{{item.INVOICE_NO}}">{{item.INVOICE_NO}}</ng-option>
+                            </ng-select>
+                            <label class="form-label-ddl">Invoice No</label>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <label class="label-header">Invoice No</label>
-                        <label class="label-subheader">INV7889787</label>
+                        <label class="label-header">Invoice Party</label>
+                        <label class="label-subheader">{{invoiceDetails?.SHIPPER_NAME}}</label>
                     </div>
                     <div class="col-md-4">
                         <label class="label-header">Vessel / Voyage</label>
-                        <label class="label-subheader">Cerus / 500</label>
+                        <label class="label-subheader">{{invoiceDetails?.VESSEL_NAME}} /
+                            {{invoiceDetails?.VOYAGE_NO}}</label>
                     </div>
                     <div class="col-md-4">
                         <label class="label-header">Credit Note To</label>
-                        <label class="label-subheader">Aqua Pharma Chemicals Pvt Ltd</label>
+                        <label class="label-subheader">{{invoiceDetails?.SHIPPER_NAME}}</label>
                     </div>
+
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <label class="label-header">GSTIN No</label>
+                        <label class="label-subheader">{{invoiceDetails?.TAX_NO}}</label>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-header">GST State Code</label>
+                        <label class="label-subheader"></label>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="label-header">Tax Applied</label>
+                        <label class="label-subheader"></label>
+                    </div>
+
                 </div>
                 <div class="row mt-4">
                     <div class="col-md-4">
                         <label class="label-header">Place of Supply</label>
-                        <label class="label-subheader">MH</label>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="label-header">GSTIN No</label>
-                        <label class="label-subheader">5658545454445</label>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="label-header">GST State Code</label>
-                        <label class="label-subheader">27</label>
-                    </div>
-                </div>
-                <div class="row mt-4">
-                    <div class="col-md-4">
-                        <label class="label-header">Tax Applied</label>
-                        <label class="label-subheader">SGST</label>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="label-header">Invoice Party</label>
-                        <label class="label-subheader">Aqua Pharma Chemicals Pvt Ltd</label>
+                        <label class="label-subheader"></label>
                     </div>
                 </div>
             </div>
@@ -68,28 +88,28 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of chargeList">
-                    <td>No</td>
-                    <td>Charge Name</td>
-                    <td>Container</td>
-                    <td>Collect Port</td>
-                    <td>Ex Rate</td>
-                    <td>Qty</td>
-                    <td>Rate</td>
-                    <td>HSN</td>
-                    <td>Taxable Amount in INR</td>
-                    <td>IGST</td>
-                    <td>SGST</td>
-                    <td>CGST</td>
-                    <td>Tax Amount</td>
-                    <td>Total Rate</td>
-                    <td>Credit Note</td>
+                <tr *ngFor="let item of invoiceDetails?.BL_LIST;let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>{{item.CHARGE_NAME}}</td>
+                    <td>20GP X {{invoiceDetails?.CONTAINERS}}</td>
+                    <td></td>
+                    <td>{{item.EXCHANGE_RATE}}</td>
+                    <td>{{item.QUANTITY}}</td>
+                    <td></td>
+                    <td>{{item.HSN_CODE}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input type="text" class="form-control3" /></td>
                 </tr>
             </tbody>
         </table>
     </div>
     <hr>
-    <div class="col-md-2 offset-md-10 mt-4">
+    <div class="col-md-2 offset-md-10 my-4">
         <button class="form-btn-primary">Create Credit Note</button>
     </div>
 </div>
