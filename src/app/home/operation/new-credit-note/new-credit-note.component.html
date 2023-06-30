@@ -62,6 +62,12 @@
                         <label class="label-header">Place of Supply</label>
                         <label class="label-subheader"></label>
                     </div>
+                    <div class="col-md-4">
+                        <div class="label-header">
+                            Containers
+                        </div>
+                        <div class="label-subheader">20GP X {{invoiceDetails?.CONTAINERS}}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -72,7 +78,6 @@
                 <tr>
                     <th>No</th>
                     <th>Charge Name</th>
-                    <th>Container</th>
                     <th>Collect Port</th>
                     <th>Ex Rate</th>
                     <th>Qty</th>
@@ -91,16 +96,15 @@
                 <tr *ngFor="let item of invoiceDetails?.BL_LIST;let i = index">
                     <td>{{i + 1}}</td>
                     <td>{{item.CHARGE_NAME}}</td>
-                    <td>20GP X {{invoiceDetails?.CONTAINERS}}</td>
                     <td></td>
                     <td>{{item.EXCHANGE_RATE}}</td>
                     <td>{{item.QUANTITY}}</td>
                     <td></td>
                     <td>{{item.HSN_CODE}}</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{item.IGST}}</td>
+                    <td>{{item.SGST}}</td>
+                    <td>{{item.CGST}}</td>
                     <td></td>
                     <td></td>
                     <td><input type="text" class="form-control3" /></td>
