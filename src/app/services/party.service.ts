@@ -30,6 +30,8 @@ export class PartyService {
         partymaster.FROM_DATE +
         '&TO_DATE=' +
         partymaster.TO_DATE +
+        '&IS_VENDOR=' +
+        partymaster.IS_VENDOR +
         (partymaster.STATUS != '' ? '&STATUS=' + partymaster.STATUS : ''),
       this.httpOptions
     );
@@ -54,7 +56,7 @@ export class PartyService {
   }
 
   postParty(party: any) {
-    console.log("part service", party)
+    console.log('part service', party);
     return this._http.post<any>(
       this.BASE_URL + 'Master/InsertPartyMaster',
       party,

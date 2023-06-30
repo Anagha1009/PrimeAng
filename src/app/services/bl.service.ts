@@ -206,7 +206,36 @@ export class BlService {
 
   InsertSurrender(blNo: string) {
     return this._http.get<any>(
-      this.BASE_URL + 'BL/InsertSurrender?BL_NO=' + blNo
+      this.BASE_URL + 'BL/InsertSurrender?BL_NO=' + blNo,
+      this.httpOptions
+    );
+  }
+
+  getInvoiceListNew(bl: Bl) {
+    return this._http.get<any>(
+      this.BASE_URL +
+        'Invoice/GetInvoiceList?FROM_DATE=' +
+        bl.FROM_DATE +
+        '&TO_DATE=' +
+        bl.TO_DATE +
+        '&ORG_CODE=' +
+        bl.ORG_CODE +
+        '&PORT=' +
+        bl.PORT,
+      this.httpOptions
+    );
+  }
+
+  getInvoiceDetailsNew(invoiceNo: string, port: string, orgcode: string) {
+    return this._http.get<any>(
+      this.BASE_URL +
+        'Invoice/GetInvoiceDetails?INVOICE_NO=' +
+        invoiceNo +
+        '&PORT=' +
+        port +
+        '&ORG_CODE=' +
+        orgcode,
+      this.httpOptions
     );
   }
 }

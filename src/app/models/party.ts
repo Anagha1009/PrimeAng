@@ -10,4 +10,5 @@ export class PARTY {
   STATUS: string = '';
   FROM_DATE: string = '';
   TO_DATE: string = '';
+  IS_VENDOR: boolean = false;
 }

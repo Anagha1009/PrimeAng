@@ -206,7 +206,7 @@
                     </div>
                   </div>
                   <div class="col-md-3 mt-4">
-                    <div class="row ms-1" >
+                    <div class="row ms-1">
                       <label class="checkbox-wrap checkbox-primary">
                         <input formControlName="IS_GROUP_COMPANIES" class="chck" type="checkbox">
                         <span class="checkmark"></span>
@@ -421,59 +421,61 @@
             <div id="collapse-6" class="collapse" role="tabpanel" aria-labelledby="heading-6"
               data-bs-parent="#accordion">
               <div class="card-body">
-                <div class="row mt-4">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" [ngClass]="{'invalid':submitted && f.BANK_NAME.errors}"
-                        formControlName="BANK_NAME" class="form-control">
-                      <label class="form-label">Bank Name<span class="text-danger"> *</span></label>
-                      <div *ngIf="submitted && f.BANK_NAME.errors" class="invalid-feedback">Bank Name is required
+                <div class="col-md-3 offset-md-9 text-end mb-3">
+                  <button (click)="addNewBank()" class="form-btn-primary">Add New Bank <i
+                      class="fa fa-plus"></i></button>
+                </div>
+                <div *ngFor="let item of f2;let i = index" [formGroup]="item">
+                  <hr class="text-success" style="height:2px;">
+                  <h6>Bank {{i+1}}</h6>
+                  <div class="row mt-4">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text"
+                          [ngClass]="{'invalid':submitted && f.BANK_LIST.controls[i].get('BANK_NAME').errors}"
+                          formControlName="BANK_NAME" class="form-control">
+                        <label class="form-label">Bank Name<span class="text-danger"> *</span></label>
+                        <div *ngIf="submitted && f.BANK_LIST.controls[i].get('BANK_NAME').errors"
+                          class="invalid-feedback">Bank Name is required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text" formControlName="BANK_ACC_NO"
+                          [ngClass]="{'invalid':submitted && f.BANK_LIST.controls[i].get('BANK_ACC_NO').errors}"
+                          class="form-control">
+                        <label class="form-label">Account No<span class="text-danger"> *</span></label>
+                        <div *ngIf="submitted && f.BANK_LIST.controls[i].get('BANK_ACC_NO').errors"
+                          class="invalid-feedback">Account No is required
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="text"
+                          [ngClass]="{'invalid':submitted && f.BANK_LIST.controls[i].get('BANK_IFSC').errors}"
+                          formControlName="BANK_IFSC" class="form-control">
+                        <label class="form-label">IFSC Code<span class="text-danger"> *</span></label>
+                        <div *ngIf="submitted && f.BANK_LIST.controls[i].get('BANK_IFSC').errors"
+                          class="invalid-feedback">IFSC Code is required
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" formControlName="BANK_ACC_NO"
-                        [ngClass]="{'invalid':submitted && f.BANK_ACC_NO.errors}" class="form-control">
-                      <label class="form-label">Account No<span class="text-danger"> *</span></label>
-                      <div *ngIf="submitted && f.BANK_ACC_NO.errors" class="invalid-feedback">Account No is required
+                  <div class="row mt-4">
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <textarea formControlName="BANK_REMARKS" type="text" class="form-control addressbox"></textarea>
+                        <label class="form-label">Remarks</label>
                       </div>
                     </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" [ngClass]="{'invalid':submitted && f.BANK_IFSC.errors}"
-                        formControlName="BANK_IFSC" class="form-control">
-                      <label class="form-label">IFSC Code<span class="text-danger"> *</span></label>
-                      <div *ngIf="submitted && f.BANK_IFSC.errors" class="invalid-feedback">IFSC Code is required
-                      </div>
+                    <div class="col-md-7 text-end">
+                      <button *ngIf="i > 0" (click)="deleteBank(i)" class="form-btn-primary rounded"><i
+                          class="fa fa-trash"></i></button>
                     </div>
                   </div>
                 </div>
-                <!--  -->
-                <div class="row mt-4">
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="text" formControlName="SWIFT_CODE" class="form-control">
-                      <label class="form-label">Swift Code</label>
-                    </div>
-                  </div>
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <textarea formControlName="BANK_REMARKS" type="text" class="form-control addressbox"></textarea>
-                      <label class="form-label">Remarks</label>
-                    </div>
-                  </div>
-                </div>
-                <!--  -->
-                <!-- <div class="row mt-4">
-                  <div class="col-md-5">
-                    <div class="form-group">
-                      <textarea formControlName="BANK_REMARKS" type="text" class="form-control addressbox"></textarea>
-                      <label class="form-label">Remarks</label>
-                    </div>
-                  </div>
-                </div> -->
               </div>
             </div>
           </div>

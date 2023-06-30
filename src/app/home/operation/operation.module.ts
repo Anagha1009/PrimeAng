@@ -27,6 +27,8 @@ import { ForgotPwdComponent } from 'src/app/auth/forgot-pwd/forgot-pwd.component
 import { SurrenderedListComponent } from './surrendered-list/surrendered-list.component';
 import { NewInvoice2Component } from './new-invoice2/new-invoice2.component';
 import { InvoiceList2Component } from './invoice-list2/invoice-list2.component';
+import { CreditNoteComponent } from './credit-note/credit-note.component';
+import { NewCreditNoteComponent } from './new-credit-note/new-credit-note.component';
 
 
 @NgModule({
@@ -49,6 +51,8 @@ import { InvoiceList2Component } from './invoice-list2/invoice-list2.component';
     SurrenderedListComponent,
     NewInvoice2Component,
     InvoiceList2Component,
+    CreditNoteComponent,
+    NewCreditNoteComponent,
 
   ],
   imports: [

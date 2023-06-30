@@ -164,4 +164,13 @@ export class CmService {
       this.httpOptions
     );
   }
+
+  rollBackContainer(containerno: string) {
+    return this._http.post<any>(
+      this.BASE_URL +
+        'ContainerMovement/RollBackContainer?CONTAINER_NO=' +
+        containerno,
+      this.httpOptions
+    );
+  }
 }

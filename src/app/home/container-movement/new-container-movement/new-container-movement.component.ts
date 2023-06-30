@@ -5,6 +5,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CONTAINER_MOVEMENT } from 'src/app/models/cm';
 import { CmService } from 'src/app/services/cm.service';
 import { CommonService } from 'src/app/services/common.service';
+import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -124,6 +125,37 @@ export class NewContainerMovementComponent implements OnInit {
     if (!this.ismanually) {
       this.openModalPopup.nativeElement.click();
     }
+  }
+
+  rollBack(containerNo: string, isList: boolean = false) {
+    Swal.fire({
+      title: 'Are you sure want to Roll Back?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Roll Back!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._CMService.rollBackContainer(containerNo).subscribe((res: any) => {
+          if (res.responseCode == 200) {
+            if (res.responseMessage == 'SUCCESS') {
+              this._commonService.successMsg(
+                'Roll Back successfully to previous movement !'
+              );
+              if (!isList) {
+                this.getContainerData(containerNo);
+              } else {
+                this.getCMList();
+              }
+            } else {
+              this._commonService.warnMsg(res.responseMessage);
+            }
+          }
+        });
+      }
+    });
   }
 
   getCMList() {
@@ -288,10 +320,11 @@ export class NewContainerMovementComponent implements OnInit {
     }
   }
 
-  getContainerData() {
+  getContainerData(containerNo: string = '') {
     this.submitted1 = true;
     var CM = new CONTAINER_MOVEMENT();
-    CM.CONTAINER_NO = this.cmForm.get('CONTAINER_NO')?.value;
+    CM.CONTAINER_NO =
+      containerNo == '' ? this.cmForm.get('CONTAINER_NO')?.value : containerNo;
 
     this.getCM(CM);
   }

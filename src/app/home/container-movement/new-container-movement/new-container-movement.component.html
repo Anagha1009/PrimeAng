@@ -81,7 +81,10 @@
                             [class]="item.STATUS == 'Hold' ? 'waiting' : item.STATUS == 'Empty' ? 'countered' : item.STATUS == 'Damage' ? 'rejected' : 'active'">{{item.STATUS}}</span>
                     </td>
                     <td width="9%">
-                        <i (click)="getCM(item)" class="fa fa-pencil ms-2 pointer text-success"></i>
+                        <i (click)="rollBack(item.CONTAINER_NO,true)" tooltip="RollBack" placement="top"
+                            class="bx bx-history fs-6 ms-2 pointer text-danger"></i>
+                        <i (click)="getCM(item)" tooltip="Edit" placement="top"
+                            class="fa fa-pencil fs-6 ms-2 pointer text-success"></i>
                     </td>
                 </tr>
             </tbody>
@@ -100,11 +103,18 @@
                             </small></span><span>Date : <small
                                 class="text-danger">{{containerMovementForm.value.ACTIVITY_DATE1}}
                             </small></span></h6>
-                    <h6 class="fw-bold"><span>Current : <small
-                                class="text-danger">{{containerMovementForm.value.CURR_ACT_NAME}}
-                                ({{containerMovementForm.value.CURR_ACT_CODE2}})</small></span>
+                    <h6 class="fw-bold">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <span>Current : <small class="text-danger">{{containerMovementForm.value.CURR_ACT_NAME}}
+                                        ({{containerMovementForm.value.CURR_ACT_CODE2}})</small></span>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="form-btn-info btn-sm"
+                                    (click)="rollBack(containerMovementForm.value.CONTAINER_NO)">Roll Back</button>
+                            </div>
+                        </div>
                     </h6>
-
                     <div class="row mt-4">
                         <div class="col-md-6 mt-4">
                             <div class="form-group">
@@ -213,7 +223,8 @@
                             </small></span></h6>
                     <h6 class="fw-bold">
                         <span>Current : <small class="text-danger">{{containerMovementForm.value.CURR_ACT_NAME}}
-                                ({{containerMovementForm.value.CURR_ACT_CODE2}})</small></span>
+                                ({{containerMovementForm.value.CURR_ACT_CODE2}})</small>
+                        </span>
                     </h6>
 
                     <div class="row mt-4">
