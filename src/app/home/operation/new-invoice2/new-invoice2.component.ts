@@ -611,7 +611,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: this.invoiceDetails?.CONTAINER_LIST,
+                      text: this.invoiceDetails?.CONTAINER_NOS,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -736,7 +736,7 @@ export class NewInvoice2Component implements OnInit {
                   fontSize: 8,
                 },
                 {
-                  text: '',
+                  text: p.AMOUNT,
                   fontSize: 8,
                 },
                 {
@@ -745,23 +745,23 @@ export class NewInvoice2Component implements OnInit {
                 },
 
                 {
-                  text: '',
+                  text: p.AMOUNT,
                   fontSize: 8,
                 },
                 {
-                  text: '',
+                  text: p.RATE,
                   fontSize: 8,
                 },
                 {
-                  text: '',
+                  text: p.SGST,
                   fontSize: 8,
                 },
                 {
-                  text: '',
+                  text: p.RATE,
                   fontSize: 8,
                 },
                 {
-                  text: '',
+                  text: p.CGST,
                   fontSize: 8,
                 },
                 {

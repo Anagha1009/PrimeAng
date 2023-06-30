@@ -1,6 +1,3 @@
-
-
-
 <div class="section-title pt-3">
   <h2>Create Invoice</h2>
 </div>
@@ -28,7 +25,7 @@
               <label *ngIf="POL" class="label-header">Shipper/CHA</label>
               <label *ngIf="!POL" class="label-header">Consignee/CHA</label>
 
-              <label  class="label-subheader">{{f.SHIPPER_NAME.value}}</label>
+              <label class="label-subheader">{{f.SHIPPER_NAME.value}}</label>
 
               <!-- <label *ngIf="!POL" class="label-subheader">{{f.SHIPPER_NAME.value}}</label> -->
 
@@ -48,41 +45,42 @@
               <nav id="navbar" class="navbar pointer">
                 <ul>
                   <li class="dropdown"><a class="form-btn-primary  p-2">Please Select Address<i
-                              class="bi bi-chevron-down"></i></a>
-                              <ul>
-                              <table class="table table-bordered">
-                                <thead>
-                                  <tr>
-                                    <th>Select</th>
-                                    <th>No</th>
-                                   <th>Customer Name</th>
-                                    <th>Branch Name</th>
-                                    <th>Address</th>
-                                    <th>Country</th>
-                                    <th>Is SEZ</th>
-                                    <th>Is Tax Applicable</th>
-                                    <th>Tax No</th>
-                                    <th>Tax Type</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr  (click)="getAddress(item.ADDRESS,item.BRANCH_ID)"  *ngFor="let item of AddressList let i = index">
-                                    <td><input type="checkbox"></td>
-                                    <td>{{i + 1}}</td>
-                                    <td>{{item.CUST_NAME}}</td>
-                                    <td>{{item.BRANCH_NAME}}</td>
-                                    <td>{{item.ADDRESS}}</td>
-                                    <td>{{item.COUNTRY}}</td>
-                                    <td>{{item.IS_SEZ}}</td>
-                                    <td>{{item.IS_TAX_APPLICABLE}}</td>
-                                    <td>{{item.TAX_NO}}</td>
-                                    <td>{{item.TAX_TYPE}}</td>
-                                  </tr>
-                                  </tbody>
-                                </table>
-                              </ul>
+                        class="bi bi-chevron-down"></i></a>
+                    <ul>
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Select</th>
+                            <th>No</th>
+                            <th>Customer Name</th>
+                            <th>Branch Name</th>
+                            <th>Address</th>
+                            <th>Country</th>
+                            <th>Is SEZ</th>
+                            <th>Is Tax Applicable</th>
+                            <th>Tax No</th>
+                            <th>Tax Type</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr (click)="getAddress(item.ADDRESS,item.BRANCH_ID)"
+                            *ngFor="let item of AddressList let i = index">
+                            <td><input type="checkbox"></td>
+                            <td>{{i + 1}}</td>
+                            <td>{{item.CUST_NAME}}</td>
+                            <td>{{item.BRANCH_NAME}}</td>
+                            <td>{{item.ADDRESS}}</td>
+                            <td>{{item.COUNTRY}}</td>
+                            <td>{{item.IS_SEZ}}</td>
+                            <td>{{item.IS_TAX_APPLICABLE}}</td>
+                            <td>{{item.TAX_NO}}</td>
+                            <td>{{item.TAX_TYPE}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </ul>
                   </li>
-              </ul>
+                </ul>
               </nav>
               <!-- <label class="label-header">Bill To</label>
               <label class="label-subheader">{{f.SHIPPER_NAME.value}}</label> -->
@@ -124,9 +122,9 @@
           </div>
           <div class="col-md-3">
             <div class="form-group">
-              <label class="label-header">Total Container =  {{f.TOTAL_CONTAINER.value}}</label>
-              </div>
-              </div>
+              <label class="label-header">Total Container = {{f.TOTAL_CONTAINER.value}}</label>
+            </div>
+          </div>
 
 
 
@@ -148,7 +146,6 @@
           <th>Qty</th>
           <th>Amount</th>
           <th>HSN Code</th>
-          <th>Requested Amount</th>
           <th>Currency</th>
           <th>Exempt Flag</th>
           <th>Tax %</th>
@@ -204,14 +201,6 @@
           </td>
 
           <td>
-            <input type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('REQUESTED_AMOUNT').errors}"
-              formControlName="REQUESTED_AMOUNT" class="form-control3" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.REQUESTED_AMOUNT}}</span>
-
-          </td>
-
-          <td>
             <select class="form-control3" *ngIf="item.value.IS_SRRCHARGE != '1'" formControlName="CURRENCY"
               [ngClass]="{'invalid': submitted && f.BL_LIST.controls[i].get('CURRENCY').errors}">
               <option disabled="true">--Select--</option>
@@ -221,17 +210,16 @@
           </td>
 
           <td>
-            <input  type="checkbox"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('EXEMPT_FLAG').errors}"
+            <input type="checkbox" [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('EXEMPT_FLAG').errors}"
               formControlName="EXEMPT_FLAG" />
-              <!-- *ngIf="item.value.IS_SRRCHARGE != '1'" -->
+            <!-- *ngIf="item.value.IS_SRRCHARGE != '1'" -->
             <!-- <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.EXEMPT_FLAG}}</span> -->
           </td>
 
           <td>
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX').errors}" formControlName="TAX" />
-              <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX}}</span>
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX}}</span>
           </td>
 
           <td>
@@ -242,13 +230,13 @@
           <td>
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('SGST').errors}" formControlName="SGST" />
-              <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.SGST}}</span>
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.SGST}}</span>
           </td>
 
           <td>
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('CGST').errors}" formControlName="CGST" />
-              <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CGST}}</span>
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CGST}}</span>
 
           </td>
 
@@ -257,7 +245,7 @@
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX_AMOUNT').errors}"
               formControlName="TAX_AMOUNT" />
-              <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX_AMOUNT}}</span>
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX_AMOUNT}}</span>
 
           </td>
 
@@ -265,7 +253,7 @@
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TOTAL_AMOUNT').errors}"
               formControlName="TOTAL_AMOUNT" />
-              <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX_AMOUNT}}</span>
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TOTAL_AMOUNT}}</span>
 
 
           </td>
@@ -279,7 +267,7 @@
 
     </table>
   </div>
-  <div class="col-md-2 offset-md-10 mt-4 text-end">
+  <div class="col-md-2 offset-md-10 my-4 text-end">
     <button (click)="SubmitList()" class="form-btn w-100">
       Save As Draft
     </button>
