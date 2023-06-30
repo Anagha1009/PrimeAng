@@ -657,7 +657,7 @@ export class NewInvoice2Component implements OnInit {
           },
 
           table: {
-            widths: [70, 15, 20, 35, 35, 35, 20, 35, 20, 35, 40],
+            widths: [55, 15, 40, 20, 25, 25, 30, 20, 30, 20, 30, 35],
             headerRows: 1,
             body: [
               [
@@ -669,6 +669,11 @@ export class NewInvoice2Component implements OnInit {
 
                 {
                   text: 'Qty',
+                  fontSize: 9,
+                  bold: true,
+                },
+                {
+                  text: 'HSN',
                   fontSize: 9,
                   bold: true,
                 },
@@ -732,6 +737,11 @@ export class NewInvoice2Component implements OnInit {
                 },
 
                 {
+                  text: p.HSN_CODE,
+                  fontSize: 8,
+                },
+
+                {
                   text: p.CURRENCY,
                   fontSize: 8,
                 },
@@ -776,6 +786,9 @@ export class NewInvoice2Component implements OnInit {
                   fontSize: 8,
                 },
 
+                {
+                  text: '',
+                },
                 {
                   text: '',
                 },

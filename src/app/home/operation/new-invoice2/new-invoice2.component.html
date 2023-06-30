@@ -36,28 +36,30 @@
     <table class="ratetable table-bordered" id="data-table-config">
       <thead>
         <tr>
-          <th>Sr No</th>
-          <th>Invoice No</th>
-          <th>Type</th>
-          <th>Bill To</th>
-          <th>BL No</th>
-          <th>Shipper Name</th>
-          <th>Bill From</th>
-          <th>Payment Term</th>
-          <th>Action</th>
+          <th width="1%">No</th>
+          <th width="10%">Invoice No</th>
+          <th width="10%">Type</th>
+          <th width="10%">Bill To</th>
+          <th width="10%">BL No</th>
+          <th width="15%">Shipper Name</th>
+          <th width="20%">Bill From</th>
+          <th width="15%">Status</th>
+          <th width="9%">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of invoiceList let i = index">
-          <td>{{i +1}}</td>
-          <td>{{item.INVOICE_NO}}</td>
-          <td>{{item.INVOICE_TYPE}}</td>
-          <td>{{item.BILL_TO}}</td>
-          <td>{{item.BL_NO}}</td>
-          <td>{{item.SHIPPER_NAME}}</td>
-          <td class="text-truncate">{{item.BILL_FROM}} ...</td>
-          <td>{{item.PAYMENT_TERM}}</td>
-          <td>
+          <td width="1%">{{i +1}}</td>
+          <td width="10%">{{item.INVOICE_NO}}</td>
+          <td width="10%">{{item.INVOICE_TYPE}}</td>
+          <td width="10%">{{item.BILL_TO}}</td>
+          <td width="10%">{{item.BL_NO}}</td>
+          <td width="15%">{{item.SHIPPER_NAME}}</td>
+          <td width="20%" class="text-truncate">{{item.BILL_FROM}} ...</td>
+          <td width="15%" class="status"><span
+              [class]="item.STATUS == 'PROFORMA' ? 'waiting' : 'active'">{{item.STATUS}}</span>
+          </td>
+          <td width="9%">
             <i class="fa fa-eye me-2 pointer fs-6" tooltip="View" placement="top"></i>
             <i class="fa fa-file-pdf-o pointer text-success fs-6" (click)="getInvoiceDetails(item.INVOICE_NO)"
               tooltip="Download PDF" placement="top"></i>

@@ -16,20 +16,13 @@
             <div class="form-group">
               <label class="label-header">Bill From</label>
               <label class="label-subheader">{{f.BILL_FROM.value}}</label>
-              <!-- <label class="label-subheader">{{f.BILL_FROM.value}}</label> -->
-
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group">
               <label *ngIf="POL" class="label-header">Shipper/CHA</label>
               <label *ngIf="!POL" class="label-header">Consignee/CHA</label>
-
               <label class="label-subheader">{{f.SHIPPER_NAME.value}}</label>
-
-              <!-- <label *ngIf="!POL" class="label-subheader">{{f.SHIPPER_NAME.value}}</label> -->
-
-
             </div>
           </div>
           <div class="col-md-3">
@@ -82,8 +75,6 @@
                   </li>
                 </ul>
               </nav>
-              <!-- <label class="label-header">Bill To</label>
-              <label class="label-subheader">{{f.SHIPPER_NAME.value}}</label> -->
             </div>
           </div>
           <div class="col-md-3">
@@ -93,8 +84,6 @@
                 <ng-option *ngFor="let item of BillFromList" value="{{item.CODE}}">{{item.CODE}}</ng-option>
               </ng-select>
               <label class="form-label-ddl">Bill To<span class="text-danger"> *</span></label>
-
-
             </div>
           </div>
           <div class="col-md-3">
@@ -113,11 +102,6 @@
             <div class="form-group">
               <input type="date" class="form-control" formControlName="INVOICE_DATE">
               <label class="form-label">Invoice Date</label>
-              <!-- <ng-select formControlName="ADDRESS">
-                <ng-option disabled value="">--Select--</ng-option>
-                <ng-option *ngFor="let item of AddressList" value="{{item.ADDRESS}}">{{item.ADDRESS}}</ng-option>
-              </ng-select>
-              <label class="form-label-ddl">Address<span class="text-danger"> *</span></label> -->
             </div>
           </div>
           <div class="col-md-3">
@@ -125,9 +109,6 @@
               <label class="label-header">Total Container = {{f.TOTAL_CONTAINER.value}}</label>
             </div>
           </div>
-
-
-
         </div>
       </div>
     </form>
@@ -142,21 +123,20 @@
         <tr>
           <th>No</th>
           <th>Charge</th>
-          <th>Ex Rate</th>
           <th>Qty</th>
-          <th>Amount</th>
           <th>HSN Code</th>
           <th>Currency</th>
+          <th>Rate</th>
+          <th>Amount</th>
+          <th>Ex Rate</th>
           <th>Exempt Flag</th>
-          <th>Tax %</th>
-          <th>IGST</th>
+          <th>Taxable Amount</th>
+          <th>Rate %</th>
           <th>SGST</th>
           <th>CGST</th>
-          <th>Tax Amount</th>
+          <th>TAX Amount</th>
           <th>Total Amount</th>
           <th>Action</th>
-
-
         </tr>
       </thead>
       <tbody>
@@ -167,30 +147,15 @@
               [ngClass]="{'invalid': submitted && f.BL_LIST.controls[i].get('CHARGE_NAME').errors}">
               <option disabled="true">--Select--</option>
               <option *ngFor="let item of ChargeMasterList" value="{{item.CODE}}">{{item.CODE}}</option>
-
             </select>
             <span *ngIf="item.value.IS_SRRCHARGE">{{item.value.CHARGE_NAME}}</span>
           </td>
-
-          <td> <input type="text" [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('EXCHANE_RATE').errors}"
-              formControlName="EXCHANE_RATE" class="form-control3" />
-
-          </td>
-
           <td>
             <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
               [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('QUANTITY').errors}"
               formControlName="QUANTITY" class="form-control3" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.QUANTITY}}</span>
           </td>
-
-          <td>
-            <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
-              [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('AMOUNT').errors }" formControlName="AMOUNT"
-              class="form-control3" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.AMOUNT}}</span>
-          </td>
-
           <td>
             <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
               [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors}" formControlName="HSN_CODE"
@@ -199,7 +164,6 @@
             <div *ngIf=" submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors" class="invalid-feedback"> HSN Code
               is required </div>
           </td>
-
           <td>
             <select class="form-control3" *ngIf="item.value.IS_SRRCHARGE != '1'" formControlName="CURRENCY"
               [ngClass]="{'invalid': submitted && f.BL_LIST.controls[i].get('CURRENCY').errors}">
@@ -208,63 +172,69 @@
             </select>
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CURRENCY}}</span>
           </td>
-
+          <td class="text-end">
+            <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
+              [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('APPROVED_RATE').errors }"
+              formControlName="APPROVED_RATE" class="form-control3" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.APPROVED_RATE}}</span>
+          </td>
+          <td class="text-end">
+            <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
+              [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('AMOUNT').errors }" formControlName="AMOUNT"
+              class="form-control3" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.AMOUNT}}</span>
+          </td>
+          <td> <input type="text" (keyup)="getTaxableAmount($event,i)"
+              [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('EXCHANE_RATE').errors}"
+              formControlName="EXCHANE_RATE" class="form-control3" />
+          </td>
           <td>
             <input type="checkbox" [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('EXEMPT_FLAG').errors}"
               formControlName="EXEMPT_FLAG" />
-            <!-- *ngIf="item.value.IS_SRRCHARGE != '1'" -->
-            <!-- <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.EXEMPT_FLAG}}</span> -->
           </td>
-
-          <td>
-            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX').errors}" formControlName="TAX" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX}}</span>
-          </td>
-
-          <td>
-            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('IGST').errors}" formControlName="IGST" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.IGST}}</span>
-          </td>
-          <td>
-            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('SGST').errors}" formControlName="SGST" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.SGST}}</span>
-          </td>
-
-          <td>
-            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('CGST').errors}" formControlName="CGST" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CGST}}</span>
-
-          </td>
-
-
-          <td>
+          <td class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX_AMOUNT').errors}"
               formControlName="TAX_AMOUNT" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX_AMOUNT}}</span>
-
           </td>
-
-          <td>
+          <td class="text-end">
+            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
+              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX').errors}" formControlName="TAX" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX}}</span>
+          </td>
+          <!-- <td>
+            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
+              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('IGST').errors}" formControlName="IGST" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.IGST}}</span>
+          </td> -->
+          <td class="text-end">
+            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
+              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('SGST').errors}" formControlName="SGST" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.SGST}}</span>
+          </td>
+          <td class="text-end">
+            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
+              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('CGST').errors}" formControlName="CGST" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CGST}}</span>
+          </td>
+          <td class="text-end">
+            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
+              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAXAMNT').errors}"
+              formControlName="TAXAMNT" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAXAMNT}}</span>
+          </td>
+          <td class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TOTAL_AMOUNT').errors}"
               formControlName="TOTAL_AMOUNT" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TOTAL_AMOUNT}}</span>
-
-
           </td>
           <td>
             <i class="fa fa-trash ms-2 pointer text-danger" (click)="deleteBranch(i)"></i>
           </td>
-
         </tr>
-
       </tbody>
-
     </table>
   </div>
   <div class="col-md-2 offset-md-10 my-4 text-end">
