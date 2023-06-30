@@ -10,6 +10,8 @@ import { PARTY } from 'src/app/models/party';
 import { MASTER } from 'src/app/models/master';
 import { Bl } from 'src/app/models/bl';
 import { InvoiceService } from 'src/app/services/invoice.service';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-invoice-list2',
@@ -36,6 +38,12 @@ export class InvoiceList2Component implements OnInit {
   dropdownSettings = {};
   master: MASTER = new MASTER();
   customer: PARTY = new PARTY();
+  symbol: string;
+  container:any[]=[];
+  containerResult:any;
+  total:any
+
+
 
 
   constructor(private route: ActivatedRoute,
@@ -76,20 +84,18 @@ export class InvoiceList2Component implements OnInit {
       INVOICE_DATE:[''],
       CONTAINER_NO:[],
       AGENT_NAME:[''],
-      AGENT_CODE:[],
+      AGENT_CODE:[''],
       ADDRESS:[''],
-      BL_LIST: new FormArray([]),
-      });
-
-
-
-    this.containerForm = this._formBuilder.group({
+      BRANCH_ID:[0],
+      STATUS:['PROFORMA'],
+      TOTAL_CONTAINER:[''],
       CONTAINER_LIST1: new FormControl(
         this.containerDropdownList,
         Validators.required
       ),
       CONTAINER_LIST: new FormArray([]),
-    });
+      BL_LIST: new FormArray([]),
+      });
 
 
 
@@ -103,9 +109,12 @@ export class InvoiceList2Component implements OnInit {
     this.listForm.get('INVOICE_TYPE')?.setValue(localStorage.getItem('value'))
     this.value = localStorage.getItem('value')
     if(this.value == 'POL'){
-        this.POL = true
+      this.POL = true
+
+    }else if(this.value == 'FREIGHT'){
+      this.POL = true
     }else{
-        this.POL = false
+      this.POL = false
     }
 
     // To set Inovice type
@@ -119,6 +128,7 @@ export class InvoiceList2Component implements OnInit {
     // get current Date
     this.currentDate = this._commonService.getcurrentDate(new Date())
     this.listForm.get("INVOICE_DATE")?.setValue( this.currentDate);
+
 
 
   }
@@ -159,10 +169,18 @@ export class InvoiceList2Component implements OnInit {
     });
 
     this._commonService.getDropdownData('ADDRESS').subscribe((res: any) => {
+
       if (res.ResponseCode == 200) {
         this.AddressList = res.Data
       }
     });
+  }
+
+  getAddress(address:any,BranchId:any){
+     this.listForm.get('ADDRESS').setValue(address)
+     this.listForm.get('BRANCH_ID').setValue(BranchId)
+    // console.log("address", address)
+
   }
 
 
@@ -323,12 +341,92 @@ export class InvoiceList2Component implements OnInit {
   // }
 
   saveContainer(event:any, value = 0){
-    var containerList = this.containerForm.get('CONTAINER_LIST1')?.value;
-    const add = this.containerForm.get('CONTAINER_LIST') as FormArray;
 
+    var containerList = this.listForm.get('CONTAINER_LIST1')?.value;
+    const add = this.listForm.get('CONTAINER_LIST') as FormArray;
+
+
+this.container.forEach((ele:any)=>{
+  console.log("ele",ele)
+  if(ele == 'CONTAINER'){
+    if(value == 1){
+      this.containerResult = event.length
+      const add = this.listForm.get('BL_LIST') as FormArray;
+
+      // to set value to form
+      for (var j = 0; j < add.length; j++) {
+        add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
+       this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
+
+      }
+
+    }
+    else if(event.length == 0){
+      this.containerResult = 0;
+      const add = this.listForm.get('BL_LIST') as FormArray;
+
+      // to set value to form
+      for (var j = 0; j < add.length; j++) {
+        add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
+         this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
+
+
+      }
+
+
+    }else{
+      this.containerResult = containerList.length
+      const add = this.listForm.get('BL_LIST') as FormArray;
+
+      // to set value to form
+      for (var j = 0; j < add.length; j++) {
+        add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
+      this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
+      }
+    }
+  }
+  else if(ele == 'BL') {
+    if(value == 1){
+      this.containerResult = event.length
+      this.containerResult = 1;
+      const add = this.listForm.get('BL_LIST') as FormArray;
+
+      // to set value to form
+      for (var j = 0; j < add.length; j++) {
+        add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
+        this.total = this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
+      }
+
+    }
+    else if(event.length == 0){
+      this.containerResult = 0;
+      this.containerResult = 1;
+      const add = this.listForm.get('BL_LIST') as FormArray;
+
+      // to set value to form
+      for (var j = 0; j < add.length; j++) {
+        add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
+        this.total = this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
+      }
+
+
+    }else{
+      this.containerResult = containerList.length
+      this.containerResult = 1;
+      const add = this.listForm.get('BL_LIST') as FormArray;
+
+      // to set value to form
+      for (var j = 0; j < add.length; j++) {
+        add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
+        this.total = this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
+      }
+    }
+  }
+})
     if (value == 1) {
-      add.clear();
+        add.clear();
       event.forEach((element: any) => {
+
         add.push(
           this._formBuilder.group({
             CONTAINER_NO: [element.CONTAINER_NO],
@@ -363,109 +461,133 @@ export class InvoiceList2Component implements OnInit {
     BL.AGENT_CODE = this._commonService.getUserCode();
     BL.BL_NO = BLNO;
     this._blService.getBLDetails(BL).subscribe((res: any) => {
+      console.log("get bl details", res)
       BL.ORG_CODE = res.Data.DESTINATION_AGENT_CODE
       BL.PORT = res.Data.FINAL_DESTINATION
       this.listForm.get('BL_NO')?.setValue(BLNO)
       this.listForm.get('SHIPPER_NAME')?.setValue(res.Data.SHIPPER)
-      // this.listForm.get('BILL_TO')?.setValue(res.Data.SHIPPER)
+      // this.listForm.get('SHIPPER_NAME')?.setValue(res.Data.CONSIGNEE)
 
      },(error:any)=>{
 
       },()=>{
 
          this._InvoiceService.GetInvoiceBLDetails(BL).subscribe((res: any) => {
-        console.log("GetInvoiceBLDetails =>", res)
-        this.containerDropdownList = res.Data.CONTAINERS
-        this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_NAME)
-        this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_ADDRESS1)
-        const add = this.listForm.get("BL_LIST") as FormArray
-        add.clear();
-        if (this.value == 'FREIGHT') {
-          res.Data.FREIGHT.forEach((element: any) => {
-                      console.log("element", element)
-                      add.push(this._formBuilder.group({
-                        ID: [0],
-                        CHARGE_NAME: [element.CHARGE_CODE],
-                        EXCHANE_RATE: [element.EXCHANE_RATE],
-                        QUANTITY: [0],
-                        AMOUNT: [0],
-                        HSN_CODE: [element.HSN_CODE],
-                        REQUESTED_AMOUNT: [element.RATE_REQUESTED],
-                        CURRENCY: [element.CURRENCY],
-                        EXEMPT_FLAG: [element.EXEMPT_FLAG],
-                        IS_SRRCHARGE: [true],
-                        TAX:[''],
-                        IGST:[''],
-                        SGST:[''],
-                        CGST:[''],
-                        TAX_AMOUNT:[''],
-                        TOTAL_AMOUNT:['']
+        // console.log("GetInvoiceBLDetails =>", res)
+        if(res.ResponseCode == 200){
+          this.containerDropdownList = res.Data.CONTAINERS
+          this.AddressList = res.Data.BRANCH
+          this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_NAME)
+          this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_ADDRESS1)
+          const add = this.listForm.get("BL_LIST") as FormArray
+          add.clear();
+          if (this.value == 'FREIGHT') {
+            res.Data.FREIGHT.forEach((element: any) => {
+                        this.container.push(element.CHARGE_TYPE)
+                         add.push(this._formBuilder.group({
+                          ID: [0],
+                          CHARGE_NAME: [element.CHARGE_CODE],
+                          EXCHANE_RATE: [element.EXCHANE_RATE],
+                          QUANTITY: [0],
+                          AMOUNT: [0],
+                          HSN_CODE: [element.HSN_CODE],
+                          REQUESTED_AMOUNT: [element.RATE_REQUESTED],
+                          CURRENCY: [element.CURRENCY],
+                          EXEMPT_FLAG: [element.EXEMPT_FLAG],
+                          IS_SRRCHARGE: [true],
+                          TAX:[''],
+                          IGST:[element.IGST],
+                          SGST:[element.SGST],
+                          CGST:[element.CGST],
+                          TAX_AMOUNT:[''],
+                          TOTAL_AMOUNT:['']
+
+                        })
+                        )
 
                       })
-                      )
 
-                    })
-              } else if (this.value == 'POD') {
+                } else if (this.value == 'POD') {
 
-              res.Data.POD.forEach((element: any) => {
-            console.log("element", element)
-            add.push(this._formBuilder.group({
-              ID: [0],
-              CHARGE_NAME: [element.CHARGE_CODE],
-              EXCHANE_RATE: [element.EXCHANE_RATE],
-              QUANTITY: [0],
-              AMOUNT: [0],
-              HSN_CODE: [element.HSN_CODE],
-              REQUESTED_AMOUNT: [element.RATE_REQUESTED],
-              CURRENCY: [element.CURRENCY],
-              EXEMPT_FLAG: [element.EXEMPT_FLAG],
-              IS_SRRCHARGE: [true],
-              TAX:[''],
-              IGST:[''],
-              SGST:[''],
-              CGST:[''],
-              TAX_AMOUNT:[''],
-              TOTAL_AMOUNT:['']
+                res.Data.POD.forEach((element: any) => {
+              add.push(this._formBuilder.group({
+                ID: [0],
+                CHARGE_NAME: [element.CHARGE_CODE],
+                EXCHANE_RATE: [element.EXCHANE_RATE],
+                QUANTITY: [0],
+                AMOUNT: [0],
+                HSN_CODE: [element.HSN_CODE],
+                REQUESTED_AMOUNT: [element.RATE_REQUESTED],
+                CURRENCY: [element.CURRENCY],
+                EXEMPT_FLAG: [element.EXEMPT_FLAG],
+                IS_SRRCHARGE: [true],
+                TAX:[''],
+                IGST:[element.IGST],
+                SGST:[element.SGST],
+                CGST:[element.CGST],
+                TAX_AMOUNT:[''],
+                TOTAL_AMOUNT:['']
 
+              })
+              )
             })
-            )
-          })
 
-        } else if (this.value == 'POL') {
+          } else if (this.value == 'POL') {
 
-          res.Data.POL.forEach((element: any) => {
-            console.log("element", element)
-            add.push(this._formBuilder.group({
-              ID: [0],
-              CHARGE_NAME: [element.CHARGE_CODE],
-              EXCHANE_RATE: [element.EXCHANE_RATE],
-              QUANTITY: [0],
-              AMOUNT: [0],
-              HSN_CODE: [element.HSN_CODE],
-              REQUESTED_AMOUNT: [element.RATE_REQUESTED],
-              CURRENCY: [element.CURRENCY],
-              EXEMPT_FLAG: [element.EXEMPT_FLAG],
-              IS_SRRCHARGE: [true],
-              TAX:[''],
-              IGST:[''],
-              SGST:[''],
-              CGST:[''],
-              TAX_AMOUNT:[''],
-              TOTAL_AMOUNT:['']
+            res.Data.POL.forEach((element: any) => {
+              add.push(this._formBuilder.group({
+                ID: [0],
+                CHARGE_NAME: [element.CHARGE_CODE],
+                EXCHANE_RATE: [element.EXCHANE_RATE],
+                QUANTITY: [0],
+                AMOUNT: [0],
+                HSN_CODE: [element.HSN_CODE],
+                REQUESTED_AMOUNT: [element.RATE_REQUESTED],
+                CURRENCY: [element.CURRENCY],
+                EXEMPT_FLAG: [element.EXEMPT_FLAG],
+                IS_SRRCHARGE: [true],
+                TAX:[''],
+                IGST:[element.IGST],
+                SGST:[element.SGST],
+                CGST:[element.CGST],
+                TAX_AMOUNT:[''],
+                TOTAL_AMOUNT:['']
 
-                }));
-            });
+                  }));
+              });
+          }
         }
-
       });
-
   });
 }
 
 
-Delete(){
-
+Delete(ID : number){
+  console.log(ID)
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this._InvoiceService.DeleteInvoice(ID).subscribe((res: any) => {
+        if (res.ResponseCode == 200) {
+          Swal.fire('Deleted!', 'Your record has been deleted.', 'success');
+        }
+      });
+    }
+  });
 }
+
+deleteBranch(i: number) {
+    const add = this.listForm.get('BL_LIST') as FormArray;
+    add.removeAt(i);
+  }
+
 }
 
 
@@ -496,3 +618,35 @@ Delete(){
     //   )
     //   });
     // });
+
+
+    // bind to qty and selection conatiner
+
+    // if(value == 1){
+    //   this.containerResult = event.length
+    //   console.log("container 1",event.length)
+    //   const add = this.listForm.get('BL_LIST') as FormArray;
+    //   for (var j = 0; j < add.length; j++) {
+    //     add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
+    //     this.total = this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
+    //   }
+
+    // }
+    // else if(event.length == 0){
+    //   this.containerResult = 0;
+    //   const add = this.listForm.get('BL_LIST') as FormArray;
+    //   for (var j = 0; j < add.length; j++) {
+    //     add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
+    //     this.total = this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
+    //   }
+
+
+    // }else{
+    //   this.containerResult = containerList.length
+    //   const add = this.listForm.get('BL_LIST') as FormArray;
+    //   for (var j = 0; j < add.length; j++) {
+    //     add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
+    //     this.total = this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
+    //   }
+
+    // }

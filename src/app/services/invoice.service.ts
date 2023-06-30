@@ -34,4 +34,9 @@ export class InvoiceService {
   console.log("data is here=>", data)
   return this._http.post<any>(this.BASE_URL + 'Invoice/InsertInvoice',data , this.httpOptions)
 }
+
+DeleteInvoice(ID: number){
+  return this._http.delete<any>(this.BASE_URL + 'Invoice/DeleteInvoice?ID=' + ID, this.httpOptions)
+
+}
 }
