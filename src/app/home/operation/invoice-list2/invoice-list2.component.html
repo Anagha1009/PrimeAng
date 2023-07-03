@@ -123,13 +123,12 @@
         <tr>
           <th>No</th>
           <th>Charge</th>
-          <th>Qty</th>
           <th>HSN Code</th>
+          <th>Qty</th>
           <th>Currency</th>
           <th>Rate</th>
           <th>Amount</th>
           <th>Ex Rate</th>
-          <th>Exempt Flag</th>
           <th>Taxable Amount</th>
           <th>Rate %</th>
           <th>SGST</th>
@@ -152,17 +151,17 @@
           </td>
           <td>
             <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
-              [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('QUANTITY').errors}"
-              formControlName="QUANTITY" class="form-control3" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.QUANTITY}}</span>
-          </td>
-          <td>
-            <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
               [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors}" formControlName="HSN_CODE"
               class="form-control3" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.HSN_CODE}}</span>
             <div *ngIf=" submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors" class="invalid-feedback"> HSN Code
               is required </div>
+          </td>
+          <td>
+            <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
+              [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('QUANTITY').errors}"
+              formControlName="QUANTITY" class="form-control3" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.QUANTITY}}</span>
           </td>
           <td>
             <select class="form-control3" *ngIf="item.value.IS_SRRCHARGE != '1'" formControlName="CURRENCY"
@@ -188,10 +187,7 @@
               [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('EXCHANE_RATE').errors}"
               formControlName="EXCHANE_RATE" class="form-control3" />
           </td>
-          <td>
-            <input type="checkbox" [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('EXEMPT_FLAG').errors}"
-              formControlName="EXEMPT_FLAG" />
-          </td>
+
           <td class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX_AMOUNT').errors}"

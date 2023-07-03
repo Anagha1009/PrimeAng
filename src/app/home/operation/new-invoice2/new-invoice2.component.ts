@@ -405,7 +405,7 @@ export class NewInvoice2Component implements OnInit {
                 {
                   columns: [
                     {
-                      text: 'Port of Delivery',
+                      text: 'Place of Delivery',
                       bold: true,
                       fontSize: 9,
                       width: 80,
@@ -497,31 +497,6 @@ export class NewInvoice2Component implements OnInit {
                 {
                   columns: [
                     {
-                      text: 'Doc. Ref No',
-                      bold: true,
-                      fontSize: 9,
-                      width: 80,
-                    },
-                    {
-                      text: ':',
-                      bold: true,
-                      fontSize: 9,
-                      width: 10,
-                    },
-                    {
-                      text: '',
-                      bold: false,
-                      fontSize: 8,
-                      width: 200,
-                    },
-                  ],
-                },
-              ],
-              [
-                {},
-                {
-                  columns: [
-                    {
                       text: 'Place of Supply',
                       bold: true,
                       fontSize: 9,
@@ -542,6 +517,7 @@ export class NewInvoice2Component implements OnInit {
                   ],
                 },
               ],
+              [{}, {}],
               [
                 {
                   colSpan: 2,
@@ -585,7 +561,10 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: '20GP X ' + this.invoiceDetails?.CONTAINERS,
+                      text:
+                        '20GP X ' +
+                        (+this.invoiceDetails?.CONTAINERS.split(',').length -
+                          1),
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -611,7 +590,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: this.invoiceDetails?.CONTAINER_NOS,
+                      text: this.invoiceDetails?.CONTAINERS,
                       bold: false,
                       fontSize: 8,
                       width: 200,

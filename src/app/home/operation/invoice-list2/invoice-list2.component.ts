@@ -100,10 +100,10 @@ export class InvoiceList2Component implements OnInit {
       ),
       CONTAINER_LIST: new FormArray([]),
       BL_LIST: new FormArray([]),
+      CONTAINERS: [''],
     });
 
     var BLNO = this.route.snapshot.paramMap.get('BL_NO');
-    console.log('BLNO', BLNO);
     this.listForm.get('BL_NO')?.setValue(BLNO);
 
     this.getDropdown();
@@ -180,7 +180,6 @@ export class InvoiceList2Component implements OnInit {
   getAddress(address: any, BranchId: any) {
     this.listForm.get('ADDRESS').setValue(address);
     this.listForm.get('BRANCH_ID').setValue(BranchId);
-    // console.log("address", address)
   }
 
   // add new row
@@ -216,20 +215,25 @@ export class InvoiceList2Component implements OnInit {
 
   // submit form final
   SubmitList() {
-    // this.submitted = true;
-    // if (this.listForm.invalid) {
-    //   return;
-    // }
+    this.submitted = true;
+    if (this.listForm.invalid) {
+      return;
+    }
     this.listForm
       .get('INVOICE_NO')
       .setValue(this._commonService.getRandomNumber('INV'));
     this.listForm.get('AGENT_NAME').setValue(this._commonService.getUserName());
     this.listForm.get('AGENT_CODE').setValue(this._commonService.getUserCode());
-
+    const add = this.listForm.get('CONTAINER_LIST') as FormArray;
+    var cl = '';
+    add.value.forEach((element: any) => {
+      cl += element.CONTAINER_NO + ',';
+    });
+    this.listForm.get('CONTAINERS').setValue(cl);
+    console.log(JSON.stringify(this.listForm.value));
     this._InvoiceService
       .InsertInvoice(JSON.stringify(this.listForm.value))
       .subscribe((res: any) => {
-        console.log('response is here =>', res);
         if (res.responseCode == 200) {
           this._commonService.successMsg('Invoice saved Successfully !');
           this._router.navigateByUrl('/home/operations/new-invoice');
@@ -330,13 +334,11 @@ export class InvoiceList2Component implements OnInit {
   }
 
   Submit(BLNO: any) {
-    console.log(BLNO);
     var BL = new Bl();
     BL.AGENT_CODE = this._commonService.getUserCode();
     BL.BL_NO = BLNO;
     this._blService.getBLDetails(BL).subscribe(
       (res: any) => {
-        console.log('get bl details', res);
         BL.ORG_CODE = this._commonService.getUserOrgCode();
         BL.PORT = this._commonService.getUserPort();
         this.listForm.get('BL_NO')?.setValue(BLNO);
@@ -439,7 +441,6 @@ export class InvoiceList2Component implements OnInit {
   }
 
   Delete(ID: number) {
-    console.log(ID);
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -464,161 +465,3 @@ export class InvoiceList2Component implements OnInit {
     add.removeAt(i);
   }
 }
-
-//  get SRR Details
-// this._blService.getSRRDetails(BL).subscribe((res:any)=>{
-//   console.log("srr details",res.Data)
-//   const add = this.listForm.get("BL_LIST") as FormArray
-//   add.clear();
-//   res.Data.SRR_RATES.forEach((element:any) => {
-//     console.log("element", element)
-//     add.push(this._formBuilder.group({
-//     ID:[0],
-//     CHARGE_NAME: [element.CHARGE_CODE],
-//     EXCHANE_RATE: [element.EXCHANE_RATE],
-//     QUANTITY: [0],
-//     AMOUNT: [0],
-//     HSN_CODE:[element.HSN_CODE],
-//     REQUESTED_AMOUNT: [0],
-//     CURRENCY: [element.CURRENCY],
-//     EXEMPT_FLAG: [element.EXEMPT_FLAG],
-//     IS_SRRCHARGE:[true],
-
-//   })
-//   )
-//   });
-// });
-
-// bind to qty and selection conatiner
-
-// if(value == 1){
-//   this.containerResult = event.length
-//   console.log("container 1",event.length)
-//   const add = this.listForm.get('BL_LIST') as FormArray;
-//   for (var j = 0; j < add.length; j++) {
-//     add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
-//     this.total = this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
-//   }
-
-// }
-// else if(event.length == 0){
-//   this.containerResult = 0;
-//   const add = this.listForm.get('BL_LIST') as FormArray;
-//   for (var j = 0; j < add.length; j++) {
-//     add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
-//     this.total = this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
-//   }
-
-// }else{
-//   this.containerResult = containerList.length
-//   const add = this.listForm.get('BL_LIST') as FormArray;
-//   for (var j = 0; j < add.length; j++) {
-//     add.at(j)?.get('QUANTITY')?.setValue(this.containerResult)
-//     this.total = this.listForm.get('TOTAL_CONTAINER').setValue(this.containerResult);
-//   }
-
-// }
-
-// bind BL no to list table
-// Submit(BLNO: any) {
-//   console.log(BLNO)
-//   var BL = new Bl();
-//   BL.AGENT_CODE = this._commonService.getUserCode();
-//   BL.BL_NO = BLNO;
-//   this._blService.getBLDetails(BL).subscribe((res: any) => {
-//     BL.ORG_CODE = res.Data.DESTINATION_AGENT_CODE
-//     BL.PORT = res.Data.FINAL_DESTINATION
-//     this.listForm.get('BL_NO')?.setValue(BLNO)
-//     this.listForm.get('SHIPPER_NAME')?.setValue(res.Data.SHIPPER)
-
-//     this._InvoiceService.GetInvoiceBLDetails(BL).subscribe((res: any) => {
-//       console.log("GetInvoiceBLDetails =>", res)
-//       this.containerDropdownList = res.Data.CONTAINERS
-//       this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_NAME)
-//       this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_ADDRESS1)
-//       const add = this.listForm.get("BL_LIST") as FormArray
-//       add.clear();
-
-//       if (this.value == 'FREIGHT') {
-//         res.Data.FREIGHT.forEach((element: any) => {
-//           console.log("element", element)
-//           add.push(this._formBuilder.group({
-//             ID: [0],
-//             CHARGE_NAME: [element.CHARGE_CODE],
-//             EXCHANE_RATE: [element.EXCHANE_RATE],
-//             QUANTITY: [0],
-//             AMOUNT: [0],
-//             HSN_CODE: [element.HSN_CODE],
-//             REQUESTED_AMOUNT: [element.RATE_REQUESTED],
-//             CURRENCY: [element.CURRENCY],
-//             EXEMPT_FLAG: [element.EXEMPT_FLAG],
-//             IS_SRRCHARGE: [true],
-//             TAX:[''],
-//             IGST:[''],
-//             SGST:[''],
-//             CGST:[''],
-//             TAX_AMOUNT:[''],
-//             TOTAL_AMOUNT:['']
-
-//           })
-//           )
-
-//         })
-//       } else if (this.value == 'POD') {
-
-//         res.Data.POD.forEach((element: any) => {
-//           console.log("element", element)
-//           add.push(this._formBuilder.group({
-//             ID: [0],
-//             CHARGE_NAME: [element.CHARGE_CODE],
-//             EXCHANE_RATE: [element.EXCHANE_RATE],
-//             QUANTITY: [0],
-//             AMOUNT: [0],
-//             HSN_CODE: [element.HSN_CODE],
-//             REQUESTED_AMOUNT: [element.RATE_REQUESTED],
-//             CURRENCY: [element.CURRENCY],
-//             EXEMPT_FLAG: [element.EXEMPT_FLAG],
-//             IS_SRRCHARGE: [true],
-//             TAX:[''],
-//             IGST:[''],
-//             SGST:[''],
-//             CGST:[''],
-//             TAX_AMOUNT:[''],
-//             TOTAL_AMOUNT:['']
-
-//           })
-//           )
-//         })
-
-//       } else if (this.value == 'POL') {
-
-//         res.Data.POL.forEach((element: any) => {
-//           console.log("element", element)
-//           add.push(this._formBuilder.group({
-//             ID: [0],
-//             CHARGE_NAME: [element.CHARGE_CODE],
-//             EXCHANE_RATE: [element.EXCHANE_RATE],
-//             QUANTITY: [0],
-//             AMOUNT: [0],
-//             HSN_CODE: [element.HSN_CODE],
-//             REQUESTED_AMOUNT: [element.RATE_REQUESTED],
-//             CURRENCY: [element.CURRENCY],
-//             EXEMPT_FLAG: [element.EXEMPT_FLAG],
-//             IS_SRRCHARGE: [true],
-//             TAX:[''],
-//             IGST:[''],
-//             SGST:[''],
-//             CGST:[''],
-//             TAX_AMOUNT:[''],
-//             TOTAL_AMOUNT:['']
-
-//           })
-//           )
-//         })
-//       }
-
-//     });
-
-//   }
-//   )
-// }
