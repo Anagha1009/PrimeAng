@@ -75,10 +75,11 @@ export class NewInvoice2Component implements OnInit {
     );
   }
 
-  getInvoiceDetails(invoiceNo: string) {
+  getInvoiceDetails(invoiceID: number) {
     this._blService
       .getInvoiceDetailsNew(
-        invoiceNo,
+        invoiceID,
+        '',
         this._commonService.getUserPort(),
         this._commonService.getUserOrgCode()
       )

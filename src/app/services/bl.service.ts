@@ -228,7 +228,12 @@ export class BlService {
     );
   }
 
-  getInvoiceDetailsNew(invoiceNo: string, port: string, orgcode: string) {
+  getInvoiceDetailsNew(
+    invoiceID: number,
+    invoiceNo: string,
+    port: string,
+    orgcode: string
+  ) {
     return this._http.get<any>(
       this.BASE_URL +
         'Invoice/GetInvoiceDetails?INVOICE_NO=' +
@@ -236,7 +241,9 @@ export class BlService {
         '&PORT=' +
         port +
         '&ORG_CODE=' +
-        orgcode,
+        orgcode +
+        '&INVOICE_ID=' +
+        invoiceID,
       this.httpOptions
     );
   }

@@ -62,12 +62,13 @@ export class NewCreditNoteComponent implements OnInit {
     });
   }
 
-  getInvoiceDetails(invoiceNo: string) {
+  getInvoiceDetails(invoiceID: number) {
     this.invoiceDetails = null;
     this._commonService.destroyDT();
     this._blService
       .getInvoiceDetailsNew(
-        invoiceNo,
+        invoiceID,
+        '',
         this._commonService.getUserPort(),
         this._commonService.getUserOrgCode()
       )

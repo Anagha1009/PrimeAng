@@ -102,6 +102,7 @@ export class InvoiceList2Component implements OnInit {
       BL_LIST: new FormArray([]),
       CONTAINERS: [''],
       SHIPPER_REF: [''],
+      REMARKS: [''],
     });
 
     var BLNO = this.route.snapshot.paramMap.get('BL_NO');
@@ -220,9 +221,7 @@ export class InvoiceList2Component implements OnInit {
     if (this.listForm.invalid) {
       return;
     }
-    this.listForm
-      .get('INVOICE_NO')
-      .setValue(this._commonService.getRandomNumber('INV'));
+
     this.listForm.get('AGENT_NAME').setValue(this._commonService.getUserName());
     this.listForm.get('AGENT_CODE').setValue(this._commonService.getUserCode());
     const add = this.listForm.get('CONTAINER_LIST') as FormArray;
@@ -231,7 +230,6 @@ export class InvoiceList2Component implements OnInit {
       cl += element.CONTAINER_NO + ',';
     });
     this.listForm.get('CONTAINERS').setValue(cl);
-    console.log(JSON.stringify(this.listForm.value));
     this._InvoiceService
       .InsertInvoice(JSON.stringify(this.listForm.value))
       .subscribe((res: any) => {

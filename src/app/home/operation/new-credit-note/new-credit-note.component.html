@@ -20,7 +20,7 @@
                             <ng-select (change)="getInvoiceDetails($event)" formControlName="INVOICE_NO">
                                 <ng-option value="">--Select--</ng-option>
                                 <ng-option *ngFor="let item of invoiceList"
-                                    value="{{item.INVOICE_NO}}">{{item.INVOICE_NO}}</ng-option>
+                                    value="{{item.INVOICE_ID}}">{{item.INVOICE_NO}}</ng-option>
                             </ng-select>
                             <label class="form-label-ddl">Invoice No</label>
                         </div>
