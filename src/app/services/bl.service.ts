@@ -247,4 +247,12 @@ export class BlService {
       this.httpOptions
     );
   }
+
+  finalizeInvoice(invoice: any) {
+    return this._http.post<any>(
+      this.BASE_URL + 'Invoice/FinalizeInvoice',
+      invoice,
+      this.httpOptions
+    );
+  }
 }

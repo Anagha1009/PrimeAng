@@ -11,6 +11,7 @@ export class Bl {
   FROM_DATE: string = '';
   TO_DATE: string = '';
   INVOICE_NO: string = '';
+  INVOICE_ID: number = 0;
   ORG_CODE: string = '';
   PORT: string = '';
 }

@@ -5,6 +5,7 @@ import { Bl } from 'src/app/models/bl';
 import { CommonService } from 'src/app/services/common.service';
 import { Router } from '@angular/router';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
+import Swal from 'sweetalert2';
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -93,6 +94,14 @@ export class NewInvoice2Component implements OnInit {
 
   async generatePDF() {
     let docDefinition = {
+      watermark: {
+        text: this.invoiceDetails?.INVOICE_NO == '' ? 'PROFORMA' : '',
+        color: '#808080',
+        opacity: 0.3,
+        bold: true,
+        italics: false,
+        fontSize: 150,
+      },
       content: [
         {
           layout: {
@@ -155,7 +164,10 @@ export class NewInvoice2Component implements OnInit {
               ],
               [
                 {
-                  text: 'TAX INVOICE',
+                  text:
+                    this.invoiceDetails?.INVOICE_NO == ''
+                      ? 'PROFORMA'
+                      : 'TAX INVOICE',
                   bold: true,
                   fontSize: 12,
                   alignment: 'center',
@@ -938,5 +950,34 @@ export class NewInvoice2Component implements OnInit {
 
   get f() {
     return this.invoiceForm.controls;
+  }
+
+  finalizeInvoice(id: number) {
+    var invoiceNo = this._commonService.getRandomNumber('INV');
+    var bl = new Bl();
+    bl.INVOICE_ID = id;
+    bl.INVOICE_NO = invoiceNo;
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't to Finalize this Proforma Invoice!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Finalize it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._blService.finalizeInvoice(bl).subscribe((res: any) => {
+          if (res.responseCode == 200) {
+            this._commonService.successMsg(
+              'Your Invoice is created successfully !<br> Invoice No :' +
+                invoiceNo
+            );
+
+            this.getInvoiceList();
+          }
+        });
+      }
+    });
   }
 }

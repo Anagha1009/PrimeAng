@@ -63,6 +63,8 @@
             <i class="fa fa-eye me-2 pointer fs-6" tooltip="View" placement="top"></i>
             <i class="fa fa-file-pdf-o pointer text-success fs-6" (click)="getInvoiceDetails(item.INVOICE_ID)"
               tooltip="Download PDF" placement="top"></i>
+            <i (click)="finalizeInvoice(item.INVOICE_ID)" *ngIf="item.STATUS == 'PROFORMA'" tooltip="Finalize"
+              placement="top" class="fs-6 ms-2 bx bxs-check-circle text-success pointer"></i>
           </td>
         </tr>
       </tbody>
