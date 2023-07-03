@@ -463,7 +463,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: '',
+                      text: this.invoiceDetails?.SHIPPER_REF,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -517,7 +517,31 @@ export class NewInvoice2Component implements OnInit {
                   ],
                 },
               ],
-              [{}, {}],
+              [
+                {
+                  columns: [
+                    {
+                      text: 'Final Destination',
+                      bold: true,
+                      fontSize: 9,
+                      width: 80,
+                    },
+                    {
+                      text: ':',
+                      bold: true,
+                      fontSize: 9,
+                      width: 10,
+                    },
+                    {
+                      text: this.invoiceDetails?.FINAL_DESTINATION,
+                      bold: false,
+                      fontSize: 8,
+                      width: 200,
+                    },
+                  ],
+                },
+                {},
+              ],
               [
                 {
                   colSpan: 2,

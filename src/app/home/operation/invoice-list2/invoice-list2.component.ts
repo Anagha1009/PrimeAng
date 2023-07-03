@@ -101,6 +101,7 @@ export class InvoiceList2Component implements OnInit {
       CONTAINER_LIST: new FormArray([]),
       BL_LIST: new FormArray([]),
       CONTAINERS: [''],
+      SHIPPER_REF: [''],
     });
 
     var BLNO = this.route.snapshot.paramMap.get('BL_NO');
