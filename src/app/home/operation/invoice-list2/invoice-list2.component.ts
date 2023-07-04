@@ -17,6 +17,7 @@ import { MASTER } from 'src/app/models/master';
 import { Bl } from 'src/app/models/bl';
 import { InvoiceService } from 'src/app/services/invoice.service';
 import Swal from 'sweetalert2';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-invoice-list2',
@@ -47,6 +48,7 @@ export class InvoiceList2Component implements OnInit {
   container: any[] = [];
   containerResult: any;
   total: any;
+  selectedItems: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -79,6 +81,7 @@ export class InvoiceList2Component implements OnInit {
 
     this.listForm = this._formBuilder.group({
       ID: [0],
+      INVOICE_ID: [0],
       INVOICE_NO: [''],
       INVOICE_TYPE: [''],
       BILL_TO: [''],
@@ -109,25 +112,22 @@ export class InvoiceList2Component implements OnInit {
     this.listForm.get('BL_NO')?.setValue(BLNO);
 
     this.getDropdown();
-    this.Submit(BLNO);
 
-    this.listForm.get('INVOICE_TYPE')?.setValue(localStorage.getItem('value'));
     this.value = localStorage.getItem('value');
-    if (this.value == 'POL') {
-      this.POL = true;
-    } else if (this.value == 'FREIGHT') {
+    this.listForm.get('INVOICE_TYPE')?.setValue(localStorage.getItem('value'));
+    this.listForm
+      .get('INVOICE_ID')
+      ?.setValue(localStorage.getItem('INVOICE_ID'));
+
+    if (localStorage.getItem('INVOICE_ID') == '0') {
+      this.Submit(BLNO);
+    } else {
+      this.getInvoiceDetails(+localStorage.getItem('INVOICE_ID'));
+    }
+    if (this.value == 'POL' || this.value == 'FREIGHT') {
       this.POL = true;
     } else {
       this.POL = false;
-    }
-
-    // To set Inovice type
-    if (this.value == 'FREIGHT') {
-      this.listForm
-        .get('INVOICE_TYPE')
-        ?.setValue(localStorage.getItem('value'));
-    } else {
-      this.listForm.get('INVOICE_TYPE')?.setValue('LOCAL');
     }
 
     // get current Date
@@ -196,7 +196,7 @@ export class InvoiceList2Component implements OnInit {
       this._formBuilder.group({
         ID: [0],
         CHARGE_NAME: ['', Validators.required],
-        EXCHANE_RATE: ['', Validators.required],
+        EXCHANGE_RATE: ['', Validators.required],
         QUANTITY: [0, Validators.required],
         AMOUNT: [0, Validators.required],
         HSN_CODE: ['', Validators.required],
@@ -342,12 +342,12 @@ export class InvoiceList2Component implements OnInit {
         BL.PORT = this._commonService.getUserPort();
         this.listForm.get('BL_NO')?.setValue(BLNO);
         this.listForm.get('SHIPPER_NAME')?.setValue(res.Data.SHIPPER);
-        // this.listForm.get('SHIPPER_NAME')?.setValue(res.Data.CONSIGNEE)
       },
       (error: any) => {},
       () => {
         this._InvoiceService.GetInvoiceBLDetails(BL).subscribe((res: any) => {
           if (res.ResponseCode == 200) {
+            alert('HI');
             this.containerDropdownList = res.Data.CONTAINERS;
             this.AddressList = res.Data.BRANCH;
             this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_NAME);
@@ -360,7 +360,7 @@ export class InvoiceList2Component implements OnInit {
                   this._formBuilder.group({
                     ID: [0],
                     CHARGE_NAME: [element.CHARGE_CODE],
-                    EXCHANE_RATE: [element.EXCHANE_RATE],
+                    EXCHANGE_RATE: [element.EXCHANGE_RATE],
                     QUANTITY: [0],
                     APPROVED_RATE: [element.APPROVED_RATE],
                     AMOUNT: [element.APPROVED_RATE],
@@ -386,7 +386,7 @@ export class InvoiceList2Component implements OnInit {
                   this._formBuilder.group({
                     ID: [0],
                     CHARGE_NAME: [element.CHARGE_CODE],
-                    EXCHANE_RATE: [element.EXCHANE_RATE],
+                    EXCHANGE_RATE: [element.EXCHANGE_RATE],
                     QUANTITY: [0],
                     APPROVED_RATE: [element.APPROVED_RATE],
                     AMOUNT: [element.APPROVED_RATE],
@@ -412,7 +412,7 @@ export class InvoiceList2Component implements OnInit {
                   this._formBuilder.group({
                     ID: [0],
                     CHARGE_NAME: [element.CHARGE_CODE],
-                    EXCHANE_RATE: [element.EXCHANE_RATE],
+                    EXCHANGE_RATE: [element.EXCHANGE_RATE],
                     QUANTITY: [0],
                     APPROVED_RATE: [element.APPROVED_RATE],
                     AMOUNT: [element.APPROVED_RATE],
@@ -437,6 +437,52 @@ export class InvoiceList2Component implements OnInit {
         });
       }
     );
+  }
+
+  getInvoiceDetails(invoiceID: number) {
+    this._blService
+      .getInvoiceDetailsNew(
+        invoiceID,
+        '',
+        this._commonService.getUserPort(),
+        this._commonService.getUserOrgCode()
+      )
+      .subscribe((res: any) => {
+        if (res.ResponseCode == 200) {
+          this.listForm.patchValue(res.Data);
+          this.listForm
+            .get('INVOICE_DATE')
+            ?.setValue(
+              formatDate(
+                this.listForm.get('INVOICE_DATE')?.value,
+                'yyyy-MM-dd',
+                'en'
+              )
+            );
+          this.containerDropdownList = [];
+          this.containerDropdownList = res.Data.BL_CONTAINER_LIST;
+
+          var x = this.listForm.get('CONTAINERS').value.split(',');
+          var ss: any = [];
+          x.forEach((element: any) => {
+            if (element != '') {
+              ss.push(
+                this.containerDropdownList.filter(
+                  (x) => x.CONTAINER_NO === element
+                )[0]
+              );
+            }
+          });
+          this.selectedItems = ss;
+
+          const add = this.listForm.get('BL_LIST') as FormArray;
+          add.clear();
+
+          res.Data.BL_LIST.forEach((element: any) => {
+            add.push(this._formBuilder.group(element));
+          });
+        }
+      });
   }
 
   Delete(ID: number) {

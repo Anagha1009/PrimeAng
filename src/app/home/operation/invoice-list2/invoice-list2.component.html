@@ -28,7 +28,8 @@
           <div class="col-md-3">
             <div class="form-group">
               <label class="label-header">Invoice Type</label>
-              <label class="label-subheader">{{f.INVOICE_TYPE.value}}</label>
+              <label class="label-subheader">{{f.INVOICE_TYPE.value}} {{f.INVOICE_TYPE.value == 'FREIGHT' ? '' :
+                'Local'}}</label>
             </div>
           </div>
         </div>
@@ -54,7 +55,8 @@
                 <ng-multiselect-dropdown (onSelectAll)="saveContainer($event,1)"
                   (onDeSelectAll)="saveContainer($event,2)" (onSelect)="saveContainer($event)"
                   (onDeSelect)="saveContainer($event)" #multiSelect [placeholder]="'Select Container'"
-                  [settings]="dropdownSettings" [formControl]="f.CONTAINER_LIST1" [data]="containerDropdownList">
+                  [settings]="dropdownSettings" [(ngModel)]="selectedItems" [formControl]="f.CONTAINER_LIST1"
+                  [data]="containerDropdownList">
                 </ng-multiselect-dropdown>
                 <label class="form-label-ddl">Container No<span class="text-danger"> *</span></label>
               </div>
@@ -199,8 +201,8 @@
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.AMOUNT}}</span>
           </td>
           <td> <input type="text" (keyup)="getTaxableAmount($event,i)"
-              [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('EXCHANE_RATE').errors}"
-              formControlName="EXCHANE_RATE" class="form-control3" />
+              [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('EXCHANGE_RATE').errors}"
+              formControlName="EXCHANGE_RATE" class="form-control3" />
           </td>
 
           <td class="text-end">

@@ -70,10 +70,18 @@ export class NewInvoice2Component implements OnInit {
       return;
     }
     this.closeBtn.nativeElement.click();
+
     localStorage.setItem('value', this.invoiceForm.get('radio').value);
+    localStorage.setItem('INVOICE_ID', '0');
     this.router.navigateByUrl(
       '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
     );
+  }
+
+  editInvoice(value: any, blNo: any, invoiceID: any) {
+    localStorage.setItem('value', value);
+    localStorage.setItem('INVOICE_ID', invoiceID);
+    this.router.navigateByUrl('/home/operations/invoice-list/' + blNo);
   }
 
   getInvoiceDetails(invoiceID: number) {
