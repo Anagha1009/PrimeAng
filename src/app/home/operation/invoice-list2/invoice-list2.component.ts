@@ -197,19 +197,19 @@ export class InvoiceList2Component implements OnInit {
         ID: [0],
         CHARGE_NAME: ['', Validators.required],
         EXCHANGE_RATE: ['', Validators.required],
-        QUANTITY: [0, Validators.required],
-        AMOUNT: [0, Validators.required],
+        QUANTITY: ['', Validators.required],
+        AMOUNT: ['', Validators.required],
         HSN_CODE: ['', Validators.required],
-        REQUESTED_AMOUNT: [0, Validators.required],
+        APPROVED_RATE: ['', Validators.required],
         CURRENCY: ['', Validators.required],
         EXEMPT_FLAG: ['', Validators.required],
         IS_SRRCHARGE: [false],
-        TAX: [''],
+        RATE_PER: [''],
         IGST: [''],
         SGST: [''],
         CGST: [''],
+        TAXABLE_AMOUNT: [''],
         TAX_AMOUNT: [''],
-        TAXAMNT: [''],
         TOTAL_AMOUNT: [''],
       })
     );
@@ -230,6 +230,7 @@ export class InvoiceList2Component implements OnInit {
       cl += element.CONTAINER_NO + ',';
     });
     this.listForm.get('CONTAINERS').setValue(cl);
+    console.log('form value', JSON.stringify(this.listForm.value));
     this._InvoiceService
       .InsertInvoice(JSON.stringify(this.listForm.value))
       .subscribe((res: any) => {
@@ -287,14 +288,15 @@ export class InvoiceList2Component implements OnInit {
           element.get('QUANTITY').value * element.get('APPROVED_RATE').value
         );
       element
-        .get('TAX_AMOUNT')
+        .get('TAXABLE_AMOUNT')
         .setValue(
           element.get('QUANTITY').value * element.get('APPROVED_RATE').value
         );
 
       var tax =
-        (element.get('TAX_AMOUNT').value * element.get('TAX').value) / 100;
-      element.get('TAXAMNT').setValue(tax);
+        (element.get('TAXABLE_AMOUNT').value * element.get('RATE_PER').value) /
+        100;
+      element.get('TAX_AMOUNT').setValue(tax);
       element
         .get('TOTAL_AMOUNT')
         .setValue(
@@ -313,7 +315,7 @@ export class InvoiceList2Component implements OnInit {
 
     add1
       .at(index)
-      .get('TAX_AMOUNT')
+      .get('TAXABLE_AMOUNT')
       .setValue(
         add1.at(index).get('QUANTITY').value *
           add1.at(index).get('APPROVED_RATE').value *
@@ -321,15 +323,15 @@ export class InvoiceList2Component implements OnInit {
       );
 
     var tax =
-      (add1.at(index).get('TAX_AMOUNT').value *
-        add1.at(index).get('TAX').value) /
+      (add1.at(index).get('TAXABLE_AMOUNT').value *
+        add1.at(index).get('RATE_PER').value) /
       100;
 
-    add1.at(index).get('TAXAMNT').setValue(tax);
+    add1.at(index).get('TAX_AMOUNT').setValue(tax);
     add1
       .at(index)
       .get('TOTAL_AMOUNT')
-      .setValue(add1.at(index).get('TAX_AMOUNT').value + tax);
+      .setValue(add1.at(index).get('TAXABLE_AMOUNT').value + tax);
   }
 
   Submit(BLNO: any) {
@@ -347,8 +349,9 @@ export class InvoiceList2Component implements OnInit {
       () => {
         this._InvoiceService.GetInvoiceBLDetails(BL).subscribe((res: any) => {
           if (res.ResponseCode == 200) {
-            alert('HI');
+            this.containerDropdownList = [];
             this.containerDropdownList = res.Data.CONTAINERS;
+            this.AddressList = [];
             this.AddressList = res.Data.BRANCH;
             this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_NAME);
             this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_ADDRESS1);
@@ -365,16 +368,15 @@ export class InvoiceList2Component implements OnInit {
                     APPROVED_RATE: [element.APPROVED_RATE],
                     AMOUNT: [element.APPROVED_RATE],
                     HSN_CODE: [element.HSN_CODE],
-                    REQUESTED_AMOUNT: [element.RATE_REQUESTED],
                     CURRENCY: [element.CURRENCY],
                     EXEMPT_FLAG: [element.EXEMPT_FLAG],
                     IS_SRRCHARGE: [true],
-                    TAX: [element.RATE],
+                    RATE_PER: [element.RATE],
                     IGST: [element.IGST],
                     SGST: [element.SGST],
                     CGST: [element.CGST],
-                    TAX_AMOUNT: [element.APPROVED_RATE],
-                    TAXAMNT: [(element.APPROVED_RATE * element.RATE) / 100],
+                    TAXABLE_AMOUNT: [element.APPROVED_RATE],
+                    TAX_AMOUNT: [(element.APPROVED_RATE * element.RATE) / 100],
                     TOTAL_AMOUNT: [''],
                     CHARGE_TYPE: [element.CHARGE_TYPE],
                   })
@@ -391,16 +393,15 @@ export class InvoiceList2Component implements OnInit {
                     APPROVED_RATE: [element.APPROVED_RATE],
                     AMOUNT: [element.APPROVED_RATE],
                     HSN_CODE: [element.HSN_CODE],
-                    REQUESTED_AMOUNT: [element.RATE_REQUESTED],
                     CURRENCY: [element.CURRENCY],
                     EXEMPT_FLAG: [element.EXEMPT_FLAG],
                     IS_SRRCHARGE: [true],
-                    TAX: [element.RATE],
+                    RATE_PER: [element.RATE],
                     IGST: [element.IGST],
                     SGST: [element.SGST],
                     CGST: [element.CGST],
-                    TAX_AMOUNT: [element.APPROVED_RATE],
-                    TAXAMNT: [(element.APPROVED_RATE * element.RATE) / 100],
+                    TAXABLE_AMOUNT: [element.APPROVED_RATE],
+                    TAX_AMOUNT: [(element.APPROVED_RATE * element.RATE) / 100],
                     TOTAL_AMOUNT: [''],
                     CHARGE_TYPE: [element.CHARGE_TYPE],
                   })
@@ -417,16 +418,15 @@ export class InvoiceList2Component implements OnInit {
                     APPROVED_RATE: [element.APPROVED_RATE],
                     AMOUNT: [element.APPROVED_RATE],
                     HSN_CODE: [element.HSN_CODE],
-                    REQUESTED_AMOUNT: [element.RATE_REQUESTED],
                     CURRENCY: [element.CURRENCY],
                     EXEMPT_FLAG: [element.EXEMPT_FLAG],
                     IS_SRRCHARGE: [true],
-                    TAX: [element.RATE],
+                    RATE_PER: [element.RATE],
                     IGST: [element.IGST],
                     SGST: [element.SGST],
                     CGST: [element.CGST],
-                    TAX_AMOUNT: [element.APPROVED_RATE],
-                    TAXAMNT: [(element.APPROVED_RATE * element.RATE) / 100],
+                    TAXABLE_AMOUNT: [element.APPROVED_RATE],
+                    TAX_AMOUNT: [(element.APPROVED_RATE * element.RATE) / 100],
                     TOTAL_AMOUNT: [''],
                     CHARGE_TYPE: [element.CHARGE_TYPE],
                   })
@@ -448,6 +448,7 @@ export class InvoiceList2Component implements OnInit {
         this._commonService.getUserOrgCode()
       )
       .subscribe((res: any) => {
+        console.log('getInvoiceDetailsNew', JSON.stringify(res));
         if (res.ResponseCode == 200) {
           this.listForm.patchValue(res.Data);
           this.listForm
@@ -481,6 +482,9 @@ export class InvoiceList2Component implements OnInit {
           res.Data.BL_LIST.forEach((element: any) => {
             add.push(this._formBuilder.group(element));
           });
+
+          this.AddressList = [];
+          this.AddressList = res.Data.BRANCH;
         }
       });
   }

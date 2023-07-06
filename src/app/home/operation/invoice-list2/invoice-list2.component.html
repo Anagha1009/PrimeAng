@@ -207,14 +207,15 @@
 
           <td class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX_AMOUNT').errors}"
-              formControlName="TAX_AMOUNT" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX_AMOUNT}}</span>
+              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAXABLE_AMOUNT').errors}"
+              formControlName="TAXABLE_AMOUNT" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAXABLE_AMOUNT}}</span>
           </td>
           <td class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX').errors}" formControlName="TAX" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX}}</span>
+              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('RATE_PER').errors}"
+              formControlName="RATE_PER" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.RATE_PER}}</span>
           </td>
           <!-- <td>
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
@@ -233,9 +234,9 @@
           </td>
           <td class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAXAMNT').errors}"
-              formControlName="TAXAMNT" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAXAMNT}}</span>
+              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX_AMOUNT').errors}"
+              formControlName="TAX_AMOUNT" />
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX_AMOUNT}}</span>
           </td>
           <td class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
