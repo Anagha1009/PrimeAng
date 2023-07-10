@@ -2,27 +2,57 @@
     <h2>Credit Note</h2>
 </div>
 <div class="container mt-4">
+    <form class="mx-5" [formGroup]="filterForm">
+        <div class="col-md-6 offset-md-6 text-end">
+            <button class="form-btn-primary" routerLink="/home/operations/new-credit-note"><i
+                    class="fa fa-plus me-1"></i>New
+                Credit Note</button>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label2">Credit Note No</label>
+                    <input formControlName="CREDIT_NO" type="text" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label2">From Date</label>
+                    <input formControlName="FROM_DATE" (change)="filterForm.get('TO_DATE')?.setValue('')"
+                        onkeypress="return false" type="date" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label2">To Date</label>
+                    <input formControlName="TO_DATE" onkeypress="return false"
+                        [min]="filterForm.get('FROM_DATE')?.value" type="date" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-3 mt-4">
+                <button class="form-btn me-2" (click)="Search()">Search</button>
+                <button class="form-btn-light" (click)="Clear()">Clear</button>
+            </div>
+        </div>
+    </form>
     <div class="table-responsive">
         <table class="ratetable" id="data-table-config">
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>Credit No</th>
                     <th>Invoice No</th>
-                    <th>Name</th>
-                    <th>BL No</th>
-                    <th>Invoice Date</th>
+                    <th>Created Date</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of creditList;let i = index">
                     <td>{{i +1}}</td>
+                    <td>{{item.CREDIT_NO}}</td>
                     <td>{{item.INVOICE_NO}}</td>
-                    <td>{{item.INVOICE_FOR}}</td>
-                    <td>{{item.BL_NO}}</td>
                     <td>{{item.CREATED_DATE | date:'mediumDate'}}</td>
                     <td><i class="fa fa-eye pointer"></i>
-                        <button class="d-none" #openBtn href="#invoiceModal" data-bs-toggle="modal"></button>
                     </td>
                 </tr>
             </tbody>

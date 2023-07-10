@@ -14,6 +14,7 @@ export class Bl {
   INVOICE_ID: number = 0;
   ORG_CODE: string = '';
   PORT: string = '';
+  CREDIT_NO: string = '';
 }
 
 export class MergeBl {
