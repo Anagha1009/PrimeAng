@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BlService } from 'src/app/services/bl.service';
 
 @Component({
   selector: 'app-credit-note',
@@ -7,11 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./credit-note.component.scss'],
 })
 export class CreditNoteComponent implements OnInit {
-  constructor(private _router: Router) {}
+  creditList: any[] = [];
+  constructor(private _router: Router, private blService: BlService) {}
 
   ngOnInit(): void {}
-
-  createCreditNote() {
-    this._router.navigateByUrl('/home/operations/new-credit-note');
-  }
 }

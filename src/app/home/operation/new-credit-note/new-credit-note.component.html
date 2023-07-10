@@ -78,42 +78,46 @@
                 <tr>
                     <th>No</th>
                     <th>Charge Name</th>
-                    <th>Collect Port</th>
-                    <th>Ex Rate</th>
-                    <th>Qty</th>
-                    <th>Rate</th>
                     <th>HSN</th>
-                    <th>Taxable Amount</th>
+                    <th>Qty</th>
+                    <th>Currency</th>
+                    <th>Ex Rate</th>
+                    <th>Rate</th>
+                    <th>Taxable Amnt</th>
+                    <th>Tax Amnt</th>
                     <th>IGST</th>
                     <th>SGST</th>
                     <th>CGST</th>
-                    <th>Tax Amount</th>
                     <th>Total Rate</th>
                     <th>Credit Note</th>
+                    <th>Remaining Credit</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of invoiceDetails?.BL_LIST;let i = index">
+                <tr *ngFor="let item of f;let i = index" [formGroup]="item">
                     <td>{{i + 1}}</td>
-                    <td>{{item.CHARGE_NAME}}</td>
-                    <td></td>
-                    <td>{{item.EXCHANGE_RATE}}</td>
-                    <td>{{item.QUANTITY}}</td>
-                    <td></td>
-                    <td>{{item.HSN_CODE}}</td>
-                    <td></td>
-                    <td>{{item.IGST}}</td>
-                    <td>{{item.SGST}}</td>
-                    <td>{{item.CGST}}</td>
-                    <td></td>
-                    <td></td>
-                    <td><input type="text" class="form-control3" /></td>
+                    <td>{{item.value.CHARGE_NAME}}</td>
+                    <td>{{item.value.HSN_CODE}}</td>
+                    <td>{{item.value.QUANTITY}}</td>
+                    <td>{{item.value.CURRENCY}}</td>
+                    <td>{{item.value.EXCHANGE_RATE}}</td>
+                    <td>{{item.value.RATE_PER}}</td>
+                    <td>{{item.value.TAXABLE_AMOUNT}}</td>
+                    <td>{{item.value.TAX_AMOUNT}}</td>
+                    <td>{{item.value.IGST}}</td>
+                    <td>{{item.value.SGST}}</td>
+                    <td>{{item.value.CGST}}</td>
+                    <td>{{item.value.TOTAL_AMOUNT}}</td>
+                    <td><input type="text" (change)="setRemainingCredit($event,i)"
+                            (keyup)="getRemainingCredit($event,i)" (keydown)="getRemainingCredit($event,i)"
+                            formControlName="CREDIT_AMOUNT" class="form-control3" /></td>
+                    <td>{{item.value.REMAINING_AMOUNT}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
     <hr>
     <div class="col-md-2 offset-md-10 my-4">
-        <button class="form-btn-primary">Create Credit Note</button>
+        <button class="form-btn-primary" (click)="createCreditNote()">Create Credit Note</button>
     </div>
 </div>

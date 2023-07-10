@@ -255,4 +255,29 @@ export class BlService {
       this.httpOptions
     );
   }
+
+  createCreditNote(bl: any) {
+    return this._http.post<any>(
+      this.BASE_URL + 'Invoice/InsertCreditNote',
+      bl,
+      this.httpOptions
+    );
+  }
+
+  getCreditNoteList(bl: any) {
+    return this._http.get<any>(
+      this.BASE_URL +
+        'Invoice/GetCreditList?FROM_DATE=' +
+        bl.FROM_DATE +
+        '&TO_DATE=' +
+        bl.TO_DATE +
+        '&PORT=' +
+        bl.PORT +
+        '&ORG_CODE=' +
+        bl.ORG_CODE +
+        '&CREDIT_NO=' +
+        bl.CREDIT_NO,
+      this.httpOptions
+    );
+  }
 }
