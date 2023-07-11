@@ -280,4 +280,17 @@ export class BlService {
       this.httpOptions
     );
   }
+
+  getCreditNoteDetails(creditNo: string, portcode: any, orgcode: any) {
+    return this._http.get<any>(
+      this.BASE_URL +
+        'Invoice/GetCreditNoteDetails?CREDIT_NO=' +
+        creditNo +
+        '&PORT=' +
+        portcode +
+        '&ORG_CODE=' +
+        orgcode,
+      this.httpOptions
+    );
+  }
 }

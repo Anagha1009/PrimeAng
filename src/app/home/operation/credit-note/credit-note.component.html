@@ -52,7 +52,7 @@
                     <td>{{item.CREDIT_NO}}</td>
                     <td>{{item.INVOICE_NO}}</td>
                     <td>{{item.CREATED_DATE | date:'mediumDate'}}</td>
-                    <td><i class="fa fa-eye pointer"></i>
+                    <td><i (click)="getCreditDetails(item.CREDIT_NO)" class="fa fa-eye pointer"></i>
                     </td>
                 </tr>
             </tbody>
