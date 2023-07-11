@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Bl } from 'src/app/models/bl';
@@ -18,6 +18,8 @@ export class ReceiptListComponent implements OnInit {
   isLoading: boolean = false;
   isLoading1: boolean = false;
   receiptType: any;
+
+  @ViewChild('closeBtn') closeBtn: ElementRef;
 
   constructor(
     private _router: Router,
@@ -82,5 +84,12 @@ export class ReceiptListComponent implements OnInit {
     //   }
     //   this._commonService.getDT();
     // });
+  }
+
+  goToNewReceipt() {
+    localStorage.removeItem('receiptType');
+    localStorage.setItem('receiptType', this.receiptType);
+    this._router.navigateByUrl('/home/operations/new-receipt');
+    this.closeBtn.nativeElement.click();
   }
 }

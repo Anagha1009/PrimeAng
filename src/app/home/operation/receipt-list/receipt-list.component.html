@@ -2,54 +2,35 @@
     <h2>Receipt List</h2>
 </div>
 <div class="container mt-4">
-    <form class="mx-5" [formGroup]="filterForm">
-        <div class="col-md-6 offset-md-6 text-end">
-            <button class="form-btn-primary" data-bs-toggle="modal" href="#receiptModal"><i
-                    class="fa fa-plus me-1"></i>New
-                Receipt</button>
-        </div>
-        <div class="row">
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label2">BL No</label>
-                    <input formControlName="CREDIT_NO" type="text" class="form-control2">
+    <div class="col-md-8 mx-auto">
+        <form class="" [formGroup]="filterForm">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="form-label2">BL No</label>
+                        <input formControlName="CREDIT_NO" type="text" class="form-control2">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="form-label2">Invoice No</label>
+                        <input formControlName="CREDIT_NO" type="text" class="form-control2">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="form-label2">Invoice Party</label>
+                        <input formControlName="CREDIT_NO" type="text" class="form-control2">
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="form-label2">Invoice No</label>
-                    <input formControlName="CREDIT_NO" type="text" class="form-control2">
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="form-label2">Invoice Party</label>
-                    <input formControlName="CREDIT_NO" type="text" class="form-control2">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label2">From Date</label>
-                    <input formControlName="FROM_DATE" (change)="filterForm.get('TO_DATE')?.setValue('')"
-                        onkeypress="return false" type="date" class="form-control2">
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="form-label2">To Date</label>
-                    <input formControlName="TO_DATE" onkeypress="return false"
-                        [min]="filterForm.get('FROM_DATE')?.value" type="date" class="form-control2">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-2 mb-4 offset-md-10">
-                <button class="form-btn me-2" (click)="Search()">Search</button>
-                <button class="form-btn-light" (click)="Clear()">Clear</button>
-            </div>
-        </div>
-    </form>
-    <div class="table-responsive">
+        </form>
+    </div>
+    <div class="col-md-4 mx-auto text-center">
+        <button class="form-btn w-100" data-bs-toggle="modal" href="#receiptModal">GET
+            RECEIPTS</button>
+    </div>
+    <div class="table-responsive mt-4">
         <table class="ratetable" id="data-table-config">
             <thead>
                 <tr>
@@ -85,7 +66,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">New Receipt</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn3></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -109,7 +90,7 @@
             </div>
             <div class="modal-footer">
                 <div class="col-md-6 mx-auto">
-                    <button type="button" class="form-btn-primary w-100">New Receipt</button>
+                    <button type="button" (click)="goToNewReceipt()" class="form-btn-primary w-100">New Receipt</button>
                 </div>
             </div>
         </div>
