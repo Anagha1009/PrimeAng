@@ -1,0 +1,117 @@
+<div class="section-title pt-3">
+    <h2>Receipt List</h2>
+</div>
+<div class="container mt-4">
+    <form class="mx-5" [formGroup]="filterForm">
+        <div class="col-md-6 offset-md-6 text-end">
+            <button class="form-btn-primary" data-bs-toggle="modal" href="#receiptModal"><i
+                    class="fa fa-plus me-1"></i>New
+                Receipt</button>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label2">BL No</label>
+                    <input formControlName="CREDIT_NO" type="text" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label2">Invoice No</label>
+                    <input formControlName="CREDIT_NO" type="text" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label2">Invoice Party</label>
+                    <input formControlName="CREDIT_NO" type="text" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label2">From Date</label>
+                    <input formControlName="FROM_DATE" (change)="filterForm.get('TO_DATE')?.setValue('')"
+                        onkeypress="return false" type="date" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label2">To Date</label>
+                    <input formControlName="TO_DATE" onkeypress="return false"
+                        [min]="filterForm.get('FROM_DATE')?.value" type="date" class="form-control2">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 mb-4 offset-md-10">
+                <button class="form-btn me-2" (click)="Search()">Search</button>
+                <button class="form-btn-light" (click)="Clear()">Clear</button>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table class="ratetable" id="data-table-config">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Receipt No</th>
+                    <th>BL No</th>
+                    <th>Vessel</th>
+                    <th>Shipper</th>
+                    <th>Consignee</th>
+                    <th>Invoice No</th>
+                    <th>Invoice Date</th>
+                    <th>Invoice Party</th>
+                    <th>Invoice Amount</th>
+                    <th>Outstanding Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of receiptList;let i = index">
+                    <!-- <td>{{i +1}}</td>
+                    <td>{{item.CREDIT_NO}}</td>
+                    <td>{{item.INVOICE_NO}}</td>
+                    <td>{{item.CREATED_DATE | date:'mediumDate'}}</td>
+                    <td><i (click)="getCreditDetails(item.CREDIT_NO)" class="fa fa-eye pointer"></i>
+                    </td> -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New Receipt</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn3></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8 text-center mx-auto mt-2">
+                        <div class="form-group">
+                            <label class="d-block mb-3">Select Receipt Type<span class="text-danger">
+                                    *</span></label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" [(ngModel)]="receiptType" type="radio"
+                                    name="RECEIPT_TYPE" id="inlineRadio1" value="Bank">
+                                <label class="form-check-label" for="inlineRadio1">Bank</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" [(ngModel)]="receiptType" type="radio"
+                                    name="RECEIPT_TYPE" id="inlineRadio2" value="Cash">
+                                <label class="form-check-label" for="inlineRadio2">Cash</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-6 mx-auto">
+                    <button type="button" class="form-btn-primary w-100">New Receipt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

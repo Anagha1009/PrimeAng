@@ -29,6 +29,7 @@ import { NewInvoice2Component } from './new-invoice2/new-invoice2.component';
 import { InvoiceList2Component } from './invoice-list2/invoice-list2.component';
 import { CreditNoteComponent } from './credit-note/credit-note.component';
 import { NewCreditNoteComponent } from './new-credit-note/new-credit-note.component';
+import { ReceiptListComponent } from './receipt-list/receipt-list.component';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { NewCreditNoteComponent } from './new-credit-note/new-credit-note.compon
     InvoiceList2Component,
     CreditNoteComponent,
     NewCreditNoteComponent,
+    ReceiptListComponent,
 
   ],
   imports: [

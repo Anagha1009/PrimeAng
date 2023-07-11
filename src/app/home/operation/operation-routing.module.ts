@@ -22,6 +22,7 @@ import { NewInvoice2Component } from './new-invoice2/new-invoice2.component';
 import { InvoiceList2Component } from './invoice-list2/invoice-list2.component';
 import { CreditNoteComponent } from './credit-note/credit-note.component';
 import { NewCreditNoteComponent } from './new-credit-note/new-credit-note.component';
+import { ReceiptListComponent } from './receipt-list/receipt-list.component';
 
 const routes: Routes = [
   {
@@ -135,6 +136,12 @@ const routes: Routes = [
   {
     path: 'new-credit-note',
     component: NewCreditNoteComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Agent] },
+  },
+  {
+    path: 'receipt-list',
+    component: ReceiptListComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Agent] },
   },
