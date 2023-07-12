@@ -1,4 +1,4 @@
-<div class="section-title pt-3">
+<div class="section-title">
     <h2>New Receipt</h2>
 </div>
 <div class="container">
@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="col-md-6 offset-md-6 text-end">
-        <button class="form-btn me-2">Add Row</button>
+        <button class="form-btn">Add Row</button>
     </div>
     <h6>Bank List</h6>
     <div class="table-responsive">
@@ -92,6 +92,7 @@
                     <th>Invoice Amount</th>
                     <th>Outstanding Amount</th>
                     <th>Amount Received</th>
+                    <th>#</th>
                 </tr>
             </thead>
             <tbody>
@@ -106,8 +107,38 @@
                     <td>Invoice Amount</td>
                     <td>Outstanding Amount</td>
                     <td><input type="text" class="form-control3" /></td>
+                    <td><span class="pointer fs-5 fw-bolder">...</span></td>
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div class="col-md-10 mx-auto">
+        <div class="table-responsive">
+            <table class="ratetable subtable table-bordered">
+                <thead>
+                    <tr class="bg-light">
+                        <th>No</th>
+                        <th>Charge Name</th>
+                        <th>Invoice Amount (INR)</th>
+                        <th>Receipt Collected (INR)</th>
+                        <th>Outstanding Amount (INR)</th>
+                        <th>Receipt Amount (INR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>No</td>
+                        <td>Charge Name</td>
+                        <td>Invoice Amount (INR)</td>
+                        <td>Receipt Collected (INR)</td>
+                        <td>Outstanding Amount (INR)</td>
+                        <td><input type="text" class="form-control3" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-2 offset-md-10 text-end mb-4">
+        <button class="form-btn w-100">Submit</button>
     </div>
 </div>

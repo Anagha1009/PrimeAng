@@ -5,3 +5,18 @@
 .ratetable tbody td {
   padding: 10px;
 }
+
+.subtable thead th {
+  padding: 6px;
+  font-size: 10px;
+  color: black;
+}
+
+.subtable tbody td {
+  padding: 6px;
+  font-size: 10px;
+}
+
+.subtable {
+  border: 1px solid;
+}

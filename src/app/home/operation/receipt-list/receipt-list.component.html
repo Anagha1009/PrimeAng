@@ -1,61 +1,60 @@
-<div class="section-title pt-3">
+<div class="section-title">
     <h2>Receipt List</h2>
 </div>
 <div class="container mt-4">
-    <div class="col-md-8 mx-auto">
-        <form class="" [formGroup]="filterForm">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="form-label2">BL No</label>
-                        <input formControlName="CREDIT_NO" type="text" class="form-control2">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="form-label2">Invoice No</label>
-                        <input formControlName="CREDIT_NO" type="text" class="form-control2">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="form-label2">Invoice Party</label>
-                        <input formControlName="CREDIT_NO" type="text" class="form-control2">
-                    </div>
+    <form class="mx-5" [formGroup]="filterForm">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label2">BL No</label>
+                    <input formControlName="BL_NO" type="text" class="form-control2">
                 </div>
             </div>
-        </form>
-    </div>
-    <div class="col-md-4 mx-auto text-center">
-        <button class="form-btn w-100" data-bs-toggle="modal" href="#receiptModal">GET
-            RECEIPTS</button>
-    </div>
-    <div class="table-responsive mt-4">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label2">Invoice No</label>
+                    <input formControlName="CREDIT_NO" type="text" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-label2">Invoice Party</label>
+                    <input formControlName="CREDIT_NO" type="text" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-3 mt-4">
+                <button class="form-btn me-2" (click)="Search()">Get Invoices</button>
+                <button class="form-btn-light" (click)="Clear()">Clear</button>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive">
         <table class="ratetable" id="data-table-config">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Receipt No</th>
-                    <th>BL No</th>
-                    <th>Vessel</th>
-                    <th>Shipper</th>
-                    <th>Consignee</th>
                     <th>Invoice No</th>
-                    <th>Invoice Date</th>
-                    <th>Invoice Party</th>
-                    <th>Invoice Amount</th>
-                    <th>Outstanding Amount</th>
+                    <th>Type</th>
+                    <th>Bill To</th>
+                    <th>BL No</th>
+                    <th>Shipper Name</th>
+                    <th>Bill From</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of receiptList;let i = index">
-                    <!-- <td>{{i +1}}</td>
-                    <td>{{item.CREDIT_NO}}</td>
+                <tr *ngFor="let item of invoiceList;let i = index">
+                    <td>{{i +1}}</td>
                     <td>{{item.INVOICE_NO}}</td>
-                    <td>{{item.CREATED_DATE | date:'mediumDate'}}</td>
-                    <td><i (click)="getCreditDetails(item.CREDIT_NO)" class="fa fa-eye pointer"></i>
-                    </td> -->
+                    <td>{{item.INVOICE_TYPE}}</td>
+                    <td>{{item.BILL_TO}}</td>
+                    <td>{{item.BL_NO}}</td>
+                    <td>{{item.SHIPPER_NAME}}</td>
+                    <td class="text-truncate">{{item.BILL_FROM}} ...</td>
+                    <td>
+                        <button class="form-btn btn-sm" data-bs-toggle="modal" href="#receiptModal">
+                            Receipt</button>
+                    </td>
                 </tr>
             </tbody>
         </table>

@@ -11,7 +11,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./receipt-list.component.scss'],
 })
 export class ReceiptListComponent implements OnInit {
-  receiptList: any[] = [];
+  invoiceList: any[] = [];
   creditDetails: any;
   bl = new Bl();
   filterForm: FormGroup;
@@ -30,31 +30,32 @@ export class ReceiptListComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterForm = this._formBuilder.group({
+      BL_NO: [''],
       INVOICE_NO: [''],
       CREDIT_NO: [''],
       FROM_DATE: [''],
       TO_DATE: [''],
     });
 
-    this.getCreditList();
+    this._commonService.getDT();
   }
 
   Search() {
-    var CREDIT_NO = this.filterForm.value.CRO_NO;
+    var BL_NO = this.filterForm.value.BL_NO;
     var FROM_DATE = this.filterForm.value.FROM_DATE;
     var TO_DATE = this.filterForm.value.TO_DATE;
 
-    if (CREDIT_NO == '' && FROM_DATE == '' && TO_DATE == '') {
+    if (BL_NO == '' && FROM_DATE == '' && TO_DATE == '') {
       alert('Please enter atleast one filter to search !');
       return;
     }
 
-    this.bl.CREDIT_NO = CREDIT_NO;
+    this.bl.BL_NO = BL_NO;
     this.bl.FROM_DATE = FROM_DATE;
     this.bl.TO_DATE = TO_DATE;
 
     this.isLoading = true;
-    this.getCreditList();
+    this.getInvoiceList();
   }
 
   Clear() {
@@ -67,23 +68,22 @@ export class ReceiptListComponent implements OnInit {
     this.bl.TO_DATE = '';
 
     this.isLoading1 = true;
-    this.getCreditList();
+    this.getInvoiceList();
   }
 
-  getCreditList() {
+  getInvoiceList() {
     this.bl.AGENT_CODE = this._commonService.getUserCode();
     this.bl.ORG_CODE = this._commonService.getUserOrgCode();
     this.bl.PORT = this._commonService.getUserPort();
     this._commonService.destroyDT();
-    this._commonService.getDT();
-    // this.blService.getCreditNoteList(this.bl).subscribe((res: any) => {
-    //   this.isLoading = false;
-    //   this.isLoading1 = false;
-    //   if (res.ResponseCode == 200) {
-    //     this.receiptList = res.Data;
-    //   }
-    //   this._commonService.getDT();
-    // });
+    this.blService.getInvoiceListNew(this.bl).subscribe((res: any) => {
+      this.isLoading = false;
+      this.isLoading1 = false;
+      if (res.ResponseCode == 200) {
+        this.invoiceList = res.Data;
+      }
+      this._commonService.getDT();
+    });
   }
 
   goToNewReceipt() {
