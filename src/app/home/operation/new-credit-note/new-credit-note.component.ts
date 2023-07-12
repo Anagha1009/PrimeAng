@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { createHash } from 'crypto';
 import { Bl } from 'src/app/models/bl';
 import { BlService } from 'src/app/services/bl.service';
 import { CommonService } from 'src/app/services/common.service';
@@ -34,6 +35,7 @@ export class NewCreditNoteComponent implements OnInit {
 
     this.creditNote = this._formBuilder.group({
       CREDIT_NOTES: new FormArray([]),
+      CREDIT_NOTES1: new FormArray([]),
     });
 
     this._commonService.getDT();
@@ -84,17 +86,58 @@ export class NewCreditNoteComponent implements OnInit {
           this.invoiceDetails = res.Data;
 
           const add = this.creditNote.get('CREDIT_NOTES') as FormArray;
+          const add1 = this.creditNote.get('CREDIT_NOTES1') as FormArray;
 
           res.Data.BL_LIST.forEach((element: any) => {
             add.push(this._formBuilder.group(element));
+            add1.push(this._formBuilder.group(element));
           });
         }
         this._commonService.getDT();
       });
   }
 
+  checkAll(event: any) {
+    const add = this.creditNote.get('CREDIT_NOTES') as FormArray;
+    const add1 = this.creditNote.get('CREDIT_NOTES1') as FormArray;
+    if (event.target.checked) {
+      add.clear();
+      add1.controls.forEach((control) => {
+        add.push(control);
+      });
+    } else {
+      add.clear();
+    }
+
+    for (var i: number = 0; i < this.f1?.length; i++) {
+      (document.getElementById('chck' + i) as HTMLInputElement).checked =
+        event.target.checked;
+    }
+  }
+
+  checkItem(item: any, event: any) {
+    const add = this.creditNote.get('CREDIT_NOTES') as FormArray;
+    if (event.target.checked) {
+      add.push(item);
+    } else {
+      add.removeAt(
+        add.value.findIndex(
+          (m: { CHARGE_NAME: any }) => m.CHARGE_NAME === item.value.CHARGE_NAME
+        )
+      );
+    }
+
+    (document.getElementById('chckAll') as HTMLInputElement).checked =
+      this.f.length == this.f1.length ? true : false;
+  }
+
   get f() {
     const add = this.creditNote.get('CREDIT_NOTES') as FormArray;
+    return add.controls;
+  }
+
+  get f1() {
+    const add = this.creditNote.get('CREDIT_NOTES1') as FormArray;
     return add.controls;
   }
 
@@ -133,6 +176,12 @@ export class NewCreditNoteComponent implements OnInit {
   createCreditNote() {
     var creditNoteList = this.creditNote.get('CREDIT_NOTES') as FormArray;
     var creditNo = this._commonService.getRandomNumber('CN');
+
+    if (creditNoteList.length == 0) {
+      this._commonService.warnMsg('Please select atleast 1 Charge !');
+      return;
+    }
+
     creditNoteList.controls.forEach((element) => {
       element.get('CREDIT_NO').setValue(creditNo);
       element.get('AGENT_CODE').setValue(this._commonService.getUserCode());

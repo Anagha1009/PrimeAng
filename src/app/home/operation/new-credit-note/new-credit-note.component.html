@@ -76,7 +76,10 @@
         <table class="ratetable" id="data-table-config">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th><label *ngIf="f1?.length > 0" class="checkbox-wrap checkbox-primary me-2">
+                            <input type="checkbox" checked (change)="checkAll($event)" id="chckAll">
+                            <span class="checkmark" style="top:-8px"></span>
+                        </label></th>
                     <th>Charge Name</th>
                     <th>HSN</th>
                     <th>Qty</th>
@@ -94,8 +97,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of f;let i = index" [formGroup]="item">
-                    <td>{{i + 1}}</td>
+                <tr class="alert" role="alert" *ngFor="let item of f1;let i = index" [formGroup]="item">
+                    <td><label class="checkbox-wrap checkbox-primary me-2">
+                            <input type="checkbox" (change)="checkItem(item,$event)" checked id="chck{{i}}">
+                            <span class="checkmark"></span>
+                        </label></td>
                     <td>{{item.value.CHARGE_NAME}}</td>
                     <td>{{item.value.HSN_CODE}}</td>
                     <td>{{item.value.QUANTITY}}</td>
