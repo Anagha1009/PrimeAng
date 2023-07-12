@@ -18,7 +18,9 @@ export class ReceiptListComponent implements OnInit {
   isLoading: boolean = false;
   isLoading1: boolean = false;
   receiptType: any;
+  invoiceNo: any;
 
+  @ViewChild('openBtn') openBtn: ElementRef;
   @ViewChild('closeBtn') closeBtn: ElementRef;
 
   constructor(
@@ -86,10 +88,17 @@ export class ReceiptListComponent implements OnInit {
     });
   }
 
+  openModal(invoiceNo: any) {
+    this.invoiceNo = invoiceNo;
+    this.openBtn.nativeElement.click();
+  }
+
   goToNewReceipt() {
     localStorage.removeItem('receiptType');
     localStorage.setItem('receiptType', this.receiptType);
-    this._router.navigateByUrl('/home/operations/new-receipt');
+    this._router.navigateByUrl(
+      '/home/operations/new-receipt/' + this.invoiceNo
+    );
     this.closeBtn.nativeElement.click();
   }
 }

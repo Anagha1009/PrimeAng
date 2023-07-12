@@ -293,4 +293,21 @@ export class BlService {
       this.httpOptions
     );
   }
+
+  getInvoiceDetailsForReceipt(
+    invoiceNo: string,
+    port: string,
+    orgcode: string
+  ) {
+    return this._http.get<any>(
+      this.BASE_URL +
+        'Invoice/GetInvoiceDetailsForReceipt?INVOICE_NO=' +
+        invoiceNo +
+        '&PORT=' +
+        port +
+        '&ORG_CODE=' +
+        orgcode,
+      this.httpOptions
+    );
+  }
 }

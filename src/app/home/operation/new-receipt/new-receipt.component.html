@@ -2,30 +2,32 @@
     <h2>New Receipt</h2>
 </div>
 <div class="container">
-    <div class="col-md-10 mx-auto my-4">
-        <div class="card">
-            <div class="card-body" [formGroup]="receiptForm">
+    <div class="col-md-10 mx-auto my-4 ">
+        <div class="services pb-0">
+            <div class="icon-box icon-box-cyan text-start" [formGroup]="receiptForm">
                 <div class="row">
                     <div class="col-md-3">
                         <label class="label-header">Invoice No</label>
-                        <label class="label-subheader">454654564654</label>
+                        <label class="label-subheader">{{invoiceDetails?.INVOICE_NO}}</label>
                     </div>
                     <div class="col-md-3">
                         <label class="label-header">Invoice Party</label>
-                        <label class="label-subheader">dfdgdg</label>
+                        <label class="label-subheader">{{invoiceDetails?.BILL_TO}}</label>
                     </div>
                     <div class="col-md-3">
                         <label class="label-header">Received From</label>
-                        <label class="label-subheader">56565
+                        <label class="label-subheader">-
                         </label>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="label-header">Deposit Cash/Bank</label>
-                        <label class="label-subheader">gbg</label>
                     </div>
                 </div>
                 <div class="row mt-4">
-                    <div class="col-md-4 mt-4">
+                    <div class="col-md-3 mt-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" />
+                            <label class="form-label">Deposit Cash/Bank</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-4">
                         <div class="form-group">
                             <ng-select formControlName="BL_NO">
                                 <ng-option value="">--Select--</ng-option>
@@ -60,20 +62,24 @@
                     <th>Deposit Date</th>
                     <th>INS. Amount</th>
                     <th>Bank Location</th>
-                    <th>Pay Indicator</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>No</td>
-                    <td>INS. Type</td>
-                    <td>Bank Name</td>
-                    <td>INS. No</td>
-                    <td>INS. Date</td>
-                    <td>Deposit Date</td>
-                    <td>INS. Amount</td>
+                <tr *ngFor="let item of f1;let i = index" [formGroup]="item">
+                    <td>{{i+1}}</td>
+                    <td><select formControlName="INS_TYPE" class="form-control3">
+                            <option value="">--Select--</option>
+                            <option value="RTGS">RTGS</option>
+                            <option value="NEFT">NEFT</option>
+                            <option value="DD">DD</option>
+                            <option value="Cash">Cash</option>
+                        </select></td>
+                    <td>{{item.value.BANK_NAME}}</td>
+                    <td><input type="text" formControlName="INS_NO" class="form-control3" /></td>
+                    <td><input type="date" formControlName="INS_DATE" class="form-control3" /></td>
+                    <td><input type="date" formControlName="DEPOSIT_DATE" class="form-control3" /></td>
+                    <td><input type="text" formControlName="INS_AMOUNT" class="form-control3" /></td>
                     <td>Bank Location</td>
-                    <td>Pay Indicator</td>
                 </tr>
             </tbody>
         </table>
@@ -82,57 +88,59 @@
         <table class="ratetable table-bordered">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>Principal</th>
-                    <th>Vessel</th>
-                    <th>BL Shipper</th>
-                    <th>TAN No</th>
-                    <th>BL No</th>
-                    <th>Invoice No</th>
-                    <th>Invoice Amount</th>
-                    <th>Outstanding Amount</th>
-                    <th>Amount Received</th>
-                    <th>#</th>
+                    <th width="1%">No</th>
+                    <th width="10%">Principal</th>
+                    <th width="10%">Vessel</th>
+                    <th width="15%">BL Shipper</th>
+                    <th width="10%">TAN No</th>
+                    <th width="10%">BL No</th>
+                    <th width="10%">Inv No</th>
+                    <th width="10%">Inv Amount</th>
+                    <th width="10%">Outstanding</th>
+                    <th width="10%">Received</th>
+                    <th width="4%">#</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>No</td>
-                    <td>Principal</td>
-                    <td>Vessel</td>
-                    <td>BL Shipper</td>
-                    <td>TAN No</td>
-                    <td>BL No</td>
-                    <td>Invoice No</td>
-                    <td>Invoice Amount</td>
-                    <td>Outstanding Amount</td>
-                    <td><input type="text" class="form-control3" /></td>
-                    <td><span class="pointer fs-5 fw-bolder">...</span></td>
+                    <td width="1%">1</td>
+                    <td width="10%">Prime Maritime</td>
+                    <td width="10%">{{invoiceDetails?.VESSEL_NAME}} / {{invoiceDetails?.VOYAGE_NO}}</td>
+                    <td width="15%">{{invoiceDetails?.SHIPPER}}</td>
+                    <td width="10%">{{invoiceDetails?.TAN_NO == '' ? '-' : invoiceDetails?.TAN_NO == null ? '-' :
+                        invoiceDetails?.TAN_NO}}
+                    </td>
+                    <td width="10%">{{invoiceDetails?.BL_NO}}</td>
+                    <td width="10%">{{invoiceDetails?.INVOICE_NO}}</td>
+                    <td width="10%">INR {{invoiceDetails?.TOTAL_AMOUNT}}</td>
+                    <td width="10%"><input type="text" class="form-control3" /></td>
+                    <td width="10%"><input type="text" class="form-control3" /></td>
+                    <td width="4%"><span class="pointer fs-5 fw-bolder">...</span></td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div class="col-md-10 mx-auto">
+    <div class="col-lg-10 mx-auto">
         <div class="table-responsive">
-            <table class="ratetable subtable table-bordered">
+            <table class="ratetable subtable">
                 <thead>
                     <tr class="bg-light">
-                        <th>No</th>
-                        <th>Charge Name</th>
-                        <th>Invoice Amount (INR)</th>
-                        <th>Receipt Collected (INR)</th>
-                        <th>Outstanding Amount (INR)</th>
-                        <th>Receipt Amount (INR)</th>
+                        <th width="1%">No</th>
+                        <th width="30%">Charge Name</th>
+                        <th width="24%">Invoice Amount (INR)</th>
+                        <th width="15%">Receipt Collected (INR)</th>
+                        <th width="15%">Outstanding Amount (INR)</th>
+                        <th width="15%">Receipt Amount (INR)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>No</td>
-                        <td>Charge Name</td>
-                        <td>Invoice Amount (INR)</td>
-                        <td>Receipt Collected (INR)</td>
-                        <td>Outstanding Amount (INR)</td>
-                        <td><input type="text" class="form-control3" /></td>
+                    <tr *ngFor="let item of f2;let i = index" [formGroup]="item">
+                        <td width="1%">{{i+1}}</td>
+                        <td width="30%">{{item.value.CHARGE_NAME}}</td>
+                        <td width="24%">{{item.value.TOTAL_AMOUNT}}</td>
+                        <td width="15%"><input type="text" class="form-control3" /></td>
+                        <td width="15%"><input type="text" class="form-control3" /></td>
+                        <td width="15%"><input type="text" class="form-control3" /></td>
                     </tr>
                 </tbody>
             </table>

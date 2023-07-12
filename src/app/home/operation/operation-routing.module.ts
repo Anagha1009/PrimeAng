@@ -147,7 +147,7 @@ const routes: Routes = [
     data: { roles: [Role.Agent] },
   },
   {
-    path: 'new-receipt',
+    path: 'new-receipt/:INVOICE_NO',
     component: NewReceiptComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Agent] },

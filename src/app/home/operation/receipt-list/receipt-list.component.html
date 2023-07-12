@@ -52,7 +52,9 @@
                     <td>{{item.SHIPPER_NAME}}</td>
                     <td class="text-truncate">{{item.BILL_FROM}} ...</td>
                     <td>
-                        <button class="form-btn btn-sm" data-bs-toggle="modal" href="#receiptModal">
+                        <button class="form-btn btn-sm" (click)="openModal(item.INVOICE_NO)">
+                            Receipt</button>
+                        <button class="form-btn btn-sm d-none" #openBtn data-bs-toggle="modal" href="#receiptModal">
                             Receipt</button>
                     </td>
                 </tr>
