@@ -63,10 +63,11 @@
             <i class="fa fa-eye me-2 pointer fs-6" tooltip="View" placement="top"></i>
             <i class="fa fa-file-pdf-o pointer text-danger fs-6" (click)="getInvoiceDetails(item.INVOICE_ID)"
               tooltip="Download PDF" placement="top"></i>
-            <i (click)="finalizeInvoice(item.INVOICE_ID)" *ngIf="item.STATUS == 'PROFORMA'" tooltip="Finalize"
-              placement="top" class="fs-6 ms-2 bx bxs-check-circle text-success pointer"></i>
-            <i (click)="editInvoice(item.INVOICE_TYPE,item.BL_NO,item.INVOICE_ID)" *ngIf="item.STATUS == 'PROFORMA'"
+              <i (click)="editInvoice(item.INVOICE_TYPE,item.BL_NO,item.INVOICE_ID)" *ngIf="item.STATUS == 'PROFORMA'"
               tooltip="Edit" placement="top" class="fs-6 ms-2 bx bx-pencil text-info pointer"></i>
+            <i (click)="finalizeInvoice(item.INVOICE_ID,item.INVOICE_TYPE)" *ngIf="item.STATUS == 'PROFORMA'" tooltip="Finalize"
+              placement="top" class="fs-6 ms-2 bx bxs-check-circle text-success pointer"></i>
+           
           </td>
         </tr>
       </tbody>
@@ -86,6 +87,7 @@
                 <label class="form-label2">BL No</label>
                 <input formControlName="BL_NO" [ngClass]="{'invalid':submitted && f.BL_NO.errors}"
                   class="form-control2" />
+              <small *ngIf="submitted && f.BL_NO.errors" class="text-danger">BL NO is required</small>
               </div>
               <label class="mb-2">Invoice Type</label>
               <div class="row">
@@ -108,7 +110,13 @@
                   </div>
                 </div>
               </div>
-              <small *ngIf="submitted && f.radio.errors" class="text-danger">This is required</small>
+              <!-- <div class="row">
+                  <div class="form-group">
+                    <input type="radio" value="Damage_container" formControlName="radio">
+                    <label class="ms-2">Damage Container</label>
+                </div>
+              </div> -->
+              <small *ngIf="submitted && f.radio.errors" class="text-danger">Invoice type is required</small>
             </form>
             <div class="col-md-6 offset-md-6 text-end">
               <button class="form-btn-primary" (click)="Submit()"> Submit </button>

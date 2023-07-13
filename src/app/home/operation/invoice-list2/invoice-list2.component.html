@@ -22,7 +22,8 @@
           <div class="col-md-3">
             <div class="form-group">
               <label class="label-header">Payment Term</label>
-              <label class="label-subheader">Prepaid</label>
+              <label *ngIf="POL" class="label-subheader">Prepaid</label>
+              <label *ngIf="!POL" class="label-subheader">collect</label>
             </div>
           </div>
           <div class="col-md-3">
@@ -47,6 +48,7 @@
                 <ng-option *ngFor="let item of BillFromList" value="{{item.CODE}}">{{item.CODE}}</ng-option>
               </ng-select>
               <label class="form-label-ddl">Bill To<span class="text-danger"> *</span></label>
+              <small *ngIf="submitted && f.BILL_TO.errors" class="text-danger">Bill To is required</small>
             </div>
           </div>
           <div class="col-md-3">
@@ -59,6 +61,7 @@
                   [data]="containerDropdownList">
                 </ng-multiselect-dropdown>
                 <label class="form-label-ddl">Container No<span class="text-danger"> *</span></label>
+                <small *ngIf="submitted && f.CONTAINER_LIST1.errors" class="text-danger">Please select container</small>
               </div>
             </form>
           </div>
@@ -100,9 +103,9 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr (click)="getAddress(item.ADDRESS,item.BRANCH_ID)"
+                            <tr
                               *ngFor="let item of AddressList let i = index">
-                              <td width="1%"><input type="checkbox"></td>
+                              <td width="1%"><input (click)="getAddress(item.ADDRESS,item.BRANCH_ID,item.IS_TAX_APPLICABLE,$event)" type="checkbox"></td>
                               <td width="10%">{{i + 1}}</td>
                               <td width="20%">{{item.CUST_NAME}}</td>
                               <td width="10%">{{item.BRANCH_NAME}}</td>
@@ -121,6 +124,7 @@
                         </table>
                       </div>
                     </ul>
+                    <small *ngIf="submitted && f.ADDRESS.errors" class="text-danger">Please select address</small>
                   </li>
                 </ul>
               </nav>
@@ -165,6 +169,8 @@
               <option *ngFor="let item of ChargeMasterList" value="{{item.CODE}}">{{item.CODE}}</option>
             </select>
             <span *ngIf="item.value.IS_SRRCHARGE">{{item.value.CHARGE_NAME}}</span>
+            <div *ngIf=" submitted && f.BL_LIST.controls[i].get('CHARGE_NAME').errors" class="invalid-feedback">Charge Code is required </div>
+
           </td>
           <td>
             <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
@@ -179,6 +185,7 @@
               [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('QUANTITY').errors}"
               formControlName="QUANTITY" class="form-control3" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.QUANTITY}}</span>
+            <div *ngIf=" submitted && f.BL_LIST.controls[i].get('QUANTITY').errors" class="invalid-feedback">Quantity is required </div>
           </td>
           <td>
             <select class="form-control3" *ngIf="item.value.IS_SRRCHARGE != '1'" formControlName="CURRENCY"
@@ -187,6 +194,7 @@
               <option *ngFor="let item of CurrencyList" value="{{item.CODE}}">{{item.CODE}}</option>
             </select>
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CURRENCY}}</span>
+            <div *ngIf=" submitted && f.BL_LIST.controls[i].get('CURRENCY').errors" class="invalid-feedback">Currency is required </div>
           </td>
           <td class="text-end">
             <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
@@ -252,8 +260,11 @@
     </table>
   </div>
   <div class="col-md-2 offset-md-10 my-4 text-end">
-    <button (click)="SubmitList()" class="form-btn w-100">
+    <button *ngIf="!isUpdate" (click)="SubmitList()" class="form-btn w-100">
       Save As Draft
+    </button>
+    <button *ngIf="isUpdate" (click)="SubmitList()" class="form-btn w-100">
+      Finalize
     </button>
   </div>
 </div>

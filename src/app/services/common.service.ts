@@ -290,6 +290,12 @@ export class CommonService {
 
     return true;
   }
+  getRandomInvoiceNumber(prefix: string) {
+    var d: any = new Date();
+    var year = d.getFullYear() 
+    var num = Math.floor((Math.random() * 9000) + 1000)
+    return prefix + year + '/' + 'S' + num;
+  }
 
 
 }
