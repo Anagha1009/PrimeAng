@@ -37,11 +37,11 @@
       <thead>
         <tr>
           <th width="1%">No</th>
-          <th width="5%">Invoice No</th>
+          <th width="10%">Invoice No</th>
           <th width="10%">Type</th>
           <th width="10%">Bill To</th>
           <th width="10%">BL No</th>
-          <th width="15%">Shipper Name</th>
+          <th width="10%">Shipper Name</th>
           <th width="20%">Bill From</th>
           <th width="15%">Status</th>
           <th width="14%">Action</th>
@@ -50,11 +50,11 @@
       <tbody>
         <tr *ngFor="let item of invoiceList let i = index">
           <td width="1%">{{i +1}}</td>
-          <td width="5%">{{item.INVOICE_NO}}</td>
+          <td width="10%">{{item.INVOICE_NO}}</td>
           <td width="10%">{{item.INVOICE_TYPE}}</td>
           <td width="10%">{{item.BILL_TO}}</td>
           <td width="10%">{{item.BL_NO}}</td>
-          <td width="15%">{{item.SHIPPER_NAME}}</td>
+          <td width="10%">{{item.SHIPPER_NAME}}</td>
           <td width="20%" class="text-truncate">{{item.BILL_FROM}} ...</td>
           <td width="15%" class="status"><span
               [class]="item.STATUS == 'PROFORMA' ? 'waiting' : 'active'">{{item.STATUS}}</span>
@@ -63,11 +63,11 @@
             <i class="fa fa-eye me-2 pointer fs-6" tooltip="View" placement="top"></i>
             <i class="fa fa-file-pdf-o pointer text-danger fs-6" (click)="getInvoiceDetails(item.INVOICE_ID)"
               tooltip="Download PDF" placement="top"></i>
-              <i (click)="editInvoice(item.INVOICE_TYPE,item.BL_NO,item.INVOICE_ID)" *ngIf="item.STATUS == 'PROFORMA'"
+            <i (click)="editInvoice(item.INVOICE_TYPE,item.BL_NO,item.INVOICE_ID)" *ngIf="item.STATUS == 'PROFORMA'"
               tooltip="Edit" placement="top" class="fs-6 ms-2 bx bx-pencil text-info pointer"></i>
-            <i (click)="finalizeInvoice(item.INVOICE_ID,item.INVOICE_TYPE)" *ngIf="item.STATUS == 'PROFORMA'" tooltip="Finalize"
-              placement="top" class="fs-6 ms-2 bx bxs-check-circle text-success pointer"></i>
-           
+            <i (click)="finalizeInvoice(item.INVOICE_ID,item.INVOICE_TYPE)" *ngIf="item.STATUS == 'PROFORMA'"
+              tooltip="Finalize" placement="top" class="fs-6 ms-2 bx bxs-check-circle text-success pointer"></i>
+
           </td>
         </tr>
       </tbody>
@@ -87,7 +87,7 @@
                 <label class="form-label2">BL No</label>
                 <input formControlName="BL_NO" [ngClass]="{'invalid':submitted && f.BL_NO.errors}"
                   class="form-control2" />
-              <small *ngIf="submitted && f.BL_NO.errors" class="text-danger">BL NO is required</small>
+                <small *ngIf="submitted && f.BL_NO.errors" class="text-danger">BL NO is required</small>
               </div>
               <label class="mb-2">Invoice Type</label>
               <div class="row">

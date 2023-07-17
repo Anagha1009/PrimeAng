@@ -28,7 +28,7 @@ export class InvoiceList2Component implements OnInit {
   listForm: FormGroup;
   containerForm: FormGroup;
   submitted: boolean = false;
-  isUpdate:boolean = false;
+  isUpdate: boolean = false;
   CurrencyList: any[] = [];
   ChargeMasterList: any[] = [];
   BillFromList: any[] = [];
@@ -48,7 +48,8 @@ export class InvoiceList2Component implements OnInit {
   container: any[] = [];
   total: any;
   selectedItems: any[] = [];
-  BankAccList: any[] =[];
+  BankAccList: any[] = [];
+  bankList: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -84,7 +85,7 @@ export class InvoiceList2Component implements OnInit {
       INVOICE_ID: [0],
       INVOICE_NO: [''],
       INVOICE_TYPE: [''],
-      BILL_TO: ['',Validators.required],
+      BILL_TO: ['', Validators.required],
       BILL_FROM: [''],
       SHIPPER_NAME: [''],
       PAYMENT_TERM: [''],
@@ -93,7 +94,7 @@ export class InvoiceList2Component implements OnInit {
       CONTAINER_NO: [],
       AGENT_NAME: [''],
       AGENT_CODE: [''],
-      ADDRESS: ['',Validators.required],
+      ADDRESS: ['', Validators.required],
       BRANCH_ID: [0],
       STATUS: ['PROFORMA'],
       TOTAL_CONTAINER: [''],
@@ -106,8 +107,8 @@ export class InvoiceList2Component implements OnInit {
       CONTAINERS: [''],
       SHIPPER_REF: [''],
       REMARKS: [''],
-      IS_TAX:[''],
-      BANCK_ACC:['', Validators.required]
+      IS_TAX: [''],
+      BANK_ID: ['', Validators.required],
     });
 
     var BLNO = this.route.snapshot.paramMap.get('BL_NO');
@@ -117,7 +118,9 @@ export class InvoiceList2Component implements OnInit {
 
     this.value = localStorage.getItem('value');
     this.listForm.get('INVOICE_TYPE')?.setValue(localStorage.getItem('value'));
-    this.listForm.get('INVOICE_ID')?.setValue(localStorage.getItem('INVOICE_ID'));
+    this.listForm
+      .get('INVOICE_ID')
+      ?.setValue(localStorage.getItem('INVOICE_ID'));
 
     if (localStorage.getItem('INVOICE_ID') == '0') {
       this.Submit(BLNO);
@@ -127,11 +130,10 @@ export class InvoiceList2Component implements OnInit {
 
     if (this.value == 'POL' || this.value == 'FREIGHT') {
       this.POL = true;
-      this.listForm.get('PAYMENT_TERM')?.setValue('PREPAID')
+      this.listForm.get('PAYMENT_TERM')?.setValue('PREPAID');
     } else {
       this.POL = false;
-      this.listForm.get('PAYMENT_TERM')?.setValue('COLLECT')
-
+      this.listForm.get('PAYMENT_TERM')?.setValue('COLLECT');
     }
 
     // get current Date
@@ -183,25 +185,62 @@ export class InvoiceList2Component implements OnInit {
     });
   }
 
-  getAddress(address: any, BranchId: any, isTax:any, event:any) {
+  getAddress(
+    address: any,
+    BranchId: any,
+    isTax: any,
+    event: any,
+    branchcode: any
+  ) {
     this.listForm.get('ADDRESS').setValue(address);
     this.listForm.get('BRANCH_ID').setValue(BranchId);
-    this.listForm.get('IS_TAX').setValue(isTax)
+    this.listForm.get('IS_TAX').setValue(isTax);
     const add1 = this.listForm.get('BL_LIST') as FormArray;
-    if(!isTax && event.target.checked){
-      add1.controls.forEach(element => {
-        element.get('TAX_AMOUNT').setValue(0)
-        element.get('TOTAL_AMOUNT').setValue(element.get('QUANTITY').value * element.get('APPROVED_RATE').value + element.get('TAX_AMOUNT').value);
-        element.get('TOTAL_AMOUNT').setValue(element.get('TAXABLE_AMOUNT').value + element.get('TAX_AMOUNT').value);
+    if (!isTax && event.target.checked) {
+      add1.controls.forEach((element) => {
+        element.get('TAX_AMOUNT').setValue(0);
+        element
+          .get('TOTAL_AMOUNT')
+          .setValue(
+            element.get('QUANTITY').value * element.get('APPROVED_RATE').value +
+              element.get('TAX_AMOUNT').value
+          );
+        element
+          .get('TOTAL_AMOUNT')
+          .setValue(
+            element.get('TAXABLE_AMOUNT').value +
+              element.get('TAX_AMOUNT').value
+          );
+      });
+    } else {
+      add1.controls.forEach((element) => {
+        element
+          .get('TAX_AMOUNT')
+          .setValue(
+            (+element.get('APPROVED_RATE').value *
+              +element.get('RATE_PER').value) /
+              100
+          );
+        element
+          .get('TOTAL_AMOUNT')
+          .setValue(
+            element.get('QUANTITY').value * element.get('APPROVED_RATE').value +
+              element.get('TAX_AMOUNT').value
+          );
+        element
+          .get('TOTAL_AMOUNT')
+          .setValue(
+            element.get('TAXABLE_AMOUNT').value +
+              element.get('TAX_AMOUNT').value
+          );
       });
     }
-    else{      
-      add1.controls.forEach(element => {
-        element.get('TAX_AMOUNT').setValue(+element.get('APPROVED_RATE').value * +element.get('RATE_PER').value / 100)
-        element.get('TOTAL_AMOUNT').setValue(element.get('QUANTITY').value * element.get('APPROVED_RATE').value + element.get('TAX_AMOUNT').value);
-        element.get('TOTAL_AMOUNT').setValue(element.get('TAXABLE_AMOUNT').value + element.get('TAX_AMOUNT').value);
-      });
-    }    
+
+    this.listForm.get('BANK_ID').setValue('');
+    this.bankList = this.BankAccList.filter(
+      (x) => x.BRANCH_CODE === branchcode
+    );
+    this.listForm.get('BANK_ID').enable();
   }
 
   // add new row
@@ -238,7 +277,7 @@ export class InvoiceList2Component implements OnInit {
   // submit form final
   SubmitList() {
     this.submitted = true;
-    this.isUpdate = false
+    this.isUpdate = false;
     if (this.listForm.invalid) {
       return;
     }
@@ -251,86 +290,121 @@ export class InvoiceList2Component implements OnInit {
       cl += element.CONTAINER_NO + ',';
     });
     this.listForm.get('CONTAINERS').setValue(cl);
-    const blList = this.listForm.get('BL_LIST') as FormArray
-    blList.controls.forEach(element => {
-      if(element.get('EXCHANGE_RATE').value == ''){
-        element.get('EXCHANGE_RATE').setValue(0)
+    const blList = this.listForm.get('BL_LIST') as FormArray;
+    blList.controls.forEach((element) => {
+      if (element.get('EXCHANGE_RATE').value == '') {
+        element.get('EXCHANGE_RATE').setValue(0);
       }
     });
-    console.log(JSON.stringify(this.listForm.value))
-    // this._InvoiceService
-    //   .InsertInvoice(JSON.stringify(this.listForm.value))
-    //   .subscribe((res: any) => {
-    //     if (res.responseCode == 200) {
-    //       this._commonService.successMsg('Invoice saved Successfully !');
-    //       this._router.navigateByUrl('/home/operations/new-invoice');
-    //     }
-    //   });
+
+    this._InvoiceService
+      .InsertInvoice(JSON.stringify(this.listForm.value))
+      .subscribe((res: any) => {
+        if (res.responseCode == 200) {
+          this._commonService.successMsg('Invoice saved Successfully !');
+          this._router.navigateByUrl('/home/operations/new-invoice');
+        }
+      });
   }
 
   saveContainer(event: any, value = 0) {
-    
-      var containerList = this.listForm.get('CONTAINER_LIST1')?.value;
-      const add = this.listForm.get('CONTAINER_LIST') as FormArray;
-        if (value == 1) {
-          debugger
-          add.clear();
-          event.forEach((element: any) => {
-            add.push(
-              this._formBuilder.group({
-                CONTAINER_NO: [element.CONTAINER_NO],
-              })
-            );
-          });
-        } else if (value == 2) {
-          debugger
-          add.clear();
-        } else {
-          debugger
-          var i = containerList.findIndex((x: any) => x.ID === event.ID);
-          if (i == -1) {
-            add.removeAt(
-              add.value.findIndex(
-                (m: { CONTAINER_NO: any }) => m.CONTAINER_NO === event.CONTAINER_NO
-              )
-            );
-          } else {
-            debugger
-            add.push(
-              this._formBuilder.group({
-                CONTAINER_NO: [event.CONTAINER_NO],
-              })
-            );
-          }
-        }
-    
-        const add1 = this.listForm.get('BL_LIST') as FormArray;
-    
-        add1.controls.forEach((element) => {
-          if (element.get('CHARGE_TYPE').value == 'BL' ) {
-            element.get('QUANTITY').setValue(1);
-          }else{ 
-            element.get('QUANTITY').setValue(add.length);
-             }
-          element.get('AMOUNT').setValue(element.get('QUANTITY').value * element.get('APPROVED_RATE').value);
-          var exchangeRate =element.get('EXCHANGE_RATE').value == '' ? 1 : element.get('EXCHANGE_RATE').value
-          element.get('TAXABLE_AMOUNT').setValue(element.get('QUANTITY').value * element.get('APPROVED_RATE').value * exchangeRate);
-    
-          var tax = (element.get('TAXABLE_AMOUNT').value * element.get('RATE_PER').value) / 100;
-          element.get('TAX_AMOUNT').setValue(this.listForm.get('IS_TAX').value ? tax : 0);
-          element.get('TOTAL_AMOUNT').setValue(element.get('TAXABLE_AMOUNT').value + element.get('TAX_AMOUNT').value);
-        });   
+    var containerList = this.listForm.get('CONTAINER_LIST1')?.value;
+    const add = this.listForm.get('CONTAINER_LIST') as FormArray;
+    if (value == 1) {
+      add.clear();
+      event.forEach((element: any) => {
+        add.push(
+          this._formBuilder.group({
+            CONTAINER_NO: [element.CONTAINER_NO],
+          })
+        );
+      });
+    } else if (value == 2) {
+      add.clear();
+    } else {
+      var i = containerList.findIndex((x: any) => x.ID === event.ID);
+      if (i == -1) {
+        add.removeAt(
+          add.value.findIndex(
+            (m: { CONTAINER_NO: any }) => m.CONTAINER_NO === event.CONTAINER_NO
+          )
+        );
+      } else {
+        add.push(
+          this._formBuilder.group({
+            CONTAINER_NO: [event.CONTAINER_NO],
+          })
+        );
+      }
     }
+
+    const add1 = this.listForm.get('BL_LIST') as FormArray;
+
+    add1.controls.forEach((element) => {
+      if (element.get('CHARGE_TYPE').value == 'BL') {
+        element.get('QUANTITY').setValue(1);
+      } else {
+        element.get('QUANTITY').setValue(add.length);
+      }
+      element
+        .get('AMOUNT')
+        .setValue(
+          element.get('QUANTITY').value * element.get('APPROVED_RATE').value
+        );
+      var exchangeRate =
+        element.get('EXCHANGE_RATE').value == ''
+          ? 1
+          : element.get('EXCHANGE_RATE').value;
+      element
+        .get('TAXABLE_AMOUNT')
+        .setValue(
+          element.get('QUANTITY').value *
+            element.get('APPROVED_RATE').value *
+            exchangeRate
+        );
+
+      var tax =
+        (element.get('TAXABLE_AMOUNT').value * element.get('RATE_PER').value) /
+        100;
+      element
+        .get('TAX_AMOUNT')
+        .setValue(this.listForm.get('IS_TAX').value ? tax : 0);
+      element
+        .get('TOTAL_AMOUNT')
+        .setValue(
+          element.get('TAXABLE_AMOUNT').value + element.get('TAX_AMOUNT').value
+        );
+    });
+  }
 
   getTaxableAmount(event: any, index: any) {
     const add1 = this.listForm.get('BL_LIST') as FormArray;
 
-    var exchangeRate = event.target.value == '' ? 1 : event.target.value
-    
-    add1.at(index).get('TAXABLE_AMOUNT').setValue(add1.at(index).get('QUANTITY').value * add1.at(index).get('APPROVED_RATE').value * exchangeRate);
-    var tax = (add1.at(index).get('TAXABLE_AMOUNT').value * add1.at(index).get('RATE_PER').value) / 100;
-    add1.at(index).get('TAX_AMOUNT').setValue(this.listForm.get('IS_TAX').value ? tax : 0);
-    add1.at(index).get('TOTAL_AMOUNT').setValue(add1.at(index).get('TAXABLE_AMOUNT').value + add1.at(index).get('TAX_AMOUNT').value);
+    var exchangeRate = event.target.value == '' ? 1 : event.target.value;
+
+    add1
+      .at(index)
+      .get('TAXABLE_AMOUNT')
+      .setValue(
+        add1.at(index).get('QUANTITY').value *
+          add1.at(index).get('APPROVED_RATE').value *
+          exchangeRate
+      );
+    var tax =
+      (add1.at(index).get('TAXABLE_AMOUNT').value *
+        add1.at(index).get('RATE_PER').value) /
+      100;
+    add1
+      .at(index)
+      .get('TAX_AMOUNT')
+      .setValue(this.listForm.get('IS_TAX').value ? tax : 0);
+    add1
+      .at(index)
+      .get('TOTAL_AMOUNT')
+      .setValue(
+        add1.at(index).get('TAXABLE_AMOUNT').value +
+          add1.at(index).get('TAX_AMOUNT').value
+      );
   }
 
   Submit(BLNO: any) {
@@ -353,7 +427,8 @@ export class InvoiceList2Component implements OnInit {
             this.AddressList = [];
             this.AddressList = res.Data.BRANCH;
             this.BankAccList = [];
-            this.BankAccList = res.Data.BANK
+            this.BankAccList = res.Data.BANK;
+            this.listForm.get('BANK_ID').disable();
             this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_NAME);
             this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_ADDRESS1);
             const add = this.listForm.get('BL_LIST') as FormArray;
@@ -441,9 +516,10 @@ export class InvoiceList2Component implements OnInit {
   }
 
   getInvoiceDetails(invoiceID: number) {
-     this.isUpdate = true
-     
-     this._blService.getInvoiceDetailsNew(
+    this.isUpdate = true;
+
+    this._blService
+      .getInvoiceDetailsNew(
         invoiceID,
         '',
         this._commonService.getUserPort(),
@@ -451,9 +527,16 @@ export class InvoiceList2Component implements OnInit {
       )
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
-          
           this.listForm.patchValue(res.Data);
-          this.listForm.get('INVOICE_DATE')?.setValue(formatDate(this.listForm.get('INVOICE_DATE')?.value,'yyyy-MM-dd','en'));
+          this.listForm
+            .get('INVOICE_DATE')
+            ?.setValue(
+              formatDate(
+                this.listForm.get('INVOICE_DATE')?.value,
+                'yyyy-MM-dd',
+                'en'
+              )
+            );
           this.containerDropdownList = [];
           this.containerDropdownList = res.Data.BL_CONTAINER_LIST;
 
@@ -461,8 +544,10 @@ export class InvoiceList2Component implements OnInit {
           var ss: any = [];
           x.forEach((element: any) => {
             if (element != '') {
-              ss.push(this.containerDropdownList.filter(
-                  (x) => x.CONTAINER_NO === element)[0]
+              ss.push(
+                this.containerDropdownList.filter(
+                  (x) => x.CONTAINER_NO === element
+                )[0]
               );
             }
           });
@@ -472,15 +557,14 @@ export class InvoiceList2Component implements OnInit {
           add.clear();
 
           res.Data.BL_LIST.forEach((element: any) => {
-            add.push(this._formBuilder.group(element));           
-             });
+            add.push(this._formBuilder.group(element));
+          });
 
           this.AddressList = [];
-          this.listForm.get('ADDRESS').setValue('')
+          this.listForm.get('ADDRESS').setValue('');
           this.AddressList = res.Data.BRANCH;
         }
       });
-
   }
 
   // Delete(ID: number) {
