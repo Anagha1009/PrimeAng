@@ -24,6 +24,7 @@ export class NewInvoice2Component implements OnInit {
   invoiceForm1: FormGroup;
   invoiceForm: FormGroup;
   submitted: boolean = false;
+  value:any
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -38,6 +39,7 @@ export class NewInvoice2Component implements OnInit {
     this.invoiceForm = this._formBuilder.group({
       radio: ['', Validators.required],
       BL_NO: ['', Validators.required],
+   
     });
 
     this.invoiceForm1 = this._formBuilder.group({
@@ -608,8 +610,7 @@ export class NewInvoice2Component implements OnInit {
                     {
                       text:
                         '20GP X ' +
-                        (+this.invoiceDetails?.CONTAINERS.split(',').length -
-                          1),
+                        (+this.invoiceDetails?.CONTAINERS.split(',').length - 1),
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -783,7 +784,7 @@ export class NewInvoice2Component implements OnInit {
                   fontSize: 8,
                 },
                 {
-                  text: p.RATE,
+                  text: p.RATE_PER,
                   fontSize: 8,
                 },
                 {
@@ -791,7 +792,7 @@ export class NewInvoice2Component implements OnInit {
                   fontSize: 8,
                 },
                 {
-                  text: p.RATE,
+                  text: p.RATE_PER,
                   fontSize: 8,
                 },
                 {
@@ -799,7 +800,7 @@ export class NewInvoice2Component implements OnInit {
                   fontSize: 8,
                 },
                 {
-                  text: '',
+                  text: p.TOTAL_AMOUNT,
                   fontSize: 8,
                 },
               ]),
@@ -960,11 +961,18 @@ export class NewInvoice2Component implements OnInit {
     return this.invoiceForm.controls;
   }
 
-  finalizeInvoice(id: number) {
-    var invoiceNo = this._commonService.getRandomNumber('INV');
+  finalizeInvoice(id: number,invoicetype:any) {
+    // var invoiceNo = this._commonService.getRandomNumber('INV');
+    if(invoicetype == 'POL' || invoicetype == 'FREIGHT'){
+    var invoiceNo = this._commonService.getRandomInvoiceNumber('HO/EX/');
+    }else{
+      var invoiceNo = this._commonService.getRandomInvoiceNumber('HO/IM/');
+    }
     var bl = new Bl();
     bl.INVOICE_ID = id;
     bl.INVOICE_NO = invoiceNo;
+    console.log("invoiceno",bl.INVOICE_NO)
+
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't to Finalize this Proforma Invoice!",
