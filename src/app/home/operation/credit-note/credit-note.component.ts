@@ -177,7 +177,7 @@ export class CreditNoteComponent implements OnInit {
               ],
               [
                 {
-                  text: this.creditDetails?.SHIPPER_NAME?.toUpperCase(),
+                  text: this.creditDetails?.BILL_TO?.toUpperCase(),
                   bold: true,
                   fontSize: 8,
                 },
