@@ -17,7 +17,6 @@ export class NewReceiptComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private _activatedRoute: ActivatedRoute,
     private _blService: BlService,
     private _commonService: CommonService
   ) {}
@@ -30,7 +29,7 @@ export class NewReceiptComponent implements OnInit {
       CHARGE_LIST: new FormArray([]),
     });
 
-    this.invoiceNo = this._activatedRoute.snapshot.paramMap.get('INVOICE_NO');
+    this.invoiceNo = localStorage.getItem('InvoiceNo');
     this.getInvoiceDetails(this.invoiceNo);
   }
 
@@ -56,6 +55,7 @@ export class NewReceiptComponent implements OnInit {
                 DEPOSIT_DATE: [''],
                 INS_AMOUNT: [''],
                 BANK_LOCATION: [''],
+                ISNEW: [0],
               })
             );
           });
@@ -66,6 +66,23 @@ export class NewReceiptComponent implements OnInit {
           });
         }
       });
+  }
+
+  addBank() {
+    const add = this.receiptForm.get('BANK_LIST') as FormArray;
+
+    add.push(
+      this._formBuilder.group({
+        INS_TYPE: [''],
+        BANK_NAME: [''],
+        INS_NO: [''],
+        INS_DATE: [''],
+        DEPOSIT_DATE: [''],
+        INS_AMOUNT: [''],
+        BANK_LOCATION: [''],
+        ISNEW: [1],
+      })
+    );
   }
 
   get f1() {

@@ -95,10 +95,10 @@ export class ReceiptListComponent implements OnInit {
 
   goToNewReceipt() {
     localStorage.removeItem('receiptType');
+    localStorage.removeItem('InvoiceNo');
     localStorage.setItem('receiptType', this.receiptType);
-    this._router.navigateByUrl(
-      '/home/operations/new-receipt/' + this.invoiceNo
-    );
+    localStorage.setItem('InvoiceNo', this.invoiceNo);
+    this._router.navigateByUrl('/home/operations/new-receipt');
     this.closeBtn.nativeElement.click();
   }
 }

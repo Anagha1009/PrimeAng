@@ -2,6 +2,7 @@
     <h2>New Receipt</h2>
 </div>
 <div class="container">
+    <a routerLink="/home/operations/receipt-list"><i class='bx bx-arrow-back'></i>Back to List</a>
     <div class="col-md-10 mx-auto my-4 ">
         <div class="services pb-0">
             <div class="icon-box icon-box-cyan text-start" [formGroup]="receiptForm">
@@ -16,7 +17,12 @@
                     </div>
                     <div class="col-md-3">
                         <label class="label-header">Received From</label>
-                        <label class="label-subheader">-
+                        <label class="label-subheader">{{invoiceDetails?.BILL_FROM}}
+                        </label>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="label-header">Customer</label>
+                        <label class="label-subheader">{{invoiceDetails?.SHIPPER}}
                         </label>
                     </div>
                 </div>
@@ -25,15 +31,6 @@
                         <div class="form-group">
                             <input type="text" class="form-control" />
                             <label class="form-label">Deposit Cash/Bank</label>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mt-4">
-                        <div class="form-group">
-                            <ng-select formControlName="BL_NO">
-                                <ng-option value="">--Select--</ng-option>
-                                <!-- <ng-option *ngFor="let item of blList" value="{{item.BL_NO}}">{{item.BL_NO}}</ng-option> -->
-                            </ng-select>
-                            <label class="form-label-ddl">Customer</label>
                         </div>
                     </div>
                     <div class="col-md-6 mt-4">
@@ -47,39 +44,42 @@
         </div>
     </div>
     <div class="col-md-6 offset-md-6 text-end">
-        <button class="form-btn">Add Row</button>
+        <button class="form-btn btn-sm" (click)="addBank()">Add Row</button>
     </div>
-    <h6>Bank List</h6>
+    <h6 class="fw-bold">Bank List</h6>
     <div class="table-responsive">
         <table class="ratetable table-bordered">
             <thead>
                 <tr>
-                    <th>No</th>
-                    <th>INS. Type</th>
-                    <th>Bank Name</th>
-                    <th>INS. No</th>
-                    <th>INS. Date</th>
-                    <th>Deposit Date</th>
-                    <th>INS. Amount</th>
-                    <th>Bank Location</th>
+                    <th width="1%">No</th>
+                    <th width="10%">INS. Type</th>
+                    <th width="20%">Bank Name</th>
+                    <th width="10%">INS. No</th>
+                    <th width="15%">INS. Date</th>
+                    <th width="15%">Deposit Date</th>
+                    <th width="10%">INS. Amount</th>
+                    <th width="9%">Bank Location</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of f1;let i = index" [formGroup]="item">
-                    <td>{{i+1}}</td>
-                    <td><select formControlName="INS_TYPE" class="form-control3">
-                            <option value="">--Select--</option>
+                    <td width="1%">{{i+1}}</td>
+                    <td width="10%"><select formControlName="INS_TYPE" class="form-control3">
+                            <option value="" disabled>--Select--</option>
                             <option value="RTGS">RTGS</option>
                             <option value="NEFT">NEFT</option>
                             <option value="DD">DD</option>
                             <option value="Cash">Cash</option>
                         </select></td>
-                    <td>{{item.value.BANK_NAME}}</td>
-                    <td><input type="text" formControlName="INS_NO" class="form-control3" /></td>
-                    <td><input type="date" formControlName="INS_DATE" class="form-control3" /></td>
-                    <td><input type="date" formControlName="DEPOSIT_DATE" class="form-control3" /></td>
-                    <td><input type="text" formControlName="INS_AMOUNT" class="form-control3" /></td>
-                    <td>Bank Location</td>
+                    <td width="20%"><span *ngIf="item.value.ISNEW == 0">{{item.value.BANK_NAME}}</span>
+                        <input *ngIf="item.value.ISNEW == 1" type="text" formControlName="BANK_NAME"
+                            class="form-control3" />
+                    </td>
+                    <td width="10%"><input type="text" formControlName="INS_NO" class="form-control3" /></td>
+                    <td width="15%"><input type="date" formControlName="INS_DATE" class="form-control3" /></td>
+                    <td width="15%"><input type="date" formControlName="DEPOSIT_DATE" class="form-control3" /></td>
+                    <td width="10%"><input type="text" formControlName="INS_AMOUNT" class="form-control3" /></td>
+                    <td width="9%">Bank Location</td>
                 </tr>
             </tbody>
         </table>
