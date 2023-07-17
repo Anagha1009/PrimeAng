@@ -39,7 +39,6 @@ export class InvoiceService {
   }
 
   DeleteInvoice(ID: number) {
-    console.log("service", ID)
     return this._http.delete<any>(
       this.BASE_URL + 'Invoice/DeleteInvoice?ID=' + ID,
       this.httpOptions

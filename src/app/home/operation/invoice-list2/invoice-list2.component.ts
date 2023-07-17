@@ -48,6 +48,7 @@ export class InvoiceList2Component implements OnInit {
   container: any[] = [];
   total: any;
   selectedItems: any[] = [];
+  BankAccList: any[] =[];
 
   constructor(
     private route: ActivatedRoute,
@@ -105,7 +106,8 @@ export class InvoiceList2Component implements OnInit {
       CONTAINERS: [''],
       SHIPPER_REF: [''],
       REMARKS: [''],
-      IS_TAX:['']
+      IS_TAX:[''],
+      BANCK_ACC:['', Validators.required]
     });
 
     var BLNO = this.route.snapshot.paramMap.get('BL_NO');
@@ -256,14 +258,14 @@ export class InvoiceList2Component implements OnInit {
       }
     });
     console.log(JSON.stringify(this.listForm.value))
-    this._InvoiceService
-      .InsertInvoice(JSON.stringify(this.listForm.value))
-      .subscribe((res: any) => {
-        if (res.responseCode == 200) {
-          this._commonService.successMsg('Invoice saved Successfully !');
-          this._router.navigateByUrl('/home/operations/new-invoice');
-        }
-      });
+    // this._InvoiceService
+    //   .InsertInvoice(JSON.stringify(this.listForm.value))
+    //   .subscribe((res: any) => {
+    //     if (res.responseCode == 200) {
+    //       this._commonService.successMsg('Invoice saved Successfully !');
+    //       this._router.navigateByUrl('/home/operations/new-invoice');
+    //     }
+    //   });
   }
 
   saveContainer(event: any, value = 0) {
@@ -350,6 +352,8 @@ export class InvoiceList2Component implements OnInit {
             this.containerDropdownList = res.Data.CONTAINERS;
             this.AddressList = [];
             this.AddressList = res.Data.BRANCH;
+            this.BankAccList = [];
+            this.BankAccList = res.Data.BANK
             this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_NAME);
             this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_ADDRESS1);
             const add = this.listForm.get('BL_LIST') as FormArray;

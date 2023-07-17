@@ -1,58 +1,113 @@
-<div class="section-title pt-3">
+<div class="section-title">
   <h2>Create Invoice</h2>
 </div>
 <div class="container mt-4">
-  <div class="row">
-    <form [formGroup]="listForm">
-      <div class="col-md-12">
-        <div class="row">
-          <div class="col-md-3">
-            <div class="form-group">
-              <label class="label-header">Bill From</label>
-              <label class="label-subheader">{{f.BILL_FROM.value}}</label>
+    <div class="services">
+      <div class="icon-box  text-start">
+        <form [formGroup]="listForm">
+          <label class="label-subheader mb-2"><span class="fw-bold">Bill From </span>: {{f.BILL_FROM.value}}</label>
+          <div class="row">            
+            <div class="col-md-4">
+              <div class="form-group">
+                <label *ngIf="POL" class="label-subheader"><span class="fw-bold">Shipper/CHA</span> : {{f.SHIPPER_NAME.value}}</label>
+                <label *ngIf="!POL" class="label-subheader"><span class="fw-bold">Consignee/CHA </span> : {{f.SHIPPER_NAME.value}}</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label  *ngIf="POL" class="label-subheader"><span class="fw-bold">Payment Term</span> : Prepaid</label>
+                <label *ngIf="!POL" class="label-subheader"><span class="fw-bold">Payment Term</span> : Collect</label>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="label-subheader"><span class="fw-bold">Invoice Type</span> : {{f.INVOICE_TYPE.value}} {{f.INVOICE_TYPE.value == 'FREIGHT' ? '' :
+                  'Local'}}</label>
+              </div>
             </div>
           </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label *ngIf="POL" class="label-header">Shipper/CHA</label>
-              <label *ngIf="!POL" class="label-header">Consignee/CHA</label>
-              <label class="label-subheader">{{f.SHIPPER_NAME.value}}</label>
+          <div class="row mt-4">
+            <div class="col-md-3">
+              <div class="form-group">
+                <input formControlName="SHIPPER_REF" class="form-control" />
+                <label class="form-label">Shipper Ref No</label>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <ng-select formControlName="BILL_TO">
+                  <ng-option disabled value="">--Select--</ng-option>
+                  <ng-option *ngFor="let item of BillFromList" value="{{item.CODE}}">{{item.CODE}}</ng-option>
+                </ng-select>
+                <label class="form-label-ddl">Bill To<span class="text-danger"> *</span></label>
+                <small *ngIf="submitted && f.BILL_TO.errors" class="text-danger">Bill To is required</small>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <nav id="navbar" class="navbar pointer">
+                  <ul>
+                    <li class="dropdown">
+                      <input type="text" formControlName="ADDRESS" readonly class="form-control text-truncate"/>
+                      <label class="form-label">Address</label>
+                      <ul>
+                        <div class="table-responsive mx-2 my-2">
+                          <table class="table table-bordered" style="font-size: 10px;">
+                            <thead>
+                              <tr>
+                                <th width="1%">#</th>
+                                <th width="10%">No</th>
+                                <th width="20%">Customer</th>
+                                <th width="10%">Branch</th>
+                                <th width="28%">Address</th>
+                                <th width="5%">Country</th>
+                                <th width="5%">SEZ</th>
+                                <th width="5%">Tax</th>
+                                <th width="7%">Tax No</th>
+                                <th width="9%">Type</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                *ngFor="let item of AddressList let i = index">
+                                <td width="1%"><input (click)="getAddress(item.ADDRESS,item.BRANCH_ID,item.IS_TAX_APPLICABLE,$event)" type="checkbox"></td>
+                                <td width="10%">{{i + 1}}</td>
+                                <td width="20%">{{item.CUST_NAME}}</td>
+                                <td width="10%">{{item.BRANCH_NAME}}</td>
+                                <td width="28%">{{item.ADDRESS}}</td>
+                                <td width="5%">{{item.COUNTRY}}</td>
+                                <td width="5%"><i
+                                    [class]="item.IS_SEZ ? 'fs-5 bx bxs-check-circle text-success' : 'fs-5 bx bxs-x-circle text-danger'"></i>
+                                </td>
+                                <td width="5%"><i
+                                    [class]="item.IS_TAX_APPLICABLE ? 'fs-5 bx bxs-check-circle text-success' : 'fs-5 bx bxs-x-circle text-danger'"></i>
+                                </td>
+                                <td width="7%">{{item.TAX_NO}}</td>
+                                <td width="9%">{{item.TAX_TYPE}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </ul>
+                      <small *ngIf="submitted && f.ADDRESS.errors" class="text-danger">Please select address</small>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <ng-select formControlName="BANCK_ACC">
+                  <ng-option value="" disabled>--Select--</ng-option>
+                <ng-option *ngFor="let item of BankAccList" value="{{item.BANK_NAME}}">{{item.BANK_NAME}}</ng-option>
+                </ng-select>
+                <label class="form-label-ddl">Bank Account<span class="text-danger"> *</span></label>
+                <small *ngIf="submitted && f.BANCK_ACC.errors" class="text-danger">Please select Bank account</small>
+              </div>
             </div>
           </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label class="label-header">Payment Term</label>
-              <label *ngIf="POL" class="label-subheader">Prepaid</label>
-              <label *ngIf="!POL" class="label-subheader">collect</label>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <label class="label-header">Invoice Type</label>
-              <label class="label-subheader">{{f.INVOICE_TYPE.value}} {{f.INVOICE_TYPE.value == 'FREIGHT' ? '' :
-                'Local'}}</label>
-            </div>
-          </div>
-        </div>
-        <div class="row mt-4">
-          <div class="col-md-3">
-            <div class="form-group">
-              <input formControlName="SHIPPER_REF" class="form-control" />
-              <label class="form-label">Shipper Ref No</label>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <ng-select formControlName="BILL_TO">
-                <ng-option disabled value="">--Select--</ng-option>
-                <ng-option *ngFor="let item of BillFromList" value="{{item.CODE}}">{{item.CODE}}</ng-option>
-              </ng-select>
-              <label class="form-label-ddl">Bill To<span class="text-danger"> *</span></label>
-              <small *ngIf="submitted && f.BILL_TO.errors" class="text-danger">Bill To is required</small>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <form [formGroup]="listForm">
+          <div class="row mt-4">
+            <div class="col-md-3">
               <div class="form-group">
                 <ng-multiselect-dropdown (onSelectAll)="saveContainer($event,1)"
                   (onDeSelectAll)="saveContainer($event,2)" (onSelect)="saveContainer($event)"
@@ -63,106 +118,52 @@
                 <label class="form-label-ddl">Container No<span class="text-danger"> *</span></label>
                 <small *ngIf="submitted && f.CONTAINER_LIST1.errors" class="text-danger">Please select container</small>
               </div>
-            </form>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <input type="date" class="form-control" formControlName="INVOICE_DATE">
-              <label class="form-label">Invoice Date</label>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <input type="date" class="form-control" formControlName="INVOICE_DATE">
+                <label class="form-label">Invoice Date</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <textarea type="date" class="form-control" formControlName="REMARKS"></textarea>
+                <label class="form-label">Remarks</label>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row mt-4">
-          <div class="col-md-3">
-            <div class="form-group">
-              <textarea type="date" class="form-control addressbox" formControlName="REMARKS"></textarea>
-              <label class="form-label">Remarks</label>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="form-group">
-              <nav id="navbar" class="navbar pointer">
-                <ul>
-                  <li class="dropdown"><a class="form-btn-primary  p-2">Please Select Address<i
-                        class="bi bi-chevron-down"></i></a>
-                    <ul>
-                      <div class="table-responsive mx-2 my-2">
-                        <table class="table table-bordered" style="font-size: 10px;">
-                          <thead>
-                            <tr>
-                              <th width="1%">#</th>
-                              <th width="10%">No</th>
-                              <th width="20%">Customer</th>
-                              <th width="10%">Branch</th>
-                              <th width="28%">Address</th>
-                              <th width="5%">Country</th>
-                              <th width="5%">SEZ</th>
-                              <th width="5%">Tax</th>
-                              <th width="7%">Tax No</th>
-                              <th width="9%">Type</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr
-                              *ngFor="let item of AddressList let i = index">
-                              <td width="1%"><input (click)="getAddress(item.ADDRESS,item.BRANCH_ID,item.IS_TAX_APPLICABLE,$event)" type="checkbox"></td>
-                              <td width="10%">{{i + 1}}</td>
-                              <td width="20%">{{item.CUST_NAME}}</td>
-                              <td width="10%">{{item.BRANCH_NAME}}</td>
-                              <td width="28%">{{item.ADDRESS}}</td>
-                              <td width="5%">{{item.COUNTRY}}</td>
-                              <td width="5%"><i
-                                  [class]="item.IS_SEZ ? 'fs-5 bx bxs-check-circle text-success' : 'fs-5 bx bxs-x-circle text-danger'"></i>
-                              </td>
-                              <td width="5%"><i
-                                  [class]="item.IS_TAX_APPLICABLE ? 'fs-5 bx bxs-check-circle text-success' : 'fs-5 bx bxs-x-circle text-danger'"></i>
-                              </td>
-                              <td width="7%">{{item.TAX_NO}}</td>
-                              <td width="9%">{{item.TAX_TYPE}}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </ul>
-                    <small *ngIf="submitted && f.ADDRESS.errors" class="text-danger">Please select address</small>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
+        </form>        
       </div>
-    </form>
-    <div class="col-md-6 offset-md-6 text-end">
-      <button (click)="addRow()" class="form-btn me-2">Add Row</button>
     </div>
-  </div>
-  <h6>Charge List</h6>
+    <div class="col-md-6 offset-md-6 text-end">
+      <button (click)="addRow()" class="form-btn btn-sm">Add Row</button>
+    </div>
+  <h6 class="fw-bold">Charge List</h6>
   <div class="table-responsive">
-    <table class="table table-bordered">
+    <table class="ratetable">
       <thead>
         <tr>
-          <th>No</th>
-          <th>Charge</th>
-          <th>HSN Code</th>
-          <th>Qty</th>
-          <th>Currency</th>
-          <th>Rate</th>
-          <th>Amount</th>
-          <th>Ex Rate</th>
-          <th>Taxable Amount</th>
-          <th>Rate %</th>
-          <th>SGST</th>
-          <th>CGST</th>
-          <th>TAX Amount</th>
-          <th>Total Amount</th>
-          <th>Action</th>
+          <th width="1%">No</th>
+          <th width="20%">Charge</th>
+          <th width="10%">HSN</th>
+          <th width="5%">Qty</th>
+          <th width="5%">Curr</th>
+          <th class="text-end" width="5%">Rate</th>
+          <th class="text-end" width="5%">Amount</th>
+          <th width="10%">Ex Rate</th>
+          <th class="text-end" width="5%">Taxable</th>
+          <th class="text-end" width="5%">Rate %</th>
+          <th class="text-end" width="5%">SGST</th>
+          <th class="text-end" width="5%">CGST</th>
+          <th class="text-end" width="5%">TAX</th>
+          <th class="text-end" width="10%">Total Amount</th>
+          <th width="4%">Action</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of f1; let i = index" [formGroup]="item">
-          <td>{{ i + 1 }}</td>
-          <td>
+          <td width="1%">{{ i + 1 }}</td>
+          <td width="20%">
             <select *ngIf="!item.value.IS_SRRCHARGE" class="form-control3" formControlName="CHARGE_NAME"
               [ngClass]="{'invalid': submitted && f.BL_LIST.controls[i].get('CHARGE_NAME').errors}">
               <option disabled="true">--Select--</option>
@@ -172,7 +173,7 @@
             <div *ngIf=" submitted && f.BL_LIST.controls[i].get('CHARGE_NAME').errors" class="invalid-feedback">Charge Code is required </div>
 
           </td>
-          <td>
+          <td width="10%">
             <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
               [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors}" formControlName="HSN_CODE"
               class="form-control3" />
@@ -180,14 +181,14 @@
             <div *ngIf=" submitted && f.BL_LIST.controls[i].get('HSN_CODE').errors" class="invalid-feedback"> HSN Code
               is required </div>
           </td>
-          <td>
+          <td width="5%">
             <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
               [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('QUANTITY').errors}"
               formControlName="QUANTITY" class="form-control3" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.QUANTITY}}</span>
             <div *ngIf=" submitted && f.BL_LIST.controls[i].get('QUANTITY').errors" class="invalid-feedback">Quantity is required </div>
           </td>
-          <td>
+          <td width="5%">
             <select class="form-control3" *ngIf="item.value.IS_SRRCHARGE != '1'" formControlName="CURRENCY"
               [ngClass]="{'invalid': submitted && f.BL_LIST.controls[i].get('CURRENCY').errors}">
               <option disabled="true">--Select--</option>
@@ -196,63 +197,58 @@
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CURRENCY}}</span>
             <div *ngIf=" submitted && f.BL_LIST.controls[i].get('CURRENCY').errors" class="invalid-feedback">Currency is required </div>
           </td>
-          <td class="text-end">
+          <td width="5%" class="text-end">
             <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
               [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('APPROVED_RATE').errors }"
               formControlName="APPROVED_RATE" class="form-control3" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.APPROVED_RATE}}</span>
           </td>
-          <td class="text-end">
+          <td width="5%" class="text-end">
             <input *ngIf="item.value.IS_SRRCHARGE != '1'" type="text"
               [ngClass]="{invalid:submitted && f.BL_LIST.controls[i].get('AMOUNT').errors }" formControlName="AMOUNT"
               class="form-control3" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.AMOUNT}}</span>
           </td>
-          <td> <input type="text" (keyup)="getTaxableAmount($event,i)"
+          <td width="10%"> <input type="text" (keyup)="getTaxableAmount($event,i)"
               [ngClass]="{ invalid: submitted && f.BL_LIST.controls[i].get('EXCHANGE_RATE').errors}"
               formControlName="EXCHANGE_RATE" class="form-control3" />
           </td>
 
-          <td class="text-end">
+          <td  width="5%" class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAXABLE_AMOUNT').errors}"
               formControlName="TAXABLE_AMOUNT" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAXABLE_AMOUNT}}</span>
           </td>
-          <td class="text-end">
+          <td  width="5%" class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('RATE_PER').errors}"
               formControlName="RATE_PER" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.RATE_PER}}</span>
           </td>
-          <!-- <td>
-            <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
-              [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('IGST').errors}" formControlName="IGST" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.IGST}}</span>
-          </td> -->
-          <td class="text-end">
+          <td  width="5%" class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('SGST').errors}" formControlName="SGST" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.SGST}}</span>
           </td>
-          <td class="text-end">
+          <td  width="5%" class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('CGST').errors}" formControlName="CGST" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CGST}}</span>
           </td>
-          <td class="text-end">
+          <td  width="5%" class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TAX_AMOUNT').errors}"
               formControlName="TAX_AMOUNT" />
             <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TAX_AMOUNT}}</span>
           </td>
-          <td class="text-end">
+          <td  width="5%"class="text-end">
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TOTAL_AMOUNT').errors}"
               formControlName="TOTAL_AMOUNT" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TOTAL_AMOUNT}}</span>
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CURRENCY}} {{item.value.TOTAL_AMOUNT}}</span>
           </td>
-          <td>
+          <td  width="4%">
             <i class="fa fa-trash ms-2 pointer text-danger" (click)="deleteBranch(i)"></i>
           </td>
         </tr>
