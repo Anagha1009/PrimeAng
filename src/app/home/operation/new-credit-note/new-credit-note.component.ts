@@ -142,7 +142,7 @@ export class NewCreditNoteComponent implements OnInit {
   }
 
   getRemainingCredit(amount: any, i: number) {
-    const add = this.creditNote.get('CREDIT_NOTES') as FormArray;
+    const add = this.creditNote.get('CREDIT_NOTES1') as FormArray;
 
     var creditamount = amount.target.value == '' ? 0 : +amount.target.value;
     var remainingamount = +add.at(i).get('REMAINING_AMOUNT').value;
@@ -158,7 +158,7 @@ export class NewCreditNoteComponent implements OnInit {
   }
 
   setRemainingCredit(amount: any, i: number) {
-    const add = this.creditNote.get('CREDIT_NOTES') as FormArray;
+    const add = this.creditNote.get('CREDIT_NOTES1') as FormArray;
 
     var creditamount = amount.target.value == '' ? 0 : +amount.target.value;
     var remainingamount = +add.at(i).get('REMAINING_AMOUNT').value;
@@ -187,6 +187,7 @@ export class NewCreditNoteComponent implements OnInit {
       element.get('AGENT_CODE').setValue(this._commonService.getUserCode());
       element.get('AGENT_NAME').setValue(this._commonService.getUserName());
     });
+
     this._blService
       .createCreditNote(creditNoteList.value)
       .subscribe((res: any) => {

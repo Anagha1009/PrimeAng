@@ -6,6 +6,7 @@ import { CommonService } from 'src/app/services/common.service';
 import { Router } from '@angular/router';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import Swal from 'sweetalert2';
+import { ToWords } from 'to-words';
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -24,7 +25,8 @@ export class NewInvoice2Component implements OnInit {
   invoiceForm1: FormGroup;
   invoiceForm: FormGroup;
   submitted: boolean = false;
-  value:any
+  value: any;
+  toWords = new ToWords();
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -39,7 +41,6 @@ export class NewInvoice2Component implements OnInit {
     this.invoiceForm = this._formBuilder.group({
       radio: ['', Validators.required],
       BL_NO: ['', Validators.required],
-   
     });
 
     this.invoiceForm1 = this._formBuilder.group({
@@ -187,7 +188,7 @@ export class NewInvoice2Component implements OnInit {
               ],
               [
                 {
-                  text: this.invoiceDetails?.SHIPPER_NAME.toUpperCase(),
+                  text: this.invoiceDetails?.BILL_TO.toUpperCase(),
                   bold: true,
                   fontSize: 8,
                 },
@@ -277,7 +278,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: this.invoiceDetails?.SHIPPER_NAME,
+                      text: this.invoiceDetails?.BILL_TO,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -582,7 +583,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: '',
+                      text: this.invoiceDetails?.REMARKS,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -610,7 +611,8 @@ export class NewInvoice2Component implements OnInit {
                     {
                       text:
                         '20GP X ' +
-                        (+this.invoiceDetails?.CONTAINERS.split(',').length - 1),
+                        (+this.invoiceDetails?.CONTAINERS.split(',').length -
+                          1),
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -806,8 +808,20 @@ export class NewInvoice2Component implements OnInit {
               ]),
               [
                 {
-                  colSpan: 5,
-                  text: 'Total : ',
+                  colSpan: 8,
+                  text:
+                    'Total : ' +
+                    'INR ' +
+                    this.invoiceDetails.BL_LIST.map(
+                      (item: any) => item.TOTAL_AMOUNT
+                    ).reduce((a: any, b: any) => a + b) +
+                    ' (' +
+                    this.toWords.convert(
+                      this.invoiceDetails.BL_LIST.map(
+                        (item: any) => item.TOTAL_AMOUNT
+                      ).reduce((a: any, b: any) => a + b)
+                    ) +
+                    ')',
                   fontSize: 8,
                 },
 
@@ -897,12 +911,20 @@ export class NewInvoice2Component implements OnInit {
                 {},
                 {
                   text:
-                    'Account Holder Name: PRIME MARITIME\n' +
-                    'Payment in Favour: \n' +
-                    'Bank Name: \n' +
-                    'Account Number:\n' +
-                    'IFSC Code:\n' +
-                    'Bank Address:',
+                    'Account Holder Name: ' +
+                    this.invoiceDetails?.BANK.BANK_HOLDER_NAME +
+                    '\n' +
+                    'Payment in Favour: PRIME MARITIME \n' +
+                    'Bank Name: ' +
+                    this.invoiceDetails?.BANK.BANK_NAME +
+                    '\n' +
+                    'Account Number: ' +
+                    this.invoiceDetails?.BANK.BANK_ACC_NO +
+                    '\n' +
+                    'IFSC Code: ' +
+                    this.invoiceDetails?.BANK.BANK_IFSC +
+                    '\n' +
+                    'Bank Address: ',
                   fontSize: 8,
                 },
               ],
@@ -961,17 +983,17 @@ export class NewInvoice2Component implements OnInit {
     return this.invoiceForm.controls;
   }
 
-  finalizeInvoice(id: number,invoicetype:any) {
+  finalizeInvoice(id: number, invoicetype: any) {
     // var invoiceNo = this._commonService.getRandomNumber('INV');
-    if(invoicetype == 'POL' || invoicetype == 'FREIGHT'){
-    var invoiceNo = this._commonService.getRandomInvoiceNumber('HO/EX/');
-    }else{
+    if (invoicetype == 'POL' || invoicetype == 'FREIGHT') {
+      var invoiceNo = this._commonService.getRandomInvoiceNumber('HO/EX/');
+    } else {
       var invoiceNo = this._commonService.getRandomInvoiceNumber('HO/IM/');
     }
     var bl = new Bl();
     bl.INVOICE_ID = id;
     bl.INVOICE_NO = invoiceNo;
-    console.log("invoiceno",bl.INVOICE_NO)
+    console.log('invoiceno', bl.INVOICE_NO);
 
     Swal.fire({
       title: 'Are you sure?',
