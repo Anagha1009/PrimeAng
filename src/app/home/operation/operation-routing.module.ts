@@ -24,6 +24,8 @@ import { CreditNoteComponent } from './credit-note/credit-note.component';
 import { NewCreditNoteComponent } from './new-credit-note/new-credit-note.component';
 import { ReceiptListComponent } from './receipt-list/receipt-list.component';
 import { NewReceiptComponent } from './new-receipt/new-receipt.component';
+import { VendorBillsComponent } from './vendor-bills/vendor-bills.component';
+import { NewVendorBillComponent } from './new-vendor-bill/new-vendor-bill.component';
 
 const routes: Routes = [
   {
@@ -149,6 +151,18 @@ const routes: Routes = [
   {
     path: 'new-receipt',
     component: NewReceiptComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Agent] },
+  },
+  {
+    path: 'vendor-bills',
+    component: VendorBillsComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Agent] },
+  },
+  {
+    path: 'new-vendor-bill',
+    component: NewVendorBillComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Agent] },
   },

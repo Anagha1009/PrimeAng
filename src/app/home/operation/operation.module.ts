@@ -31,6 +31,8 @@ import { CreditNoteComponent } from './credit-note/credit-note.component';
 import { NewCreditNoteComponent } from './new-credit-note/new-credit-note.component';
 import { ReceiptListComponent } from './receipt-list/receipt-list.component';
 import { NewReceiptComponent } from './new-receipt/new-receipt.component';
+import { VendorBillsComponent } from './vendor-bills/vendor-bills.component';
+import { NewVendorBillComponent } from './new-vendor-bill/new-vendor-bill.component';
 
 
 @NgModule({
@@ -57,6 +59,8 @@ import { NewReceiptComponent } from './new-receipt/new-receipt.component';
     NewCreditNoteComponent,
     ReceiptListComponent,
     NewReceiptComponent,
+    VendorBillsComponent,
+    NewVendorBillComponent,
 
   ],
   imports: [
