@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-new-vendor-bill',
@@ -13,8 +14,12 @@ export class NewVendorBillComponent implements OnInit {
   containerDropdownList: any[] = [];
   selectedItems: any[] = [];
   isUploaded: boolean = false;
-
-  constructor(private _formBuilder: FormBuilder) {}
+  tabs: string = '1';
+  vendorChargeList: any[] = [];
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _commonService: CommonService
+  ) {}
 
   ngOnInit(): void {
     this.dropdownSettings = {
@@ -46,5 +51,21 @@ export class NewVendorBillComponent implements OnInit {
 
   get f() {
     return this.vendorForm.controls;
+  }
+
+  onchangeTab(index: any) {
+    debugger;
+    this.tabs = index;
+
+    if (index == '2') {
+      this._commonService.destroyDT();
+      this._commonService.getDT();
+    }
+  }
+
+  nextGeneralDetails() {
+    this.tabs = '2';
+    this._commonService.destroyDT();
+    this._commonService.getDT();
   }
 }

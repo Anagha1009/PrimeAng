@@ -2,83 +2,143 @@
     <h2>New Vendor Bill</h2>
 </div>
 <div class="container">
-    <div class="row mt-4">
-        <div class="col-md-3 mt-4">
-            <div class="form-group">
-                <input type="text" class="form-control" />
-                <label class="form-label">Vessel Name</label>
-            </div>
-        </div>
-        <div class="col-md-3 mt-4">
-            <div class="form-group">
-                <ng-select><ng-option value="">--Select--</ng-option></ng-select>
-                <label class="form-label-ddl">Voyage No</label>
-            </div>
-        </div>
-        <div class="col-md-3 mt-4">
-            <div class="form-group">
-                <ng-multiselect-dropdown #multiSelect [placeholder]="'Select Container'" [settings]="dropdownSettings"
-                    [(ngModel)]="selectedItems" [formControl]="f.CONTAINER_LIST1" [data]="containerDropdownList">
-                </ng-multiselect-dropdown>
-                <label class="form-label-ddl">Container No<span class="text-danger"> *</span></label>
-                <small *ngIf="submitted && f.CONTAINER_LIST1.errors" class="text-danger">Please select container</small>
-            </div>
-        </div>
-        <div class="col-md-3 mt-4">
-            <div class="form-group">
-                <ng-select><ng-option value="">--Select--</ng-option></ng-select>
-                <label class="form-label-ddl">Vendors</label>
-            </div>
+    <div class="col-md-9 mx-auto">
+        <div class="tabs">
+            <input type="radio" class="d-none" (change)="onchangeTab('1')" id="radio-1" name="tabs" />
+            <label [class]="tabs == '1' ? 'tab ractive' : 'tab'" for="radio-1">General Details</label>
+            <input type="radio" class="d-none" (change)="onchangeTab('2')" id="radio-2" name="tabs" />
+            <label [class]="tabs == '2' ? 'tab ractive' : 'tab'" for="radio-2">Add Charges</label>
+            <input type="radio" class="d-none" (change)="onchangeTab('3')" id="radio-3" name="tabs" />
+            <label [class]="tabs == '3' ? 'tab ractive' : 'tab'" for="radio-3">Add Container & Rates</label>
+            <span class="glider d-none"></span>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-3 mt-4">
-            <div class="form-group">
-                <input type="text" class="form-control" />
-                <label class="form-label">Bill No</label>
-            </div>
-        </div>
-        <div class="col-md-3 mt-4">
-            <div class="form-group">
-                <input type="date" onkeypress="return false" class="form-control" />
-                <label class="form-label">Bill Date</label>
-            </div>
-        </div>
-        <div class="col-md-3 mt-4">
-            <div class="form-group">
-                <input type="date" onkeypress="return false" class="form-control" />
-                <label class="form-label">Bill Due Date</label>
-            </div>
-        </div>
-        <div class="col-md-3 mt-4">
-            <div class="form-group">
-                <textarea type="text" class="form-control"></textarea>
-                <label class="form-label">Additional Comments</label>
-            </div>
-        </div>
-    </div>
-    <h6 class="fw-bold">
-        Upload
-        Files</h6>
-    <div class="col-md-3">
-        <div class="formbold-mb-5 formbold-file-input" *ngIf="!isUploaded">
-            <input type="file" (change)="fileUpload($event)" name="file" id="file" />
-            <label for="file">
-                <div>
-                    <h3><i class="fa fa-file-pdf-o"></i></h3>
-                    <span class="formbold-drop-file">Upload</span>
-                    <small>Vendor Files</small>
+    <div class="services mt-2">
+        <div class="icon-box text-start">
+            <div *ngIf="tabs == '1'">
+                <div class="row mt-4">
+                    <div class="col-md-3 mt-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" />
+                            <label class="form-label">Vessel Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-4">
+                        <div class="form-group">
+                            <ng-select><ng-option value="">--Select--</ng-option></ng-select>
+                            <label class="form-label-ddl">Voyage No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-4">
+                        <div class="form-group">
+                            <ng-multiselect-dropdown #multiSelect [placeholder]="'Select Container'"
+                                [settings]="dropdownSettings" [(ngModel)]="selectedItems"
+                                [formControl]="f.CONTAINER_LIST1" [data]="containerDropdownList">
+                            </ng-multiselect-dropdown>
+                            <label class="form-label-ddl">Container No<span class="text-danger"> *</span></label>
+                            <small *ngIf="submitted && f.CONTAINER_LIST1.errors" class="text-danger">Please select
+                                container</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-4">
+                        <div class="form-group">
+                            <ng-select><ng-option value="">--Select--</ng-option></ng-select>
+                            <label class="form-label-ddl">Vendors</label>
+                        </div>
+                    </div>
                 </div>
-            </label>
-        </div>
-        <div class="formbold-file-list formbold-mb-5" *ngIf="isUploaded">
-            <div class="formbold-file-item">
-                <span class="formbold-file-name"></span>
-                <button><span class="bx bx-x-circle"></span></button>
+                <div class="row">
+                    <div class="col-md-3 mt-4">
+                        <div class="form-group">
+                            <input type="text" class="form-control" />
+                            <label class="form-label">Bill No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-4">
+                        <div class="form-group">
+                            <input type="date" onkeypress="return false" class="form-control" />
+                            <label class="form-label">Bill Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-4">
+                        <div class="form-group">
+                            <input type="date" onkeypress="return false" class="form-control" />
+                            <label class="form-label">Bill Due Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-4">
+                        <div class="form-group">
+                            <textarea type="text" class="form-control"></textarea>
+                            <label class="form-label">Additional Comments</label>
+                        </div>
+                    </div>
+                </div>
+                <h6 class="fw-bold">
+                    Upload
+                    Files</h6>
+                <div class="col-md-3">
+                    <div class="formbold-mb-5 formbold-file-input" *ngIf="!isUploaded">
+                        <input type="file" (change)="fileUpload($event)" name="file" id="file" />
+                        <label for="file">
+                            <div>
+                                <h3><i class="fa fa-file-pdf-o"></i></h3>
+                                <span class="formbold-drop-file">Upload</span>
+                                <small>Vendor Files</small>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="formbold-file-list formbold-mb-5" *ngIf="isUploaded">
+                        <div class="formbold-file-item">
+                            <span class="formbold-file-name"></span>
+                            <button><span class="bx bx-x-circle"></span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 offset-md-10 text-end">
+                    <button class="form-btn w-100" (click)="nextGeneralDetails()">Next</button>
+                </div>
+            </div>
+            <div *ngIf="tabs=='2'">
+                <div class="table-responsive">
+                    <table class="ratetable" id="data-table-config">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Vendor Bill No</th>
+                                <th>Vendor Name</th>
+                                <th>BL No</th>
+                                <th>GSTIN</th>
+                                <th>HSN Code</th>
+                                <th>Vendor Bill Date</th>
+                                <th>Charge Name</th>
+                                <th>Currency</th>
+                                <th>Rate</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of vendorChargeList;let i = index">
+                                <td>{{i +1}}</td>
+                                <td>Vendor Bill No</td>
+                                <td>Vendor Name</td>
+                                <td>BL No</td>
+                                <td>GSTIN</td>
+                                <td>HSN Code</td>
+                                <td>Vendor Bill Date</td>
+                                <td>Charge Name</td>
+                                <td>Currency</td>
+                                <td>Rate</td>
+                                <td><i class="fa fa-eye pointer"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-2 offset-md-10 text-end">
+                    <button class="form-btn w-100">Next</button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-2 offset-md-10 text-end">
-        <button class="form-btn w-100">Save</button>
-    </div>
+
 </div>
