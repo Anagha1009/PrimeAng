@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import Swal from 'sweetalert2';
 import { ToWords } from 'to-words';
+import { InvoiceService } from 'src/app/services/invoice.service';
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -32,7 +33,8 @@ export class NewInvoice2Component implements OnInit {
     private _formBuilder: FormBuilder,
     private _blService: BlService,
     private _commonService: CommonService,
-    private router: Router
+    private router: Router,
+    private _invoiceService: InvoiceService
   ) {}
 
   @ViewChild('closeBtn') closeBtn: ElementRef;
@@ -47,7 +49,6 @@ export class NewInvoice2Component implements OnInit {
       FROM_DATE: [''],
       TO_DATE: [''],
     });
-
     this.getInvoiceList();
   }
 
@@ -62,7 +63,6 @@ export class NewInvoice2Component implements OnInit {
       if (res.ResponseCode == 200) {
         this.invoiceList = res.Data;
       }
-
       this._commonService.getDT();
     });
   }
@@ -73,12 +73,21 @@ export class NewInvoice2Component implements OnInit {
       return;
     }
     this.closeBtn.nativeElement.click();
-
-    localStorage.setItem('value', this.invoiceForm.get('radio').value);
-    localStorage.setItem('INVOICE_ID', '0');
-    this.router.navigateByUrl(
-      '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
-    );
+    var blno = this.invoiceForm.get('BL_NO').value;
+    var type = this.invoiceForm.get('radio').value;
+    this._invoiceService.checkBL(blno, type).subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this._commonService.warnMsg(' Invoice is Already Exists !');
+        this.submitted = false;
+        this.invoiceForm.reset();
+      } else {
+        localStorage.setItem('value', this.invoiceForm.get('radio').value);
+        localStorage.setItem('INVOICE_ID', '0');
+        this.router.navigateByUrl(
+          '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
+        );
+      }
+    });
   }
 
   editInvoice(value: any, blNo: any, invoiceID: any) {

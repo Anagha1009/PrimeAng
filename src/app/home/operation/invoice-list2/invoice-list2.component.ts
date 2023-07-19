@@ -296,7 +296,6 @@ export class InvoiceList2Component implements OnInit {
         element.get('EXCHANGE_RATE').setValue(0);
       }
     });
-
     this._InvoiceService
       .InsertInvoice(JSON.stringify(this.listForm.value))
       .subscribe((res: any) => {
