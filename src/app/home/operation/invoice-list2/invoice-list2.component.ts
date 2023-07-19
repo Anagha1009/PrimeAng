@@ -258,14 +258,14 @@ export class InvoiceList2Component implements OnInit {
       }
     });
     console.log(JSON.stringify(this.listForm.value))
-    // this._InvoiceService
-    //   .InsertInvoice(JSON.stringify(this.listForm.value))
-    //   .subscribe((res: any) => {
-    //     if (res.responseCode == 200) {
-    //       this._commonService.successMsg('Invoice saved Successfully !');
-    //       this._router.navigateByUrl('/home/operations/new-invoice');
-    //     }
-    //   });
+    this._InvoiceService
+      .InsertInvoice(JSON.stringify(this.listForm.value))
+      .subscribe((res: any) => {
+        if (res.responseCode == 200) {
+          this._commonService.successMsg('Invoice saved Successfully !');
+          this._router.navigateByUrl('/home/operations/new-invoice');
+        }
+      });
   }
 
   saveContainer(event: any, value = 0) {

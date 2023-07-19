@@ -44,4 +44,10 @@ export class InvoiceService {
       this.httpOptions
     );
   }
+  checkBL(BL_NO:any, INVOICE_TYPE:any){
+    return this._http.post<any>(
+      this.BASE_URL + 'Invoice/GetBLExists?INVOICE_TYPE=' +INVOICE_TYPE + 
+      '&BL_NO=' + BL_NO,
+       this.httpOptions)
+  }
 }
