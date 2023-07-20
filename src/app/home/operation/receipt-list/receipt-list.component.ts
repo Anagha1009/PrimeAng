@@ -18,6 +18,7 @@ export class ReceiptListComponent implements OnInit {
   isLoading: boolean = false;
   isLoading1: boolean = false;
   receiptType: any;
+  invoiceNoList: any[] = [];
   invoiceNo: any;
 
   @ViewChild('openBtn') openBtn: ElementRef;
@@ -88,7 +89,7 @@ export class ReceiptListComponent implements OnInit {
     });
   }
 
-  openModal(invoiceNo: any) {
+  openModal(invoiceNo: any = '') {
     this.invoiceNo = invoiceNo;
     this.openBtn.nativeElement.click();
   }
@@ -96,9 +97,45 @@ export class ReceiptListComponent implements OnInit {
   goToNewReceipt() {
     localStorage.removeItem('receiptType');
     localStorage.removeItem('InvoiceNo');
+    localStorage.removeItem('InvoiceNoList');
     localStorage.setItem('receiptType', this.receiptType);
     localStorage.setItem('InvoiceNo', this.invoiceNo);
+    localStorage.setItem('InvoiceNoList', JSON.stringify(this.invoiceNoList));
     this._router.navigateByUrl('/home/operations/new-receipt');
     this.closeBtn.nativeElement.click();
+  }
+
+  checkAll(event: any) {
+    if (event.target.checked) {
+      this.invoiceNoList = [];
+      this.invoiceList.forEach((element) => {
+        this.invoiceNoList.push(element.INVOICE_NO);
+      });
+    } else {
+      this.invoiceNoList = [];
+    }
+
+    for (var i: number = 0; i < this.invoiceList?.length; i++) {
+      (document.getElementById('chck' + i) as HTMLInputElement).checked =
+        event.target.checked;
+    }
+  }
+
+  getChecked(i: any) {
+    return (document.getElementById('chck' + i) as HTMLInputElement).checked;
+  }
+
+  checkItem(item: any, event: any) {
+    if (event.target.checked) {
+      this.invoiceNoList.push(item);
+    } else {
+      var index = this.invoiceNoList.findIndex(
+        (m: { INVOICE_NO: any }) => m.INVOICE_NO === item.INVOICE_NO
+      );
+      this.invoiceNoList.splice(index, 1);
+    }
+
+    (document.getElementById('chckAll') as HTMLInputElement).checked =
+      this.invoiceNoList.length == this.invoiceList.length ? true : false;
   }
 }

@@ -7,33 +7,34 @@
         <div class="services pb-0">
             <div class="icon-box icon-box-cyan text-start" [formGroup]="receiptForm">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="label-header">Invoice No</label>
-                        <label class="label-subheader">{{invoiceDetails?.INVOICE_NO}}</label>
+                        <label class="label-subheader">{{invoiceNoList}}</label>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="label-header">Invoice Party</label>
-                        <label class="label-subheader">{{invoiceDetails?.BILL_TO}}</label>
+                        <label class="label-subheader"></label>
                     </div>
-                    <div class="col-md-3">
-                        <label class="label-header">Received From</label>
-                        <label class="label-subheader">{{invoiceDetails?.BILL_FROM}}
-                        </label>
-                    </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="label-header">Customer</label>
-                        <label class="label-subheader">{{invoiceDetails?.SHIPPER}}
+                        <label class="label-subheader">
                         </label>
                     </div>
                 </div>
                 <div class="row mt-4">
-                    <div class="col-md-3 mt-4">
+                    <div class="col-md-4 mt-4">
+                        <div class="form-group">
+                            <input formControlName="RECEIVED_FROM" type="text" class="form-control" />
+                            <label class="form-label">Received From</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-4">
                         <div class="form-group">
                             <input type="text" class="form-control" />
                             <label class="form-label">Deposit Cash/Bank</label>
                         </div>
                     </div>
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-4 mt-4">
                         <div class="form-group">
                             <textarea type="text" class="form-control"></textarea>
                             <label class="form-label">Receipt Remarks</label>
@@ -71,7 +72,12 @@
                             <option value="DD">DD</option>
                             <option value="Cash">Cash</option>
                         </select></td>
-                    <td width="20%"><span *ngIf="item.value.ISNEW == 0">{{item.value.BANK_NAME}}</span>
+                    <td width="20%"><span *ngIf="item.value.ISNEW == 0"><select formControlName="BANK_NAME"
+                                class="form-control3">
+                                <option value="" disabled>--Select--</option>
+                                <option value="{{bankItems.BANK_NAME}}" *ngFor="let bankItems of bankList">
+                                    {{bankItems.BANK_NAME}}</option>
+                            </select></span>
                         <input *ngIf="item.value.ISNEW == 1" type="text" formControlName="BANK_NAME"
                             class="form-control3" />
                     </td>
@@ -102,17 +108,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr *ngFor="let item of f;let i = index">
                     <td width="1%">1</td>
                     <td width="10%">Prime Maritime</td>
-                    <td width="10%">{{invoiceDetails?.VESSEL_NAME}} / {{invoiceDetails?.VOYAGE_NO}}</td>
-                    <td width="15%">{{invoiceDetails?.SHIPPER}}</td>
-                    <td width="10%">{{invoiceDetails?.TAN_NO == '' ? '-' : invoiceDetails?.TAN_NO == null ? '-' :
-                        invoiceDetails?.TAN_NO}}
+                    <td width="10%">{{item.value.VESSEL_NAME}} / {{item.value.VOYAGE_NO}}</td>
+                    <td width="15%">{{item.value.SHIPPER}}</td>
+                    <td width="10%">{{item.value.TAN_NO == '' ? '-' : item.value.TAN_NO == null ? '-' :
+                        item.value.TAN_NO}}
                     </td>
-                    <td width="10%">{{invoiceDetails?.BL_NO}}</td>
-                    <td width="10%">{{invoiceDetails?.INVOICE_NO}}</td>
-                    <td width="10%">INR {{invoiceDetails?.TOTAL_AMOUNT}}</td>
+                    <td width="10%">{{item.value.BL_NO}}</td>
+                    <td width="10%">{{item.value.INVOICE_NO}}</td>
+                    <td width="10%">INR {{item.value.TOTAL_AMOUNT}}</td>
                     <td width="10%"><input type="text" class="form-control3" /></td>
                     <td width="10%"><input type="text" class="form-control3" /></td>
                     <td width="4%"><span class="pointer fs-5 fw-bolder">...</span></td>

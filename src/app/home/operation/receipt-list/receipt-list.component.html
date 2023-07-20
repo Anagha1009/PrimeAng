@@ -32,7 +32,10 @@
         <table class="ratetable" id="data-table-config">
             <thead>
                 <tr>
-                    <th>No</th>
+                    <th><label *ngIf="invoiceList?.length > 0" class="checkbox-wrap checkbox-primary">
+                            <input type="checkbox" (change)="checkAll($event)" id="chckAll">
+                            <span class="checkmark" style="top:-8px"></span>
+                        </label></th>
                     <th>Invoice No</th>
                     <th>Type</th>
                     <th>Bill To</th>
@@ -43,17 +46,29 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of invoiceList;let i = index">
-                    <td>{{i +1}}</td>
+                <tr *ngFor="let item of invoiceList;let i = index; let first = first">
+                    <td>
+                        <label class="checkbox-wrap checkbox-primary">
+                            <input type="checkbox" (change)="checkItem(item,$event)" id="chck{{i}}">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
                     <td>{{item.INVOICE_NO}}</td>
                     <td>{{item.INVOICE_TYPE}}</td>
                     <td>{{item.BILL_TO}}</td>
                     <td>{{item.BL_NO}}</td>
                     <td>{{item.SHIPPER_NAME}}</td>
-                    <td class="text-truncate">{{item.BILL_FROM}} ...</td>
-                    <td>
-                        <button class="form-btn btn-sm" (click)="openModal(item.INVOICE_NO)">
+                    <td>{{item.BILL_FROM.split('|')[0]}}</td>
+                    <td *ngIf="invoiceList.length != invoiceNoList.length">
+                        <button *ngIf="getChecked(i)" class="form-btn btn-sm" (click)="openModal(item.INVOICE_NO)">
                             Receipt</button>
+                        <button class="form-btn btn-sm d-none" #openBtn data-bs-toggle="modal" href="#receiptModal">
+                            Receipt</button>
+                    </td>
+                    <td [attr.rowspan]="2" *ngIf="invoiceList.length
+                    == invoiceNoList.length && first">
+                        <button class="form-btn btn-sm" (click)="openModal()">
+                            Receipt All</button>
                         <button class="form-btn btn-sm d-none" #openBtn data-bs-toggle="modal" href="#receiptModal">
                             Receipt</button>
                     </td>
