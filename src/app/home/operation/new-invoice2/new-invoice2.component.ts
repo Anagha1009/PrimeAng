@@ -107,6 +107,7 @@ export class NewInvoice2Component implements OnInit {
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
           this.invoiceDetails = res.Data;
+          console.log(this.invoiceDetails);
           this.generatePDF();
         }
       });
@@ -287,7 +288,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: this.invoiceDetails?.BILL_TO,
+                      text: this.invoiceDetails?.SHIPPER_NAME,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -381,7 +382,7 @@ export class NewInvoice2Component implements OnInit {
                     {
                       text:
                         this.invoiceDetails?.VESSEL_NAME +
-                        '/' +
+                        ' / ' +
                         this.invoiceDetails?.VOYAGE_NO,
                       bold: false,
                       fontSize: 8,
@@ -428,7 +429,10 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: '',
+                      text:
+                        this.invoiceDetails?.INVOICE_TYPE == 'FREIGHT'
+                          ? this.invoiceDetails?.PAYMENT_TERM
+                          : '',
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -619,7 +623,7 @@ export class NewInvoice2Component implements OnInit {
                     },
                     {
                       text:
-                        '20GP X ' +
+                        "20'GP X " +
                         (+this.invoiceDetails?.CONTAINERS.split(',').length -
                           1),
                       bold: false,
@@ -693,7 +697,7 @@ export class NewInvoice2Component implements OnInit {
           },
 
           table: {
-            widths: [55, 15, 40, 20, 25, 25, 30, 20, 30, 20, 30, 35],
+            widths: [45, 10, 30, 20, 25, 25, 20, 20, 20, 30, 20, 30, 35],
             headerRows: 1,
             body: [
               [
@@ -729,7 +733,11 @@ export class NewInvoice2Component implements OnInit {
                   fontSize: 9,
                   bold: true,
                 },
-
+                {
+                  text: 'Ex Rate',
+                  fontSize: 9,
+                  bold: true,
+                },
                 {
                   text: 'Tax Amount',
                   fontSize: 9,
@@ -782,16 +790,20 @@ export class NewInvoice2Component implements OnInit {
                   fontSize: 8,
                 },
                 {
-                  text: p.AMOUNT,
+                  text: p.APPROVED_RATE,
                   fontSize: 8,
                 },
                 {
                   text: p.AMOUNT,
+                  fontSize: 8,
+                },
+                {
+                  text: p.EXCHANGE_RATE,
                   fontSize: 8,
                 },
 
                 {
-                  text: p.AMOUNT,
+                  text: p.TAXABLE_AMOUNT,
                   fontSize: 8,
                 },
                 {
@@ -817,7 +829,7 @@ export class NewInvoice2Component implements OnInit {
               ]),
               [
                 {
-                  colSpan: 8,
+                  colSpan: 12,
                   text:
                     'Total : ' +
                     'INR ' +
@@ -834,6 +846,9 @@ export class NewInvoice2Component implements OnInit {
                   fontSize: 8,
                 },
 
+                {
+                  text: '',
+                },
                 {
                   text: '',
                 },

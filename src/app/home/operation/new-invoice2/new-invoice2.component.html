@@ -36,30 +36,29 @@
     <table class="ratetable table-bordered" id="data-table-config">
       <thead>
         <tr>
-          <th width="1%">No</th>
-          <th width="10%">Invoice No</th>
-          <th width="10%">Type</th>
-          <th width="10%">Bill To</th>
-          <th width="10%">BL No</th>
-          <th width="10%">Shipper</th>
-          <th width="20%">Bill From</th>
-          <th width="15%">Status</th>
-          <th width="14%">Action</th>
+          <th>No</th>
+          <th>Invoice No</th>
+          <th>Type</th>
+          <th>Bill To</th>
+          <th>BL No</th>
+          <th>Shipper</th>
+          <th>Bill From</th>
+          <th>Status</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of invoiceList let i = index">
-          <td width="1%">{{i +1}}</td>
-          <td width="10%">{{item.INVOICE_NO}}</td>
-          <td width="10%">{{item.INVOICE_TYPE}}</td>
-          <td width="10%">{{item.BILL_TO}}</td>
-          <td width="10%">{{item.BL_NO}}</td>
-          <td width="10%">{{item.SHIPPER_NAME}}</td>
-          <td width="20%" class="text-truncate">{{item.BILL_FROM}} ...</td>
-          <td width="15%" class="status"><span
-              [class]="item.STATUS == 'PROFORMA' ? 'waiting' : 'active'">{{item.STATUS}}</span>
+          <td>{{i +1}}</td>
+          <td>{{item.INVOICE_NO}}</td>
+          <td>{{item.INVOICE_TYPE}}</td>
+          <td>{{item.BILL_TO}}</td>
+          <td>{{item.BL_NO}}</td>
+          <td>{{item.SHIPPER_NAME}}</td>
+          <td>{{item.BILL_FROM.split('|')[0]}}</td>
+          <td class="status"><span [class]="item.STATUS == 'PROFORMA' ? 'waiting' : 'active'">{{item.STATUS}}</span>
           </td>
-          <td width="14%">
+          <td>
             <i class="fa fa-eye me-2 pointer fs-6" tooltip="View" placement="top"></i>
             <i class="fa fa-file-pdf-o pointer text-danger fs-6" (click)="getInvoiceDetails(item.INVOICE_ID)"
               tooltip="Download PDF" placement="top"></i>

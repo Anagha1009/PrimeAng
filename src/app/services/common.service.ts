@@ -4,9 +4,6 @@ import { environment } from 'src/environments/environment.prod';
 import * as jquery from 'jquery';
 import Swal from 'sweetalert2';
 
-
-
-
 @Injectable({
   providedIn: 'root',
 })
@@ -292,10 +289,8 @@ export class CommonService {
   }
   getRandomInvoiceNumber(prefix: string) {
     var d: any = new Date();
-    var year = d.getFullYear() 
-    var num = Math.floor((Math.random() * 9000) + 1000)
-    return prefix + year + '/' + 'S' + num;
+    var year = d.getFullYear();
+    //var num = Math.floor((Math.random() * 9000) + 1000)
+    return prefix + year + '/' + 'S';
   }
-
-
 }

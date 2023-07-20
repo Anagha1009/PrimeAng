@@ -31,9 +31,10 @@ export class InvoiceList2Component implements OnInit {
   isUpdate: boolean = false;
   CurrencyList: any[] = [];
   ChargeMasterList: any[] = [];
-  BillFromList: any[] = [];
+  BillToList: any[] = [];
   containerDropdownList: any[] = [];
   AddressList: any[] = [];
+  AddressList1: any[] = [];
   BLNO: string = '';
   blno: any;
   data: any;
@@ -88,6 +89,7 @@ export class InvoiceList2Component implements OnInit {
       BILL_TO: ['', Validators.required],
       BILL_FROM: [''],
       SHIPPER_NAME: [''],
+      CONSIGNEE_NAME: [''],
       PAYMENT_TERM: [''],
       BL_NO: [''],
       INVOICE_DATE: [''],
@@ -171,10 +173,10 @@ export class InvoiceList2Component implements OnInit {
 
     // Get Cutomer Name Bill_To
     this._commonService
-      .getDropdownData('CUSTOMER_NAME')
+      .getDropdownData('BILL_TO_CUSTOMER_NAME')
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
-          this.BillFromList = res.Data;
+          this.BillToList = res.Data;
         }
       });
 
@@ -183,6 +185,13 @@ export class InvoiceList2Component implements OnInit {
         this.AddressList = res.Data;
       }
     });
+  }
+
+  getAddressForCx(event: any) {
+    this.listForm.get('ADDRESS').setValue('');
+    this.AddressList1 = [];
+    this.AddressList1 = this.AddressList.filter((x) => x.CUST_ID === +event);
+    this.listForm.get('ADDRESS').enable();
   }
 
   getAddress(
@@ -416,6 +425,7 @@ export class InvoiceList2Component implements OnInit {
         BL.PORT = this._commonService.getUserPort();
         this.listForm.get('BL_NO')?.setValue(BLNO);
         this.listForm.get('SHIPPER_NAME')?.setValue(res.Data.SHIPPER);
+        this.listForm.get('CONSIGNEE_NAME')?.setValue(res.Data.CONSIGNEE);
       },
       (error: any) => {},
       () => {
@@ -428,8 +438,10 @@ export class InvoiceList2Component implements OnInit {
             this.BankAccList = [];
             this.BankAccList = res.Data.BANK;
             this.listForm.get('BANK_ID').disable();
-            this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_NAME);
-            this.listForm.get('BILL_FROM')?.setValue(res.Data.ORG_ADDRESS1);
+            this.listForm.get('ADDRESS').disable();
+            this.listForm
+              .get('BILL_FROM')
+              ?.setValue(res.Data.ORG_NAME + ' | ' + res.Data.ORG_ADDRESS1);
             const add = this.listForm.get('BL_LIST') as FormArray;
             add.clear();
             if (this.value == 'FREIGHT') {
