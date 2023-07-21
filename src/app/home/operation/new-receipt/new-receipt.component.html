@@ -8,12 +8,8 @@
             <div class="icon-box icon-box-cyan text-start" [formGroup]="receiptForm">
                 <div class="row">
                     <div class="col-md-4">
-                        <label class="label-header">Invoice No</label>
-                        <label class="label-subheader">{{invoiceNoList}}</label>
-                    </div>
-                    <div class="col-md-4">
                         <label class="label-header">Invoice Party</label>
-                        <label class="label-subheader"></label>
+                        <label class="label-subheader">{{receiptForm.get('INVOICE_PARTY')?.value}}</label>
                     </div>
                     <div class="col-md-4">
                         <label class="label-header">Customer</label>
@@ -44,9 +40,6 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6 offset-md-6 text-end">
-        <button class="form-btn btn-sm" (click)="addBank()">Add Row</button>
-    </div>
     <h6 class="fw-bold">Bank List</h6>
     <div class="table-responsive">
         <table class="ratetable table-bordered">
@@ -71,6 +64,7 @@
                             <option value="NEFT">NEFT</option>
                             <option value="DD">DD</option>
                             <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
                         </select></td>
                     <td width="20%"><span *ngIf="item.value.ISNEW == 0"><select formControlName="BANK_NAME"
                                 class="form-control3">
@@ -90,43 +84,130 @@
             </tbody>
         </table>
     </div>
-    <div class="table-responsive mt-4">
+    <table class="ratetable table-bordered">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>Principal
+                </th>
+                <th>Vessel</th>
+                <th>BL Shipper</th>
+                <th>TAN</th>
+                <th>BL No</th>
+                <th>Invoice No</th>
+                <th>Invoice Amount</th>
+                <th>Outstanding Amount</th>
+                <th>Amount Received</th>
+                <th>#</th>
+            </tr>
+        </thead>
+
+        <tbody *ngFor="let invList of f; let i = index">
+
+            <tr>
+                <td>{{i+1}}</td>
+                <td>Prime Maritime</td>
+                <td>{{invList.value.VESSEL_NAME}} / {{invList.value.VOYAGE_NO}}</td>
+                <td>{{invList.value.SHIPPER}}</td>
+                <td>{{invList.value.TAN_NO}}</td>
+                <td>{{invList.value.BL_NO}}</td>
+                <td> {{invList.value.INVOICE_NO}}</td>
+                <td>INR {{invList.value.TOTAL_AMOUNT}}</td>
+                <td><input class="form-control3" /></td>
+                <td><input class="form-control3" /></td>
+                <td>
+                    <a class="fs-5 fw-bold" (click)="getChargeList(invList.value.INVOICE_NO,i)">
+                        ...
+                    </a>
+                </td>
+            </tr>
+            <tr class="subtable" *ngIf="i == subtableIndex">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="5" class="p-0 border">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th width="10%">No</th>
+                                <th width="30%">Charge</th>
+                                <th width="15%">Invoice</th>
+                                <th width="15%">Collected</th>
+                                <th width="15%">Outstanding</th>
+                                <th width="15%">Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let chList of f2;let i = index" [formGroup]="chList">
+                                <td width="10%">{{i+1}}</td>
+                                <td width="30%">{{chList.value.CHARGE_NAME}}</td>
+                                <td width="15%">{{chList.value.TOTAL_AMOUNT}}</td>
+                                <td width="15%"><input type="text" class="form-control3" /></td>
+                                <td width="15%"><input type="text" class="form-control3" /></td>
+                                <td width="15%"><input type="text" class="form-control3" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </tbody>
+    </table>
+    <!-- <div class="table-responsive mt-4">
         <table class="ratetable table-bordered">
             <thead>
                 <tr>
-                    <th width="1%">No</th>
-                    <th width="10%">Principal</th>
-                    <th width="10%">Vessel</th>
-                    <th width="15%">BL Shipper</th>
-                    <th width="10%">TAN No</th>
-                    <th width="10%">BL No</th>
-                    <th width="10%">Inv No</th>
-                    <th width="10%">Inv Amount</th>
-                    <th width="10%">Outstanding</th>
-                    <th width="10%">Received</th>
-                    <th width="4%">#</th>
+                    <th>No</th>
+                    <th>Principal</th>
+                    <th>Vessel</th>
+                    <th>BL Shipper</th>
+                    <th>TAN No</th>
+                    <th>BL No</th>
+                    <th>Inv No</th>
+                    <th>Inv Amount</th>
+                    <th>Outstanding</th>
+                    <th>Received</th>
+                    <th>#</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of f;let i = index">
-                    <td width="1%">1</td>
-                    <td width="10%">Prime Maritime</td>
-                    <td width="10%">{{item.value.VESSEL_NAME}} / {{item.value.VOYAGE_NO}}</td>
-                    <td width="15%">{{item.value.SHIPPER}}</td>
-                    <td width="10%">{{item.value.TAN_NO == '' ? '-' : item.value.TAN_NO == null ? '-' :
+                    <td colspan="f.length + 1">
+                <tr>
+                    <td>{{i+1}}</td>
+                    <td>Prime Maritime</td>
+                    <td>{{item.value.VESSEL_NAME}} / {{item.value.VOYAGE_NO}}</td>
+                    <td>{{item.value.SHIPPER}}</td>
+                    <td>{{item.value.TAN_NO == '' ? '-' : item.value.TAN_NO == null ? '-' :
                         item.value.TAN_NO}}
                     </td>
-                    <td width="10%">{{item.value.BL_NO}}</td>
-                    <td width="10%">{{item.value.INVOICE_NO}}</td>
-                    <td width="10%">INR {{item.value.TOTAL_AMOUNT}}</td>
-                    <td width="10%"><input type="text" class="form-control3" /></td>
-                    <td width="10%"><input type="text" class="form-control3" /></td>
-                    <td width="4%"><span class="pointer fs-5 fw-bolder">...</span></td>
+                    <td>{{item.value.BL_NO}}</td>
+                    <td>{{item.value.INVOICE_NO}}</td>
+                    <td>INR {{item.value.TOTAL_AMOUNT}}</td>
+                    <td><input type="text" class="form-control3" /></td>
+                    <td><input type="text" class="form-control3" /></td>
+                    <td><span class="pointer fs-5 fw-bolder">...</span></td>
+                </tr>
+                </td>
+                <td>
+                    <tr *ngFor="let chList of f2;let i = index" [formGroup]="chList">
+                        <td>{{i+1}}</td>
+                        <td>{{chList.value.CHARGE_NAME}}</td>
+                        <td>{{chList.value.TOTAL_AMOUNT}}</td>
+                        <td><input type="text" class="form-control3" /></td>
+                        <td><input type="text" class="form-control3" /></td>
+                        <td><input type="text" class="form-control3" />
+                        </td>
+                    </tr>
+                </td>
                 </tr>
             </tbody>
         </table>
-    </div>
-    <div class="col-lg-10 mx-auto">
+    </div> -->
+    <!-- <div class="col-lg-10 mx-auto">
         <div class="table-responsive">
             <table class="ratetable subtable">
                 <thead>
@@ -140,10 +221,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of f2;let i = index" [formGroup]="item">
+                    <tr *ngFor="let chList of f2;let i = index" [formGroup]="chList">
                         <td width="1%">{{i+1}}</td>
-                        <td width="30%">{{item.value.CHARGE_NAME}}</td>
-                        <td width="24%">{{item.value.TOTAL_AMOUNT}}</td>
+                        <td width="30%">{{chList.value.CHARGE_NAME}}</td>
+                        <td width="24%">{{chList.value.TOTAL_AMOUNT}}</td>
                         <td width="15%"><input type="text" class="form-control3" /></td>
                         <td width="15%"><input type="text" class="form-control3" /></td>
                         <td width="15%"><input type="text" class="form-control3" /></td>
@@ -154,7 +235,7 @@
         <label class="label-header">
             Balance Amount :
         </label>
-    </div>
+    </div> -->
     <div class="col-md-2 offset-md-10 text-end mb-4">
         <button class="form-btn w-100">Submit</button>
     </div>
