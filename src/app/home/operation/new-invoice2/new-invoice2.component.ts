@@ -6,8 +6,8 @@ import { CommonService } from 'src/app/services/common.service';
 import { Router } from '@angular/router';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import Swal from 'sweetalert2';
-import { ToWords } from 'to-words';
 import { InvoiceService } from 'src/app/services/invoice.service';
+import { ToWords } from 'to-words';
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -72,20 +72,74 @@ export class NewInvoice2Component implements OnInit {
     if (this.invoiceForm.invalid) {
       return;
     }
-    this.closeBtn.nativeElement.click();
     var blno = this.invoiceForm.get('BL_NO').value;
-    var type = this.invoiceForm.get('radio').value;
-    this._invoiceService.checkBL(blno, type).subscribe((res: any) => {
-      if (res.ResponseCode == 200) {
-        this._commonService.warnMsg(' Invoice is Already Exists !');
-        this.submitted = false;
-        this.invoiceForm.reset();
-      } else {
+    var BL = new Bl();
+    BL.AGENT_CODE = this._commonService.getUserCode();
+    BL.BL_NO = blno;
+    this._blService.getBLDetails(BL).subscribe((res: any) => {
+      console.log('res', res);
+      var agentcode = res.Data.DESTINATION_AGENT_CODE;
+      var finalport = res.Data.FINAL_DESTINATION;
+      var userport = this._commonService.getUserPort().split(',')[0];
+      var orgCode = this._commonService.getUserOrgCode();
+      var username = this._commonService.getUserName();
+      console.log('username ', username);
+      var radio = this.invoiceForm.get('radio').value;
+      // TRUE == POD AND FREIGHT OFF
+      if (
+        agentcode == 'I001' &&
+        finalport == 'AEJEA' &&
+        radio == 'POL' &&
+        username == 'SheenuB'
+      ) {
+        //  localStorage.setItem('value', this.invoiceForm.get('radio').value);
+        //   localStorage.setItem('INVOICE_ID', '0');
+        //   this.router.navigateByUrl(
+        //      '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
+        //    );
+        //    this.submitted = false;
+        //    this.invoiceForm.reset();
+        //    this.closeBtn.nativeElement.click();
+
+        this.closeBtn.nativeElement.click();
+        var blno = this.invoiceForm.get('BL_NO').value;
+        var type = this.invoiceForm.get('radio').value;
+        this._invoiceService.checkBL(blno, type).subscribe((res: any) => {
+          if (res.ResponseCode == 200) {
+            this._commonService.warnMsg(' Invoice is Already Exists !');
+            this.submitted = false;
+            this.invoiceForm.reset();
+          }
+        });
+      } else if (
+        agentcode != 'I001' &&
+        finalport != 'AEJEA' &&
+        radio != 'POL' &&
+        username != res.Data.CREATED_BY
+      ) {
         localStorage.setItem('value', this.invoiceForm.get('radio').value);
         localStorage.setItem('INVOICE_ID', '0');
         this.router.navigateByUrl(
           '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
         );
+        this.submitted = false;
+        this.invoiceForm.reset();
+        this.closeBtn.nativeElement.click();
+      } else {
+        debugger;
+        alert('hi');
+        this.submitted = false;
+        this.invoiceForm.reset();
+        this.closeBtn.nativeElement.click();
+        var blno = this.invoiceForm.get('BL_NO').value;
+        var type = this.invoiceForm.get('radio').value;
+        this._invoiceService.checkBL(blno, type).subscribe((res: any) => {
+          if (res.ResponseCode == 200) {
+            this._commonService.warnMsg(' Invoice is Already Exists !');
+            this.submitted = false;
+            this.invoiceForm.reset();
+          }
+        });
       }
     });
   }
@@ -198,7 +252,7 @@ export class NewInvoice2Component implements OnInit {
               ],
               [
                 {
-                  text: this.invoiceDetails?.BILL_TO.toUpperCase(),
+                  text: this.invoiceDetails?.SHIPPER_NAME.toUpperCase(),
                   bold: true,
                   fontSize: 8,
                 },
@@ -596,7 +650,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: this.invoiceDetails?.REMARKS,
+                      text: '',
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -935,20 +989,12 @@ export class NewInvoice2Component implements OnInit {
                 {},
                 {
                   text:
-                    'Account Holder Name: ' +
-                    this.invoiceDetails?.BANK.BANK_HOLDER_NAME +
-                    '\n' +
-                    'Payment in Favour: PRIME MARITIME \n' +
-                    'Bank Name: ' +
-                    this.invoiceDetails?.BANK.BANK_NAME +
-                    '\n' +
-                    'Account Number: ' +
-                    this.invoiceDetails?.BANK.BANK_ACC_NO +
-                    '\n' +
-                    'IFSC Code: ' +
-                    this.invoiceDetails?.BANK.BANK_IFSC +
-                    '\n' +
-                    'Bank Address: ',
+                    'Account Holder Name: PRIME MARITIME\n' +
+                    'Payment in Favour: \n' +
+                    'Bank Name: \n' +
+                    'Account Number:\n' +
+                    'IFSC Code:\n' +
+                    'Bank Address:',
                   fontSize: 8,
                 },
               ],
@@ -1043,3 +1089,20 @@ export class NewInvoice2Component implements OnInit {
     });
   }
 }
+
+// this.closeBtn.nativeElement.click();
+// var blno = this.invoiceForm.get('BL_NO').value
+// var type = this.invoiceForm.get('radio').value
+// //  this._invoiceService.checkBL(blno, type).subscribe((res:any)=>{
+// //   if(res.ResponseCode == 200){
+// //         this._commonService.warnMsg(' Invoice is Already Exists !');
+// //         this.submitted = false;
+// //         this.invoiceForm.reset();
+// //   }else{
+//         localStorage.setItem('value', this.invoiceForm.get('radio').value);
+//         localStorage.setItem('INVOICE_ID', '0');
+//         this.router.navigateByUrl(
+//           '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
+//         );
+//   // }
+//   // })
