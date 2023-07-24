@@ -40,7 +40,7 @@
             </div>
         </div>
     </div>
-    <h6 class="fw-bold">Bank List</h6>
+    <h6 class="fw-bold">Bank Details</h6>
     <div class="table-responsive">
         <table class="ratetable table-bordered">
             <thead>
@@ -101,9 +101,7 @@
                 <th>#</th>
             </tr>
         </thead>
-
         <tbody *ngFor="let invList of f; let i = index">
-
             <tr>
                 <td>{{i+1}}</td>
                 <td>Prime Maritime</td>
@@ -153,89 +151,8 @@
                 <td></td>
                 <td></td>
             </tr>
-
         </tbody>
     </table>
-    <!-- <div class="table-responsive mt-4">
-        <table class="ratetable table-bordered">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Principal</th>
-                    <th>Vessel</th>
-                    <th>BL Shipper</th>
-                    <th>TAN No</th>
-                    <th>BL No</th>
-                    <th>Inv No</th>
-                    <th>Inv Amount</th>
-                    <th>Outstanding</th>
-                    <th>Received</th>
-                    <th>#</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of f;let i = index">
-                    <td colspan="f.length + 1">
-                <tr>
-                    <td>{{i+1}}</td>
-                    <td>Prime Maritime</td>
-                    <td>{{item.value.VESSEL_NAME}} / {{item.value.VOYAGE_NO}}</td>
-                    <td>{{item.value.SHIPPER}}</td>
-                    <td>{{item.value.TAN_NO == '' ? '-' : item.value.TAN_NO == null ? '-' :
-                        item.value.TAN_NO}}
-                    </td>
-                    <td>{{item.value.BL_NO}}</td>
-                    <td>{{item.value.INVOICE_NO}}</td>
-                    <td>INR {{item.value.TOTAL_AMOUNT}}</td>
-                    <td><input type="text" class="form-control3" /></td>
-                    <td><input type="text" class="form-control3" /></td>
-                    <td><span class="pointer fs-5 fw-bolder">...</span></td>
-                </tr>
-                </td>
-                <td>
-                    <tr *ngFor="let chList of f2;let i = index" [formGroup]="chList">
-                        <td>{{i+1}}</td>
-                        <td>{{chList.value.CHARGE_NAME}}</td>
-                        <td>{{chList.value.TOTAL_AMOUNT}}</td>
-                        <td><input type="text" class="form-control3" /></td>
-                        <td><input type="text" class="form-control3" /></td>
-                        <td><input type="text" class="form-control3" />
-                        </td>
-                    </tr>
-                </td>
-                </tr>
-            </tbody>
-        </table>
-    </div> -->
-    <!-- <div class="col-lg-10 mx-auto">
-        <div class="table-responsive">
-            <table class="ratetable subtable">
-                <thead>
-                    <tr class="bg-light">
-                        <th width="1%">No</th>
-                        <th width="30%">Charge Name</th>
-                        <th width="24%">Invoice Amount (INR)</th>
-                        <th width="15%">Receipt Collected (INR)</th>
-                        <th width="15%">Outstanding Amount (INR)</th>
-                        <th width="15%">Receipt Amount (INR)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let chList of f2;let i = index" [formGroup]="chList">
-                        <td width="1%">{{i+1}}</td>
-                        <td width="30%">{{chList.value.CHARGE_NAME}}</td>
-                        <td width="24%">{{chList.value.TOTAL_AMOUNT}}</td>
-                        <td width="15%"><input type="text" class="form-control3" /></td>
-                        <td width="15%"><input type="text" class="form-control3" /></td>
-                        <td width="15%"><input type="text" class="form-control3" /></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <label class="label-header">
-            Balance Amount :
-        </label>
-    </div> -->
     <div class="col-md-2 offset-md-10 text-end mb-4">
         <button class="form-btn w-100">Submit</button>
     </div>
