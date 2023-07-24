@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CONTAINER } from 'src/app/models/container';
 import { CmService } from 'src/app/services/cm.service';
 import { CommonService } from 'src/app/services/common.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-pm-container-list',
@@ -10,6 +11,7 @@ import { CommonService } from 'src/app/services/common.service';
   styleUrls: ['./pm-container-list.component.scss'],
 })
 export class PmContainerListComponent implements OnInit {
+  fileName= 'Inventory report.xlsx';
   filterForm: FormGroup;
   inventoryList: any[] = [];
   container: CONTAINER = new CONTAINER();
@@ -70,5 +72,13 @@ export class PmContainerListComponent implements OnInit {
         }
         this._cm.getDT();
       });
+  }
+
+  exportexcel(){
+    let element = document.getElementById('data-table-config');
+    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, this.fileName);
   }
 }
