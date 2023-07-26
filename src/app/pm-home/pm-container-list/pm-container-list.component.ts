@@ -11,9 +11,10 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./pm-container-list.component.scss'],
 })
 export class PmContainerListComponent implements OnInit {
-  fileName= 'Inventory report.xlsx';
+  fileName = 'Inventory report.xlsx';
   filterForm: FormGroup;
   inventoryList: any[] = [];
+  inventoryList1: any[] = [];
   container: CONTAINER = new CONTAINER();
   isLoading: boolean = false;
   isLoading1: boolean = false;
@@ -69,14 +70,15 @@ export class PmContainerListComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
           this.inventoryList = res.Data;
+          this.inventoryList1 = res.Data;
         }
         this._cm.getDT();
       });
   }
 
-  exportexcel(){
-    let element = document.getElementById('data-table-config');
-    const ws: XLSX.WorkSheet =XLSX.utils.table_to_sheet(element);
+  exportexcel() {
+    let element = document.getElementById('excelTable');
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, this.fileName);
