@@ -72,75 +72,88 @@ export class NewInvoice2Component implements OnInit {
     if (this.invoiceForm.invalid) {
       return;
     }
+    this.closeBtn.nativeElement.click();
     var blno = this.invoiceForm.get('BL_NO').value;
-    var BL = new Bl();
-    BL.AGENT_CODE = this._commonService.getUserCode();
-    BL.BL_NO = blno;
-    this._blService.getBLDetails(BL).subscribe((res: any) => {
-      console.log('res', res);
-      var agentcode = res.Data.DESTINATION_AGENT_CODE;
-      var finalport = res.Data.FINAL_DESTINATION;
-      var userport = this._commonService.getUserPort().split(',')[0];
-      var orgCode = this._commonService.getUserOrgCode();
-      var username = this._commonService.getUserName();
-      console.log('username ', username);
-      var radio = this.invoiceForm.get('radio').value;
-      // TRUE == POD AND FREIGHT OFF
-      if (
-        agentcode == 'I001' &&
-        finalport == 'AEJEA' &&
-        radio == 'POL' &&
-        username == 'SheenuB'
-      ) {
-        //  localStorage.setItem('value', this.invoiceForm.get('radio').value);
-        //   localStorage.setItem('INVOICE_ID', '0');
-        //   this.router.navigateByUrl(
-        //      '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
-        //    );
-        //    this.submitted = false;
-        //    this.invoiceForm.reset();
-        //    this.closeBtn.nativeElement.click();
-
-        this.closeBtn.nativeElement.click();
-        var blno = this.invoiceForm.get('BL_NO').value;
-        var type = this.invoiceForm.get('radio').value;
-        this._invoiceService.checkBL(blno, type).subscribe((res: any) => {
-          if (res.ResponseCode == 200) {
-            this._commonService.warnMsg(' Invoice is Already Exists !');
-            this.submitted = false;
-            this.invoiceForm.reset();
-          }
-        });
-      } else if (
-        agentcode != 'I001' &&
-        finalport != 'AEJEA' &&
-        radio != 'POL' &&
-        username != res.Data.CREATED_BY
-      ) {
+    var type = this.invoiceForm.get('radio').value;
+    this._invoiceService.checkBL(blno, type).subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this._commonService.warnMsg('This invoice is already generated !');
+        this.submitted = false;
+        this.invoiceForm.reset();
+      } else {
         localStorage.setItem('value', this.invoiceForm.get('radio').value);
         localStorage.setItem('INVOICE_ID', '0');
         this.router.navigateByUrl(
           '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
         );
-        this.submitted = false;
-        this.invoiceForm.reset();
-        this.closeBtn.nativeElement.click();
-      } else {
-        debugger;
-        alert('hi');
-        this.submitted = false;
-        this.invoiceForm.reset();
-        this.closeBtn.nativeElement.click();
-        var blno = this.invoiceForm.get('BL_NO').value;
-        var type = this.invoiceForm.get('radio').value;
-        this._invoiceService.checkBL(blno, type).subscribe((res: any) => {
-          if (res.ResponseCode == 200) {
-            this._commonService.warnMsg(' Invoice is Already Exists !');
-            this.submitted = false;
-            this.invoiceForm.reset();
-          }
-        });
       }
+
+      // console.log('res', res);
+      // debugger;
+      // var agentcode = res.Data.DESTINATION_AGENT_CODE;
+      // var finalport = res.Data.FINAL_DESTINATION;
+      // var userport = this._commonService.getUserPort().split(',')[0];
+      // var orgCode = this._commonService.getUserOrgCode();
+      // var username = this._commonService.getUserName();
+      // console.log('username ', username);
+      // var radio = this.invoiceForm.get('radio').value;
+      // // TRUE == POD AND FREIGHT OFF
+      // if (
+      //   agentcode == 'I001' &&
+      //   finalport == 'AEJEA' &&
+      //   radio == 'POL' &&
+      //   username == 'SheenuB'
+      // ) {
+      //   //  localStorage.setItem('value', this.invoiceForm.get('radio').value);
+      //   //   localStorage.setItem('INVOICE_ID', '0');
+      //   //   this.router.navigateByUrl(
+      //   //      '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
+      //   //    );
+      //   //    this.submitted = false;
+      //   //    this.invoiceForm.reset();
+      //   //    this.closeBtn.nativeElement.click();
+
+      //   this.closeBtn.nativeElement.click();
+      //   var blno = this.invoiceForm.get('BL_NO').value;
+      //   var type = this.invoiceForm.get('radio').value;
+      //   this._invoiceService.checkBL(blno, type).subscribe((res: any) => {
+      //     debugger;
+      //     if (res.ResponseCode == 200) {
+      //       this._commonService.warnMsg(' Invoice is Already Exists !');
+      //       this.submitted = false;
+      //       this.invoiceForm.reset();
+      //     }
+      //   });
+      // } else if (
+      //   agentcode != 'I001' &&
+      //   finalport != 'AEJEA' &&
+      //   radio != 'POL' &&
+      //   username != res.Data.CREATED_BY
+      // ) {
+      //   localStorage.setItem('value', this.invoiceForm.get('radio').value);
+      //   localStorage.setItem('INVOICE_ID', '0');
+      //   this.router.navigateByUrl(
+      //     '/home/operations/invoice-list/' + this.invoiceForm.get('BL_NO').value
+      //   );
+      //   this.submitted = false;
+      //   this.invoiceForm.reset();
+      //   this.closeBtn.nativeElement.click();
+      // } else {
+      //   debugger;
+      //   alert('hi');
+      //   this.submitted = false;
+      //   this.invoiceForm.reset();
+      //   this.closeBtn.nativeElement.click();
+      //   var blno = this.invoiceForm.get('BL_NO').value;
+      //   var type = this.invoiceForm.get('radio').value;
+      //   this._invoiceService.checkBL(blno, type).subscribe((res: any) => {
+      //     if (res.ResponseCode == 200) {
+      //       this._commonService.warnMsg(' Invoice is Already Exists !');
+      //       this.submitted = false;
+      //       this.invoiceForm.reset();
+      //     }
+      //   });
+      // }
     });
   }
 
@@ -252,7 +265,7 @@ export class NewInvoice2Component implements OnInit {
               ],
               [
                 {
-                  text: this.invoiceDetails?.SHIPPER_NAME.toUpperCase(),
+                  text: this.invoiceDetails?.BILL_TO.toUpperCase(),
                   bold: true,
                   fontSize: 8,
                 },
@@ -342,7 +355,7 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: this.invoiceDetails?.SHIPPER_NAME,
+                      text: this.invoiceDetails?.BILL_TO,
                       bold: false,
                       fontSize: 8,
                       width: 200,
@@ -376,7 +389,10 @@ export class NewInvoice2Component implements OnInit {
                 {
                   columns: [
                     {
-                      text: 'Shipper Name',
+                      text:
+                        this.invoiceDetails?.INVOICE_TYPE == 'POD'
+                          ? 'Consignee Name'
+                          : 'Shipper Name',
                       bold: true,
                       fontSize: 9,
                       width: 80,
@@ -388,7 +404,10 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: this.invoiceDetails?.SHIPPER_NAME,
+                      text:
+                        this.invoiceDetails?.INVOICE_TYPE == 'POD'
+                          ? this.invoiceDetails?.CONSIGNEE_NAME
+                          : this.invoiceDetails?.SHIPPER_NAME,
                       bold: false,
                       fontSize: 8,
                       width: 200,

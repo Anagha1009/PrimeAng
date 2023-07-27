@@ -305,6 +305,13 @@ export class InvoiceList2Component implements OnInit {
         element.get('EXCHANGE_RATE').setValue(0);
       }
     });
+    console.log(JSON.stringify(this.listForm.value));
+    this.listForm
+      .get('SHIPPER_NAME')
+      .setValue(this.POL ? this.listForm.get('SHIPPER_NAME').value : '');
+    this.listForm
+      .get('CONSIGNEE_NAME')
+      .setValue(this.POL ? '' : this.listForm.get('CONSIGNEE_NAME').value);
     this._InvoiceService
       .InsertInvoice(JSON.stringify(this.listForm.value))
       .subscribe((res: any) => {

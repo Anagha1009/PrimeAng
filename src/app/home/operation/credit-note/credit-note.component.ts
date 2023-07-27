@@ -775,12 +775,12 @@ export class CreditNoteComponent implements OnInit {
                   fontSize: 8,
                 },
                 {
-                  text: p.APPROVED_RATE,
+                  text: p.CREDIT_AMOUNT,
                   fontSize: 8,
                 },
 
                 {
-                  text: p.TAXABLE_AMOUNT,
+                  text: p.CREDIT_AMOUNT,
                   fontSize: 8,
                 },
                 {
@@ -800,7 +800,7 @@ export class CreditNoteComponent implements OnInit {
                   fontSize: 8,
                 },
                 {
-                  text: p.TOTAL_AMOUNT,
+                  text: p.CREDIT_AMOUNT,
                   fontSize: 8,
                 },
               ]),
@@ -811,12 +811,12 @@ export class CreditNoteComponent implements OnInit {
                     'Total : ' +
                     'INR ' +
                     this.creditDetails.CHARGE_LIST.map(
-                      (item: any) => item.TOTAL_AMOUNT
+                      (item: any) => item.CREDIT_AMOUNT
                     ).reduce((a: any, b: any) => a + b) +
                     ' (' +
                     this.toWords.convert(
                       this.creditDetails.CHARGE_LIST.map(
-                        (item: any) => item.TOTAL_AMOUNT
+                        (item: any) => item.CREDIT_AMOUNT
                       ).reduce((a: any, b: any) => a + b)
                     ) +
                     ')',

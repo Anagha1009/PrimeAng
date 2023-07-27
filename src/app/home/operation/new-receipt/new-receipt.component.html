@@ -26,13 +26,13 @@
                     </div>
                     <div class="col-md-4 mt-4">
                         <div class="form-group">
-                            <input type="text" class="form-control" />
+                            <input formControlName="DEPOSIT_CASH_BANK" type="text" class="form-control" />
                             <label class="form-label">Deposit Cash/Bank</label>
                         </div>
                     </div>
                     <div class="col-md-4 mt-4">
                         <div class="form-group">
-                            <textarea type="text" class="form-control"></textarea>
+                            <textarea formControlName="RECEIPT_REMARKS" type="text" class="form-control"></textarea>
                             <label class="form-label">Receipt Remarks</label>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                 <td><input class="form-control3" /></td>
                 <td><input class="form-control3" /></td>
                 <td>
-                    <a class="fs-5 fw-bold" (click)="getChargeList(invList.value.INVOICE_NO,i)">
+                    <a class="fs-5 fw-bold" (click)="getChargeList(i)">
                         ...
                     </a>
                 </td>
@@ -127,8 +127,7 @@
                     <table class="table mb-0">
                         <thead>
                             <tr>
-                                <th width="10%">No</th>
-                                <th width="30%">Charge</th>
+                                <th width="40%">Charge</th>
                                 <th width="15%">Invoice</th>
                                 <th width="15%">Collected</th>
                                 <th width="15%">Outstanding</th>
@@ -137,12 +136,16 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let chList of f2;let i = index" [formGroup]="chList">
-                                <td width="10%">{{i+1}}</td>
-                                <td width="30%">{{chList.value.CHARGE_NAME}}</td>
-                                <td width="15%">{{chList.value.TOTAL_AMOUNT}}</td>
-                                <td width="15%"><input type="text" class="form-control3" /></td>
-                                <td width="15%"><input type="text" class="form-control3" /></td>
-                                <td width="15%"><input type="text" class="form-control3" /></td>
+                                <td width="40%" *ngIf="chList.value.INVOICE_NO == invList.value.INVOICE_NO">
+                                    {{chList.value.CHARGE_NAME}}</td>
+                                <td width="15%" *ngIf="chList.value.INVOICE_NO == invList.value.INVOICE_NO">
+                                    {{chList.value.TOTAL_AMOUNT}}</td>
+                                <td width="15%" *ngIf="chList.value.INVOICE_NO == invList.value.INVOICE_NO"><input
+                                        formControlName="RECEIPT_COLLECTED" type="text" class="form-control3" /></td>
+                                <td width="15%" *ngIf="chList.value.INVOICE_NO == invList.value.INVOICE_NO"><input
+                                        formControlName="OUTSTANDING_AMOUNT" type="text" class="form-control3" /></td>
+                                <td width="15%" *ngIf="chList.value.INVOICE_NO == invList.value.INVOICE_NO"><input
+                                        formControlName="RECEIPT_AMOUNT" type="text" class="form-control3" /></td>
                             </tr>
                         </tbody>
                     </table>
@@ -154,6 +157,6 @@
         </tbody>
     </table>
     <div class="col-md-2 offset-md-10 text-end mb-4">
-        <button class="form-btn w-100">Submit</button>
+        <button class="form-btn w-100" (click)="insertReceipt()">Submit</button>
     </div>
 </div>

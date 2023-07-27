@@ -75,7 +75,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <input type="text" [ngClass]="{'invalid':submitted && f.CHARGE_NAME.errors}"
-                    formControlName="CHARGE_NAME" class="form-control" maxlength="20">
+                    formControlName="CHARGE_NAME" class="form-control">
                   <label class="form-label">Charge Name<span class="text-danger"> *</span></label>
                   <div *ngIf="submitted && f.CHARGE_NAME.errors" class="invalid-feedback">Charge Name is required</div>
                 </div>

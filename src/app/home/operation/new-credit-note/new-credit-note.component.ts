@@ -188,6 +188,7 @@ export class NewCreditNoteComponent implements OnInit {
       element.get('AGENT_NAME').setValue(this._commonService.getUserName());
     });
 
+    console.log(JSON.stringify(creditNoteList.value));
     this._blService
       .createCreditNote(creditNoteList.value)
       .subscribe((res: any) => {

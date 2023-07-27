@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { BlService } from 'src/app/services/bl.service';
 import { CommonService } from 'src/app/services/common.service';
+import { ReceiptService } from 'src/app/services/receipt.service';
 
 @Component({
   selector: 'app-new-receipt',
@@ -23,19 +24,19 @@ export class NewReceiptComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private _blService: BlService,
-    private _commonService: CommonService
+    private _commonService: CommonService,
+    private _receiptService: ReceiptService
   ) {}
 
   ngOnInit(): void {
     this.receiptForm = this._formBuilder.group({
-      BL_NO: [''],
-      INVOICE_NO: [''],
       INVOICE_PARTY: [''],
       RECEIVED_FROM: [''],
+      DEPOSIT_CASH_BANK: [''],
+      RECEIPT_REMARKS: [''],
       INVOICE_LIST: new FormArray([]),
       BANK_LIST: new FormArray([]),
       CHARGE_LIST: new FormArray([]),
-      CHARGE_LIST1: new FormArray([]),
     });
 
     this.invoiceNo = localStorage.getItem('InvoiceNo');
@@ -95,32 +96,55 @@ export class NewReceiptComponent implements OnInit {
           this.bankList = res.Data.BANK_LIST;
 
           const add1 = this.receiptForm.get('CHARGE_LIST') as FormArray;
-          const add2 = this.receiptForm.get('CHARGE_LIST1') as FormArray;
           add1.clear();
-          add2.clear();
           res.Data.CHARGE_LIST.forEach((elem: any) => {
             add1.push(this._formBuilder.group(elem));
-            add2.push(this._formBuilder.group(elem));
           });
-
-          // this.receiptForm
-          //   .get('RECEIVED_FROM')
-          //   .setValue(res.Data.BILL_FROM.split('|')[0]);
         }
       });
   }
 
-  getChargeList(invoiceNo: any, index: any) {
-    const add1 = this.receiptForm.get('CHARGE_LIST') as FormArray;
-    const add2 = this.receiptForm.get('CHARGE_LIST1') as FormArray;
-
-    var x = add2.controls.filter((x) => x.value.INVOICE_NO == invoiceNo);
-
-    add1.clear();
-    x.forEach((control) => {
-      add1.push(control);
-    });
+  getChargeList(index: any) {
     this.subtableIndex = this.subtableIndex == -1 ? index : -1;
+  }
+
+  insertReceipt() {
+    const add = this.receiptForm.get('INVOICE_LIST') as FormArray;
+
+    var receiptNo = this._commonService.getRandomNumber('RC');
+    var agentCode = this._commonService.getUserCode();
+    var agentName = this._commonService.getUserName();
+
+    add.controls.forEach((element) => {
+      element
+        .get('RECEIVED_FROM')
+        .setValue(this.receiptForm.get('RECEIVED_FROM').value);
+
+      element
+        .get('DEPOSIT_CASH_BANK')
+        .setValue(this.receiptForm.get('DEPOSIT_CASH_BANK').value);
+
+      element
+        .get('RECEIPT_REMARKS')
+        .setValue(this.receiptForm.get('RECEIPT_REMARKS').value);
+
+      element.get('RECEIPT_NO').setValue(receiptNo);
+
+      element.get('AGENT_NAME').setValue(agentName);
+      element.get('AGENT_CODE').setValue(agentCode);
+    });
+
+    console.log(JSON.stringify(this.receiptForm.value));
+
+    this._receiptService
+      .InsertReceipt(this.receiptForm.value)
+      .subscribe((res: any) => {
+        if (res.responseCode == 200) {
+          this._commonService.successMsg(
+            'Receipt created successfully !<br> Receipt No is : ' + receiptNo
+          );
+        }
+      });
   }
 
   get f() {
