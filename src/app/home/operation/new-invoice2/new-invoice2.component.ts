@@ -738,7 +738,7 @@ export class NewInvoice2Component implements OnInit {
         },
         {
           text: '',
-          margin: [0, 10, 0, 10],
+          margin: [0, 5, 0, 5],
         },
         {
           layout: {
@@ -756,10 +756,10 @@ export class NewInvoice2Component implements OnInit {
               return 1;
             },
             paddingTop: function (i: any) {
-              return i === 1 ? 50 : 7;
+              return i === 1 ? 10 : 7;
             },
             paddingBottom: function (i: any, node: any) {
-              return i === node.table.body.length - 2 ? 50 : 7;
+              return i === node.table.body.length - 2 ? 10 : 7;
             },
             paddingLeft: function () {
               return 7;
@@ -770,139 +770,130 @@ export class NewInvoice2Component implements OnInit {
           },
 
           table: {
-            widths: [45, 10, 30, 20, 25, 25, 20, 20, 20, 30, 20, 30, 35],
+            widths: [60, 20, 30, 20, 30, 30, 20, 30, 15, 30, 30, 35],
             headerRows: 1,
             body: [
               [
                 {
                   text: 'Charges',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
 
                 {
                   text: 'Qty',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
                 {
                   text: 'HSN',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
 
                 {
                   text: 'Curr',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
                 {
                   text: 'Chrg Amount',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
                 {
                   text: 'Amount',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
                 {
                   text: 'Ex Rate',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
                 {
                   text: 'Tax Amount',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
                 {
                   text: 'Rate %',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
                 {
                   text: 'SGST',
-                  fontSize: 9,
-                  bold: true,
-                },
-                {
-                  text: 'Rate %',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
                 {
                   text: 'CGST',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
                 {
                   text: 'Amount in INR',
-                  fontSize: 9,
+                  fontSize: 8,
                   bold: true,
                 },
               ],
               ...this.invoiceDetails.BL_LIST.map((p: any) => [
                 {
                   text: p.CHARGE_NAME,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
 
                 {
                   text: p.QUANTITY,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
 
                 {
                   text: p.HSN_CODE,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
 
                 {
                   text: p.CURRENCY,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
                 {
                   text: p.APPROVED_RATE,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
                 {
                   text: p.AMOUNT,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
                 {
                   text: p.EXCHANGE_RATE,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
 
                 {
                   text: p.TAXABLE_AMOUNT,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
                 {
                   text: p.RATE_PER,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
                 {
                   text: p.SGST,
-                  fontSize: 8,
-                },
-                {
-                  text: p.RATE_PER,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
                 {
                   text: p.CGST,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
                 {
                   text: p.TOTAL_AMOUNT,
-                  fontSize: 8,
+                  fontSize: 7,
                 },
               ]),
               [
                 {
-                  colSpan: 12,
+                  colSpan: 7,
                   text:
                     'Total : ' +
                     'INR ' +
@@ -916,7 +907,7 @@ export class NewInvoice2Component implements OnInit {
                       ).reduce((a: any, b: any) => a + b)
                     ) +
                     ')',
-                  fontSize: 8,
+                  fontSize: 7,
                 },
 
                 {
@@ -938,26 +929,31 @@ export class NewInvoice2Component implements OnInit {
                   text: '',
                 },
                 {
-                  text: '',
-                  fontSize: 9,
+                  text: this.invoiceDetails.BL_LIST.map(
+                    (item: any) => item.TAXABLE_AMOUNT
+                  ).reduce((a: any, b: any) => a + b),
+                  fontSize: 7,
                 },
                 {
                   text: '',
                 },
                 {
-                  text: '',
-                  fontSize: 9,
+                  text: this.invoiceDetails.BL_LIST.map(
+                    (item: any) => item.SGST
+                  ).reduce((a: any, b: any) => a + b),
+                  fontSize: 7,
                 },
                 {
-                  text: '',
+                  text: this.invoiceDetails.BL_LIST.map(
+                    (item: any) => item.CGST
+                  ).reduce((a: any, b: any) => a + b),
+                  fontSize: 7,
                 },
                 {
-                  text: '',
-                  fontSize: 9,
-                },
-                {
-                  text: '',
-                  fontSize: 9,
+                  text: this.invoiceDetails.BL_LIST.map(
+                    (item: any) => item.TOTAL_AMOUNT
+                  ).reduce((a: any, b: any) => a + b),
+                  fontSize: 7,
                 },
               ],
             ],
@@ -974,7 +970,7 @@ export class NewInvoice2Component implements OnInit {
           },
           table: {
             headerRows: 1,
-            widths: [150, 358],
+            widths: [160, 353],
             body: [
               [
                 {

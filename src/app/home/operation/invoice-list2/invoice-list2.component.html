@@ -8,7 +8,7 @@
       <form [formGroup]="listForm">
         <label class="label-subheader mb-2"><span class="fw-bold">Bill From </span>: {{f.BILL_FROM.value}}</label>
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="form-group">
               <label *ngIf="POL" class="label-subheader"><span class="fw-bold">Shipper/CHA</span> :
                 {{f.SHIPPER_NAME.value}}</label>
@@ -16,17 +16,23 @@
                 {{f.CONSIGNEE_NAME.value}}</label>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="form-group">
               <label *ngIf="POL" class="label-subheader"><span class="fw-bold">Payment Term</span> : Prepaid</label>
               <label *ngIf="!POL" class="label-subheader"><span class="fw-bold">Payment Term</span> : Collect</label>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="form-group">
               <label class="label-subheader"><span class="fw-bold">Invoice Type</span> : {{f.INVOICE_TYPE.value}}
                 {{f.INVOICE_TYPE.value == 'FREIGHT' ? '' :
                 'Local'}}</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="label-subheader"><span class="fw-bold">BL No</span> : {{f.BL_NO.value}}
+              </label>
             </div>
           </div>
         </div>
@@ -106,8 +112,7 @@
                 <ng-option value="" disabled>--Select--</ng-option>
                 <ng-option *ngFor="let item of bankList" value="{{item.BANK_ID}}">{{item.BANK_NAME}}</ng-option>
               </ng-select>
-              <label class="form-label-ddl">Bank Account<span class="text-danger"> *</span></label>
-              <small *ngIf="submitted && f.BANK_ID.errors" class="text-danger">Please select Bank account</small>
+              <label class="form-label-ddl">Bank Account</label>
             </div>
           </div>
         </div>
@@ -253,7 +258,7 @@
             <input class="form-control3" type="text" *ngIf="item.value.IS_SRRCHARGE != '1'"
               [ngClass]="{invalid: submitted && f.BL_LIST.controls[i].get('TOTAL_AMOUNT').errors}"
               formControlName="TOTAL_AMOUNT" />
-            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.CURRENCY}} {{item.value.TOTAL_AMOUNT}}</span>
+            <span *ngIf="item.value.IS_SRRCHARGE == '1'">{{item.value.TOTAL_AMOUNT}}</span>
           </td>
           <td width="4%">
             <i class="fa fa-trash ms-2 pointer text-danger" (click)="deleteBranch(i)"></i>

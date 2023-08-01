@@ -41,7 +41,7 @@
           <th>Type</th>
           <th>Bill To</th>
           <th>BL No</th>
-          <th>Shipper</th>
+          <th>Shipper / Consignee</th>
           <th>Bill From</th>
           <th>Status</th>
           <th>Action</th>
@@ -54,12 +54,11 @@
           <td>{{item.INVOICE_TYPE}}</td>
           <td>{{item.BILL_TO}}</td>
           <td>{{item.BL_NO}}</td>
-          <td>{{item.SHIPPER_NAME}}</td>
+          <td>{{item.INVOICE_TYPE == 'POL' ? item.SHIPPER_NAME : item.CONSIGNEE_NAME}}</td>
           <td>{{item.BILL_FROM.split('|')[0]}}</td>
           <td class="status"><span [class]="item.STATUS == 'PROFORMA' ? 'waiting' : 'active'">{{item.STATUS}}</span>
           </td>
           <td>
-            <i class="fa fa-eye me-2 pointer fs-6" tooltip="View" placement="top"></i>
             <i class="fa fa-file-pdf-o pointer text-danger fs-6" (click)="getInvoiceDetails(item.INVOICE_ID)"
               tooltip="Download PDF" placement="top"></i>
             <i (click)="editInvoice(item.INVOICE_TYPE,item.BL_NO,item.INVOICE_ID)" *ngIf="item.STATUS == 'PROFORMA'"

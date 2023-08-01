@@ -184,7 +184,7 @@ export class NewBlComponent implements OnInit {
     BL.AGENT_CODE = this._commonService.getUserCode();
 
     this._blService.getBLDetails(BL).subscribe((res: any) => {
-      console.log("res bl", res)
+      console.log('res bl', res);
       if (res.ResponseCode == 200) {
         var blDetails = res.Data;
 
@@ -1297,7 +1297,7 @@ export class NewBlComponent implements OnInit {
                     MEASUREMENT: [element.MEASUREMENT?.toString()],
                     NO_OF_CONTPKG: [this.groupedList[this.i]],
                     KIND_OF_GOODS: [element.DESC_OF_GOODS.substr(0, 549)],
-                    MKS_NO: [element.MARKS_NOS.substr(0, 139)],
+                    MKS_NO: [element.MARKS_NOS.substr(0, 142)],
                   })
                 );
               } else if (this.i == 5) {
@@ -1323,7 +1323,7 @@ export class NewBlComponent implements OnInit {
                     ],
                     MKS_NO: [
                       element.MARKS_NOS.substr(
-                        140,
+                        143,
                         element.MARKS_NOS.length - 1
                       ),
                     ],
@@ -2670,7 +2670,7 @@ export class NewBlComponent implements OnInit {
                               { text: ' ', fontSize: 7 },
                               {
                                 text: this.ContainerList1[0].MARKS_NOS.substr(
-                                  140,
+                                  143,
                                   this.ContainerList1[0].MARKS_NOS.length - 1
                                 ),
                                 fontSize: 7,
@@ -3941,7 +3941,7 @@ export class NewBlComponent implements OnInit {
                               { text: ' ', fontSize: 9 },
                               {
                                 text: this.ContainerList1[0].MARKS_NOS.substr(
-                                  140,
+                                  143,
                                   this.ContainerList1[0].MARKS_NOS.length - 1
                                 ),
                                 fontSize: 9,
