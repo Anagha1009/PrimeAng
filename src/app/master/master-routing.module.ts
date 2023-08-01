@@ -26,9 +26,11 @@ import { UserComponent } from './user/user.component';
 import { VesselComponent } from './vessel/vessel.component';
 import { VoyageComponent } from './voyage/voyage.component';
 
-import {ChargeMasterComponent } from './charge-master/charge-master.component'
+import { ChargeMasterComponent } from './charge-master/charge-master.component';
 import { VendorComponent } from './vendor/vendor.component';
 import { HsnCodeComponent } from './hsn-code/hsn-code.component';
+import { CountryComponent } from './country/country.component';
+import { StateComponent } from './state/state.component';
 
 const routes: Routes = [
   {
@@ -190,6 +192,18 @@ const routes: Routes = [
   {
     path: 'hsn-code',
     component: HsnCodeComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Principal, Role.Admin] },
+  },
+  {
+    path: 'country-master',
+    component: CountryComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Principal, Role.Admin] },
+  },
+  {
+    path: 'state-master',
+    component: StateComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Principal, Role.Admin] },
   },

@@ -34,6 +34,8 @@ import { MandatoryComponent } from './mandatory/mandatory.component';
 import { ChargeMasterComponent } from './charge-master/charge-master.component';
 import { VendorComponent } from './vendor/vendor.component';
 import { HsnCodeComponent } from './hsn-code/hsn-code.component';
+import { CountryComponent } from './country/country.component';
+import { StateComponent } from './state/state.component';
 
 @NgModule({
     declarations: [
@@ -62,7 +64,9 @@ import { HsnCodeComponent } from './hsn-code/hsn-code.component';
         MandatoryComponent,
         ChargeMasterComponent,
         VendorComponent,
-        HsnCodeComponent
+        HsnCodeComponent,
+        CountryComponent,
+        StateComponent
     ],
     imports: [
         CommonModule,

@@ -370,37 +370,141 @@ export class MasterService {
     );
   }
 
-// New charge Master
+  // New charge Master
   InsertChargeMaster(type: any) {
-    return this._http.post<any>(this.BASE_URL + 'Master/InsertChargesMaster',type,this.httpOptions);
+    return this._http.post<any>(
+      this.BASE_URL + 'Master/InsertChargesMaster',
+      type,
+      this.httpOptions
+    );
   }
 
-  GetChargeMasterList(){
-    return this._http.get<any>(this.BASE_URL + 'Master/GetChargeMaster', this.httpOptions);
+  GetChargeMasterList() {
+    return this._http.get<any>(
+      this.BASE_URL + 'Master/GetChargeMaster',
+      this.httpOptions
+    );
   }
 
   GetChargeMastersDetails(ID: number) {
-    return this._http.get<any>(this.BASE_URL + 'Master/GetChargeMastersDetails?ID=' + ID, this.httpOptions);
+    return this._http.get<any>(
+      this.BASE_URL + 'Master/GetChargeMastersDetails?ID=' + ID,
+      this.httpOptions
+    );
   }
 
-  UpdateChargeMaster(master:any){
-    return this._http.post<any>(this.BASE_URL + 'Master/UpdateChargesMaster', master, this.httpOptions );
+  UpdateChargeMaster(master: any) {
+    return this._http.post<any>(
+      this.BASE_URL + 'Master/UpdateChargesMaster',
+      master,
+      this.httpOptions
+    );
   }
 
   DeleteChargeMaster(ID: number) {
-    return this._http.delete<any>(this.BASE_URL + 'Master/DeleteChargesMaster?ID=' + ID, this.httpOptions);
+    return this._http.delete<any>(
+      this.BASE_URL + 'Master/DeleteChargesMaster?ID=' + ID,
+      this.httpOptions
+    );
   }
 
-  InsertHsnCode(data:any){
-    return this._http.post<any>(this.BASE_URL + 'Master/InsertHsnCode',data, this.httpOptions);
-
+  InsertHsnCode(data: any) {
+    return this._http.post<any>(
+      this.BASE_URL + 'Master/InsertHsnCode',
+      data,
+      this.httpOptions
+    );
   }
 
-  getHsnList(){
-    return this._http.get<any>(this.BASE_URL + 'Master/GetHsnMaster', this.httpOptions)
+  getHsnList() {
+    return this._http.get<any>(
+      this.BASE_URL + 'Master/GetHsnMaster',
+      this.httpOptions
+    );
   }
 
-  DeleteHsnMaster(ID:number){
-    return this._http.delete<any>(this.BASE_URL + 'Master/DeleteHsnMaster?ID=' + ID, this.httpOptions)
+  DeleteHsnMaster(ID: number) {
+    return this._http.delete<any>(
+      this.BASE_URL + 'Master/DeleteHsnMaster?ID=' + ID,
+      this.httpOptions
+    );
+  }
+
+  // COUNTRY
+
+  InsertCountryMaster(master: any) {
+    return this._http.post<any>(
+      this.BASE_URL + 'Master/InsertCountryMaster',
+      master,
+      this.httpOptions
+    );
+  }
+
+  GetCountryMasterList() {
+    return this._http.get<any>(
+      this.BASE_URL + 'Master/GetCountryMasterList',
+      this.httpOptions
+    );
+  }
+
+  GetCountryMastersDetails(ID: number) {
+    return this._http.get<any>(
+      this.BASE_URL + 'Master/GetCountryMasterDetails?ID=' + ID,
+      this.httpOptions
+    );
+  }
+
+  UpdateCountryMaster(master: any) {
+    return this._http.post<any>(
+      this.BASE_URL + 'Master/UpdateCountryMasterList',
+      master,
+      this.httpOptions
+    );
+  }
+
+  DeleteCountryMaster(ID: number) {
+    return this._http.delete<any>(
+      this.BASE_URL + 'Master/DeleteCountryMasterList?ID=' + ID,
+      this.httpOptions
+    );
+  }
+
+  // STATE
+
+  InsertStateMaster(master: any) {
+    return this._http.post<any>(
+      this.BASE_URL + 'Master/InsertStateMaster',
+      master,
+      this.httpOptions
+    );
+  }
+
+  GetStateMasterList() {
+    return this._http.get<any>(
+      this.BASE_URL + 'Master/GetStateMasterList',
+      this.httpOptions
+    );
+  }
+
+  GetStateMastersDetails(ID: number) {
+    return this._http.get<any>(
+      this.BASE_URL + 'Master/GetStateMasterDetails?ID=' + ID,
+      this.httpOptions
+    );
+  }
+
+  UpdateStateMaster(master: any) {
+    return this._http.post<any>(
+      this.BASE_URL + 'Master/UpdateStateMasterList',
+      master,
+      this.httpOptions
+    );
+  }
+
+  DeleteStateMaster(ID: number) {
+    return this._http.delete<any>(
+      this.BASE_URL + 'Master/DeleteStateMasterList?ID=' + ID,
+      this.httpOptions
+    );
   }
 }

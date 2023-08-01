@@ -1,0 +1,122 @@
+<div class="section-title pt-3">
+    <h2>State Master</h2>
+</div>
+<div class="mb-4">
+    <div class="col-md-6 offset-md-6 text-end mb-4">
+        <button (click)="openModal()" class="form-btn-primary"><i class="fa fa-plus me-1"></i>New
+            State</button>
+        <button class="form-btn-primary d-none" #openModalPopup data-bs-toggle="modal" href="#stateModal">New
+            State</button>
+    </div>
+    <table class="ratetable table-bordered" id="data-table-config">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Short Name</th>
+                <th>Country</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of stateList; let i = index">
+                <td>{{i+1}}</td>
+                <td>{{item.NAME}}</td>
+                <td>{{item.SHORT_NAME}}</td>
+                <td>{{item.COUNTRY_NAME}}</td>
+                <td class="status"><span [class]="!item.STATUS ? 'rejected' : 'active'">{{item.STATUS ?
+                        'Active'
+                        :
+                        'In-Active'}}</span></td>
+                <td>
+                    <i class="fa fa-pencil mx-2 pointer text-success" (click)="openModal(item.ID)"></i>
+                    <i class="fa fa-trash ms-2 pointer text-danger" (click)="DeleteStateMaster(item.ID)"></i>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal fade" id="stateModal" aria-labelledby="exampleModalLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">State Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" #closeBtn></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="stateForm">
+                    <div class="col-md-12">
+                        <div class="form-group w-50">
+                            <label class="form-label2">Code<span class="text-danger"> *</span></label>
+                            <input type="text"
+                                onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57"
+                                [ngClass]="{'invalid':submitted && f.CODE.errors}" formControlName="CODE"
+                                class="form-control2" maxlength="5">
+                            <div *ngIf="submitted && f.CODE.errors" class="invalid-feedback">Code is required</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label2">Name<span class="text-danger"> *</span></label>
+                            <input oninput="this.value = this.value.toUpperCase()" type="text"
+                                [ngClass]="{'invalid':submitted && f.NAME.errors}" formControlName="NAME"
+                                class="form-control2" />
+                            <div *ngIf="submitted && f.NAME.errors" class="invalid-feedback">Name is
+                                required</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label2">Short Name<span class="text-danger"> *</span></label>
+                                <input oninput="this.value = this.value.toUpperCase()" type="text" maxlength="5"
+                                    [ngClass]="{'invalid':submitted && f.SHORT_NAME.errors}"
+                                    formControlName="SHORT_NAME" class="form-control2" />
+                                <div *ngIf="submitted && f.SHORT_NAME.errors" class="invalid-feedback">Short Name is
+                                    required</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-4">
+                            <div class="form-group">
+                                <ng-select formControlName="COUNTRY_ID">
+                                    <ng-option disabled value="">--Select--</ng-option>
+                                    <ng-option *ngFor="let item of countryList"
+                                        value="{{item.CODE}}">{{item.CODE_DESC}}</ng-option>
+                                </ng-select>
+                                <label class="form-label-ddl">Country <span class="text-danger">*</span></label>
+                                <div *ngIf="submitted && f.COUNTRY_ID.errors" class="invalid-feedback">Country is
+                                    required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 mt-4">
+                            <div class="row">
+                                <label class="checkbox-wrap checkbox-primary">
+                                    <input formControlName="IS_UT" class="chck" type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="ms-4">UT</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-4">
+                            <div class="form-group">
+                                <div class="form-check form-switch">
+                                    <input formControlName="STATUS" class="form-check-input" type="checkbox"
+                                        role="switch" />
+                                    <label class="form-check-label">Status <span class="text-danger"> *</span></label>
+                                </div>
+                                <div *ngIf="submitted && f.STATUS.errors" class="invalid-feedback">Status is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button *ngIf="!isUpdate" (click)="InsertStateMaster()" class="form-btn me-2"
+                    class="form-btn me-2">Save</button>
+                <button (click)="ClearForm()" class="form-btn-light me-2">Clear</button>
+                <button *ngIf="isUpdate" (click)="UpdateStateMaster()" class="form-btn">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
