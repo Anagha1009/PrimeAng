@@ -51,6 +51,7 @@ export class InvoiceList2Component implements OnInit {
   selectedItems: any[] = [];
   BankAccList: any[] = [];
   bankList: any[] = [];
+  localCurrency: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -141,6 +142,8 @@ export class InvoiceList2Component implements OnInit {
     // get current Date
     this.currentDate = this._commonService.getcurrentDate(new Date());
     this.listForm.get('INVOICE_DATE')?.setValue(this.currentDate);
+
+    this.localCurrency = this._commonService.getUser().currency;
   }
   get f() {
     return this.listForm.controls;
@@ -278,6 +281,7 @@ export class InvoiceList2Component implements OnInit {
         CGST: [''],
         SGST1: [''],
         CGST1: [''],
+        IGST1: [''],
         TAXABLE_AMOUNT: [''],
         TAX_AMOUNT: [''],
         TOTAL_AMOUNT: [''],
@@ -410,6 +414,13 @@ export class InvoiceList2Component implements OnInit {
         );
 
       element
+        .get('IGST')
+        .setValue(
+          (element.get('TAXABLE_AMOUNT').value * element.get('IGST1').value) /
+            100
+        );
+
+      element
         .get('TOTAL_AMOUNT')
         .setValue(
           element.get('TAXABLE_AMOUNT').value + element.get('TAX_AMOUNT').value
@@ -418,6 +429,10 @@ export class InvoiceList2Component implements OnInit {
   }
 
   getTaxableAmount(event: any, index: any) {
+    if (this.f1[index].value.CURRENCY == this.localCurrency) {
+      return;
+    }
+
     const add1 = this.listForm.get('BL_LIST') as FormArray;
 
     var exchangeRate = event.target.value == '' ? 1 : event.target.value;
@@ -456,6 +471,15 @@ export class InvoiceList2Component implements OnInit {
       .setValue(
         (add1.at(index).get('TAXABLE_AMOUNT').value *
           add1.at(index).get('CGST1').value) /
+          100
+      );
+
+    add1
+      .at(index)
+      .get('IGST')
+      .setValue(
+        (add1.at(index).get('TAXABLE_AMOUNT').value *
+          add1.at(index).get('IGST1').value) /
           100
       );
 
@@ -512,11 +536,12 @@ export class InvoiceList2Component implements OnInit {
                     EXEMPT_FLAG: [element.EXEMPT_FLAG],
                     IS_SRRCHARGE: [true],
                     RATE_PER: [element.RATE],
-                    IGST: [element.IGST],
+                    IGST: [(element.APPROVED_RATE * element.IGST) / 100],
                     SGST: [(element.APPROVED_RATE * element.SGST) / 100],
                     CGST: [(element.APPROVED_RATE * element.CGST) / 100],
                     SGST1: [element.SGST],
                     CGST1: [element.CGST],
+                    IGST1: [element.IGST],
                     TAXABLE_AMOUNT: [element.APPROVED_RATE],
                     TAX_AMOUNT: [(element.APPROVED_RATE * element.RATE) / 100],
                     TOTAL_AMOUNT: [''],
@@ -539,11 +564,12 @@ export class InvoiceList2Component implements OnInit {
                     EXEMPT_FLAG: [element.EXEMPT_FLAG],
                     IS_SRRCHARGE: [true],
                     RATE_PER: [element.RATE],
-                    IGST: [element.IGST],
+                    IGST: [(element.APPROVED_RATE * element.IGST) / 100],
                     SGST: [(element.APPROVED_RATE * element.SGST) / 100],
                     CGST: [(element.APPROVED_RATE * element.CGST) / 100],
                     SGST1: [element.SGST],
                     CGST1: [element.CGST],
+                    IGST1: [element.IGST],
                     TAXABLE_AMOUNT: [element.APPROVED_RATE],
                     TAX_AMOUNT: [(element.APPROVED_RATE * element.RATE) / 100],
                     TOTAL_AMOUNT: [''],
@@ -566,11 +592,12 @@ export class InvoiceList2Component implements OnInit {
                     EXEMPT_FLAG: [element.EXEMPT_FLAG],
                     IS_SRRCHARGE: [true],
                     RATE_PER: [element.RATE],
-                    IGST: [element.IGST],
+                    IGST: [(element.APPROVED_RATE * element.IGST) / 100],
                     SGST: [(element.APPROVED_RATE * element.SGST) / 100],
                     CGST: [(element.APPROVED_RATE * element.CGST) / 100],
                     SGST1: [element.SGST],
                     CGST1: [element.CGST],
+                    IGST1: [element.IGST],
                     TAXABLE_AMOUNT: [element.APPROVED_RATE],
                     TAX_AMOUNT: [(element.APPROVED_RATE * element.RATE) / 100],
                     TOTAL_AMOUNT: [''],

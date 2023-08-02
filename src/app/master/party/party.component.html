@@ -132,7 +132,8 @@
                     <div class="form-group">
                       <ng-select formControlName="COUNTRY" [ngClass]="{'invalid':submitted && f.COUNTRY.errors}">
                         <ng-option disabled="true">--Select--</ng-option>
-                        <ng-option value="IND">India</ng-option>
+                        <ng-option *ngFor="let items of countryList"
+                          value="{{items.CODE_DESC}}">{{items.CODE_DESC}}</ng-option>
                       </ng-select>
                       <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
                       <div *ngIf="submitted && f.COUNTRY.errors" class="invalid-feedback">Country is required
@@ -141,8 +142,12 @@
                   </div>
                   <div class="col-md-3">
                     <div class="form-group">
-                      <input type="text" formControlName="STATE" class="form-control">
-                      <label class="form-label">State</label>
+                      <ng-select formControlName="STATE">
+                        <ng-option disabled="true">--Select--</ng-option>
+                        <ng-option *ngFor="let items of stateList"
+                          value="{{items.CODE_DESC}}">{{items.CODE_DESC}}</ng-option>
+                      </ng-select>
+                      <label class="form-label-ddl">State</label>
                     </div>
                   </div>
                   <div class="col-md-3">
@@ -426,7 +431,8 @@
               <div class="form-group">
                 <ng-select formControlName="COUNTRY" [ngClass]="{'invalid': submitted1 &&  f3.COUNTRY.errors}">
                   <ng-option disabled="true">--Select--</ng-option>
-                  <ng-option value="IND">India</ng-option>
+                  <ng-option *ngFor="let items of countryList"
+                    value="{{items.CODE_DESC}}">{{items.CODE_DESC}}</ng-option>
                 </ng-select>
                 <label class="form-label-ddl">Country <span class="text-danger"> *</span></label>
                 <div *ngIf="submitted1 && f3.COUNTRY.errors" class="invalid-feedback">
@@ -436,8 +442,11 @@
             </div>
             <div class="col-md-3">
               <div class="form-group">
-                <input type="text" formControlName="STATE" class="form-control">
-                <label class="form-label">State</label>
+                <ng-select formControlName="STATE" [ngClass]="{'invalid': submitted1 &&  f3.STATE.errors}">
+                  <ng-option disabled="true">--Select--</ng-option>
+                  <ng-option *ngFor="let items of stateList" value="{{items.CODE_DESC}}">{{items.CODE_DESC}}</ng-option>
+                </ng-select>
+                <label class="form-label-ddl">State</label>
               </div>
             </div>
           </div>

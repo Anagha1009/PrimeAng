@@ -36,6 +36,8 @@ export class PartyComponent implements OnInit {
   fileList: any[] = [];
   branchForm: FormGroup;
   isBranchUpdate: boolean = false;
+  countryList: any[] = [];
+  stateList: any[] = [];
 
   @ViewChild('closeBtn') closeBtn: ElementRef;
   @ViewChild('closeBtn1') closeBtn1: ElementRef;
@@ -52,6 +54,7 @@ export class PartyComponent implements OnInit {
     this.onLoad();
     this.GetPartyMasterList();
     this.getDropdown();
+    this.getDropdownData();
   }
 
   onLoad() {
@@ -145,6 +148,20 @@ export class PartyComponent implements OnInit {
       FILE_NAME: [''],
       FILE_SIZE: [''],
       FILE: [''],
+    });
+  }
+
+  getDropdownData() {
+    this._commonService.getDropdownData('COUNTRY').subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this.countryList = res.Data;
+      }
+    });
+
+    this._commonService.getDropdownData('STATE').subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this.stateList = res.Data;
+      }
     });
   }
 
