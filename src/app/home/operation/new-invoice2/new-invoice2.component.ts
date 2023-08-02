@@ -174,7 +174,6 @@ export class NewInvoice2Component implements OnInit {
       .subscribe((res: any) => {
         if (res.ResponseCode == 200) {
           this.invoiceDetails = res.Data;
-          console.log(this.invoiceDetails);
           this.generatePDF();
         }
       });
@@ -199,15 +198,16 @@ export class NewInvoice2Component implements OnInit {
                 i === node.table.body.length ||
                 i === 2 ||
                 i === 3 ||
-                i === 7 ||
-                i === 14
+                i === 4 ||
+                i === 8 ||
+                i === 15
               ) {
                 return 1;
               }
               return 0;
             },
             vLineWidth: function (i: any) {
-              return i === 1;
+              return 1;
             },
             hLineColor: function (i: any) {
               return 'black';
@@ -225,6 +225,7 @@ export class NewInvoice2Component implements OnInit {
               return 7;
             },
           },
+
           table: {
             headerRows: 1,
             widths: [250, 250],
@@ -245,8 +246,17 @@ export class NewInvoice2Component implements OnInit {
                   bold: false,
                   fontSize: 10,
                   alignment: 'center',
-                  colSpan: 2,
                   margin: [0, 0, 0, 70],
+                  colSpan: 2,
+                },
+                {},
+              ],
+              [
+                {
+                  text: 'IRN : ',
+                  bold: true,
+                  fontSize: 10,
+                  colSpan: 2,
                 },
                 {},
               ],
@@ -619,7 +629,10 @@ export class NewInvoice2Component implements OnInit {
                       width: 10,
                     },
                     {
-                      text: '',
+                      text:
+                        this.invoiceDetails?.SELECTED_BRANCH.STATECODE +
+                        ' / ' +
+                        this.invoiceDetails?.SELECTED_BRANCH.STATE,
                       bold: false,
                       fontSize: 8,
                       width: 200,
