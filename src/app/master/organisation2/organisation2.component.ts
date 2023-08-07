@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
-  Form,
   FormArray,
   FormBuilder,
   FormControl,
@@ -9,20 +8,21 @@ import {
 } from '@angular/forms';
 import { PARTY } from 'src/app/models/party';
 import { CommonService } from 'src/app/services/common.service';
+import { MasterService } from 'src/app/services/master.service';
 import { PartyService } from 'src/app/services/party.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-party',
-  templateUrl: './party.component.html',
-  styleUrls: ['./party.component.scss'],
+  selector: 'app-organisation2',
+  templateUrl: './organisation2.component.html',
+  styleUrls: ['./organisation2.component.scss'],
 })
-export class PartyComponent implements OnInit {
+export class Organisation2Component implements OnInit {
   submitted: boolean = false;
-  partyForm: FormGroup;
-  partyList: any[] = [];
+  orgForm: FormGroup;
+  orgList: any[] = [];
   isUpdate: boolean = false;
-  custForm: FormGroup;
+  filterForm: FormGroup;
   isLoading: boolean = false;
   isLoading1: boolean = false;
   customer: PARTY = new PARTY();
@@ -46,14 +46,14 @@ export class PartyComponent implements OnInit {
 
   constructor(
     private _partyService: PartyService,
+    private _masterService: MasterService,
     private _formBuilder: FormBuilder,
     private _commonService: CommonService
   ) {}
 
   ngOnInit(): void {
     this.onLoad();
-    this.GetPartyMasterList();
-    this.getDropdown();
+    this.GetOrgMasterList();
     this.getDropdownData();
   }
 
@@ -77,28 +77,10 @@ export class PartyComponent implements OnInit {
       defaultOpen: false,
     };
 
-    this.partyForm = this._formBuilder.group({
-      CUST_ID: [0],
-      CUST_NAME: ['', Validators.required],
-      CUST_EMAIL: ['', [Validators.email]],
-      CUST_ADDRESS: [''],
-      CUST_TYPE: [''],
-      CUST_TYPE_CODE: new FormControl(this.custTypeList, Validators.required),
-      GSTIN: [
-        '',
-        [
-          Validators.pattern(
-            '^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$'
-          ),
-        ],
-      ],
+    this.orgForm = this._formBuilder.group({
+      ORG_CODE: [''],
+      ORG_NAME: ['', Validators.required],
       STATUS: ['', Validators.required],
-      CUST_CONTACT: [''],
-      VAT_NO: [''],
-      COUNTRY: ['', Validators.required],
-      STATE: [''],
-      CITY: [''],
-      PINCODE: [''],
       PAN: [
         '',
         [Validators.required, Validators.pattern('^[A-Z]{5}[0-9]{4}[A-Z]{1}$')],
@@ -116,9 +98,8 @@ export class PartyComponent implements OnInit {
       BANK_LIST3: new FormArray([]), // For Update,
     });
 
-    this.custForm = this._formBuilder.group({
-      CUST_NAME: [''],
-      CUST_TYPE: [''],
+    this.filterForm = this._formBuilder.group({
+      ORG_NAME: [''],
       STATUS: [''],
       FROM_DATE: [''],
       TO_DATE: [''],
@@ -126,7 +107,7 @@ export class PartyComponent implements OnInit {
 
     this.branchForm = this._formBuilder.group({
       ID: [0],
-      CUST_ID: [0],
+      ORG_CODE: [''],
       BRANCH_NAME: ['', Validators.required],
       COUNTRY: ['', Validators.required],
       STATE: [''],
@@ -174,11 +155,10 @@ export class PartyComponent implements OnInit {
     this.branchForm.get('IS_SEZ').setValue(false);
     this.branchForm.get('IS_TAX_APPLICABLE').setValue(false);
     this.branchForm.get('ID').setValue(0);
-    this.branchForm.get('CUST_ID').setValue(0);
 
     this.submitted1 = false;
     this.submitted2 = false;
-    const add = this.partyForm.get('BANK_LIST2') as FormArray;
+    const add = this.orgForm.get('BANK_LIST2') as FormArray;
     add.clear();
 
     this.isBranchUpdate = false;
@@ -192,7 +172,7 @@ export class PartyComponent implements OnInit {
       return;
     }
 
-    const add1 = this.partyForm.get('BANK_LIST2') as FormArray;
+    const add1 = this.orgForm.get('BANK_LIST2') as FormArray;
     add1.push(
       this._formBuilder.group({
         ID: [0],
@@ -212,15 +192,15 @@ export class PartyComponent implements OnInit {
   saveBranch() {
     this.submitted2 = true;
 
-    const add1 = this.partyForm.get('BANK_LIST2') as FormArray;
+    const add1 = this.orgForm.get('BANK_LIST2') as FormArray;
     if (add1.invalid) {
       return;
     }
 
-    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    const add = this.orgForm.get('BRANCH_LIST') as FormArray;
     add.push(this._formBuilder.group(this.branchForm.value));
 
-    var add2 = this.partyForm.get('BANK_LIST') as FormArray;
+    var add2 = this.orgForm.get('BANK_LIST') as FormArray;
 
     add1.controls.forEach((element) => {
       add2.push(element);
@@ -233,19 +213,19 @@ export class PartyComponent implements OnInit {
   updateBranch() {
     this.submitted2 = true;
 
-    const add1 = this.partyForm.get('BANK_LIST2') as FormArray;
+    const add1 = this.orgForm.get('BANK_LIST2') as FormArray;
     if (add1.invalid) {
       return;
     }
 
-    var add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    var add = this.orgForm.get('BRANCH_LIST') as FormArray;
     var branch = add.controls.findIndex(
       (x) => x.value.BRANCH_CODE === this.branchForm.get('BRANCH_CODE').value
     );
     add.removeAt(branch);
     add.push(this._formBuilder.group(this.branchForm.value));
 
-    var add2 = this.partyForm.get('BANK_LIST') as FormArray;
+    var add2 = this.orgForm.get('BANK_LIST') as FormArray;
 
     add1.controls.forEach((element) => {
       add2.push(element);
@@ -256,16 +236,16 @@ export class PartyComponent implements OnInit {
   }
 
   get f() {
-    return this.partyForm.controls;
+    return this.orgForm.controls;
   }
 
   get f1() {
-    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    const add = this.orgForm.get('BRANCH_LIST') as FormArray;
     return add.controls;
   }
 
   get f2() {
-    const add = this.partyForm.get('BANK_LIST2') as FormArray;
+    const add = this.orgForm.get('BANK_LIST2') as FormArray;
     return add.controls;
   }
 
@@ -304,24 +284,24 @@ export class PartyComponent implements OnInit {
   }
 
   deleteBranch(i: number) {
-    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    const add = this.orgForm.get('BRANCH_LIST') as FormArray;
     add.removeAt(i);
   }
 
   deleteBank(i: number) {
-    const add = this.partyForm.get('BANK_LIST2') as FormArray;
+    const add = this.orgForm.get('BANK_LIST2') as FormArray;
     add.removeAt(i);
   }
 
   editBranch(branchCode: string) {
-    var add = this.partyForm.get('BRANCH_LIST') as FormArray;
+    var add = this.orgForm.get('BRANCH_LIST') as FormArray;
     var branch = add.controls.find((x) => x.value.BRANCH_CODE === branchCode);
     this.branchForm.reset();
     this.branchForm.patchValue(branch.value);
 
     debugger;
-    var add1 = this.partyForm.get('BANK_LIST3') as FormArray;
-    var add2 = this.partyForm.get('BANK_LIST2') as FormArray;
+    var add1 = this.orgForm.get('BANK_LIST3') as FormArray;
+    var add2 = this.orgForm.get('BANK_LIST2') as FormArray;
     if (add1.length > 0) {
       var bankList = add1.controls.filter(
         (x) => x.value.BRANCH_CODE === branchCode
@@ -338,21 +318,23 @@ export class PartyComponent implements OnInit {
 
   Search() {
     var CUST_NAME =
-      this.custForm.value.CUST_NAME == null
+      this.filterForm.value.CUST_NAME == null
         ? ''
-        : this.custForm.value.CUST_NAME;
+        : this.filterForm.value.CUST_NAME;
     var CUST_TYPE =
-      this.custForm.value.CUST_TYPE == null
+      this.filterForm.value.CUST_TYPE == null
         ? ''
-        : this.custForm.value.CUST_TYPE;
+        : this.filterForm.value.CUST_TYPE;
     var STATUS =
-      this.custForm.value.STATUS == null ? '' : this.custForm.value.STATUS;
+      this.filterForm.value.STATUS == null ? '' : this.filterForm.value.STATUS;
     var FROM_DATE =
-      this.custForm.value.FROM_DATE == null
+      this.filterForm.value.FROM_DATE == null
         ? ''
-        : this.custForm.value.FROM_DATE;
+        : this.filterForm.value.FROM_DATE;
     var TO_DATE =
-      this.custForm.value.TO_DATE == null ? '' : this.custForm.value.TO_DATE;
+      this.filterForm.value.TO_DATE == null
+        ? ''
+        : this.filterForm.value.TO_DATE;
 
     if (
       CUST_NAME == '' &&
@@ -371,33 +353,30 @@ export class PartyComponent implements OnInit {
     this.customer.FROM_DATE = FROM_DATE;
     this.customer.TO_DATE = TO_DATE;
     this.isLoading = true;
-    this.GetPartyMasterList();
+    this.GetOrgMasterList();
   }
 
   Clear() {
-    this.custForm.reset();
-    this.custForm.get('STATUS')?.setValue('');
+    this.filterForm.reset();
+    this.filterForm.get('STATUS')?.setValue('');
     this.customer = new PARTY();
     this.isLoading1 = true;
-    this.GetPartyMasterList();
+    this.GetOrgMasterList();
   }
 
-  GetPartyMasterList() {
-    this.customer.AGENT_CODE = '';
-    this.customer.IS_VENDOR = false;
+  GetOrgMasterList() {
     this._commonService.destroyDT();
-    this._partyService.getPartyList(this.customer).subscribe((res: any) => {
+    this._masterService.GetOrgMasterList().subscribe((res: any) => {
       this.isLoading = false;
       this.isLoading1 = false;
       if (res.ResponseCode == 200) {
-        this.partyList = res.Data;
+        this.orgList = res.Data;
       }
       this._commonService.getDT();
     });
   }
 
-  InsertPartyMaster() {
-    debugger;
+  InsertOrgMaster() {
     this.submitted = true;
     if (this.isKYC) {
       if (this.fileList[0].FILE_NAME == '') {
@@ -406,36 +385,27 @@ export class PartyComponent implements OnInit {
       }
     }
 
-    if (this.partyForm.invalid) {
+    if (this.orgForm.invalid) {
       return;
     }
 
-    const branchList = this.partyForm.get('BRANCH_LIST') as FormArray;
+    const branchList = this.orgForm.get('BRANCH_LIST') as FormArray;
     if (branchList.length == 0) {
       this._commonService.errorMsg('Please add atleast 1 Branch !');
       return;
     }
 
-    this.partyForm
-      .get('CREATED_BY')
-      ?.setValue(this._commonService.getUserName());
+    this.orgForm.get('CREATED_BY')?.setValue(this._commonService.getUserName());
 
-    const add = this.partyForm.get('CUST_TYPE_CODE') as FormArray;
-    var custType = '';
-    add.value.forEach((element: any) => {
-      custType += element.CODE + ',';
-    });
-    this.partyForm.get('CUST_TYPE').setValue(custType);
-
-    this._partyService
-      .postParty(JSON.stringify(this.partyForm.value))
+    this._masterService
+      .insertOrg(JSON.stringify(this.orgForm.value))
       .subscribe((res: any) => {
         if (res.responseCode == 200) {
           this._commonService.successMsg(
             'Your record has been inserted successfully !'
           );
           this.uploadFilestoDB(res.responseMessage);
-          this.GetPartyMasterList();
+          this.GetOrgMasterList();
           this.closeBtn.nativeElement.click();
         }
       });
@@ -458,7 +428,7 @@ export class PartyComponent implements OnInit {
     this.fileList[index].FILE = event.target.files[0];
   }
 
-  DeletePartyMaster(partyID: number) {
+  DeleteOrgMaster(orgcode: string) {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -469,26 +439,24 @@ export class PartyComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        this._partyService.deleteParty(partyID).subscribe((res: any) => {
-          if (res.ResponseCode == 200) {
-            Swal.fire('Deleted!', 'Your record has been deleted.', 'success');
-            this.GetPartyMasterList();
-          }
-        });
+        this._masterService
+          .DeleteOrgMasterList(orgcode)
+          .subscribe((res: any) => {
+            if (res.ResponseCode == 200) {
+              Swal.fire('Deleted!', 'Your record has been deleted.', 'success');
+              this.GetOrgMasterList();
+            }
+          });
       }
     });
   }
 
-  GetPartyMasterDetails(partyID: number) {
-    var partyModel = new PARTY();
-    partyModel.AGENT_CODE = '';
-    partyModel.CUST_ID = partyID;
-
-    this._partyService.getPartyDetails(partyModel).subscribe((res: any) => {
+  GetOrgMasterDetails(orgcode: string) {
+    this._masterService.GetOrgMasterDetails(orgcode).subscribe((res: any) => {
       if (res.ResponseCode == 200) {
-        this.partyForm.patchValue(res.Data);
-        this.getDropdown('1');
-        const add = this.partyForm.get('BRANCH_LIST') as FormArray;
+        this.orgForm.patchValue(res.Data);
+
+        const add = this.orgForm.get('BRANCH_LIST') as FormArray;
         add.clear();
 
         res.Data.BRANCH_LIST.forEach((element: any) => {
@@ -514,7 +482,7 @@ export class PartyComponent implements OnInit {
           });
         });
 
-        const add1 = this.partyForm.get('BANK_LIST3') as FormArray;
+        const add1 = this.orgForm.get('BANK_LIST3') as FormArray;
         add1.clear();
 
         res.Data.BANK_LIST.forEach((element: any) => {
@@ -536,54 +504,45 @@ export class PartyComponent implements OnInit {
     });
   }
 
-  UpdatePartyMaster() {
+  UpdateOrgMaster() {
     this.submitted = true;
 
-    if (this.partyForm.invalid) {
+    if (this.orgForm.invalid) {
       return;
     }
 
-    const add = this.partyForm.get('CUST_TYPE_CODE') as FormArray;
-    var custType = '';
-    add.value.forEach((element: any) => {
-      custType += element.CODE + ',';
-    });
-    this.partyForm.get('CUST_TYPE').setValue(custType);
-
-    this._partyService
-      .updateParty(JSON.stringify(this.partyForm.value))
+    this._masterService
+      .UpdateOrgMasterList(JSON.stringify(this.orgForm.value))
       .subscribe((res: any) => {
         if (res.responseCode == 200) {
           this._commonService.successMsg(
             'Your record has been updated successfully !'
           );
-          this.GetPartyMasterList();
+          this.GetOrgMasterList();
           this.closeBtn.nativeElement.click();
         }
       });
   }
 
   ClearForm() {
-    this.partyForm.reset();
-    this.partyForm.get('CUST_TYPE')?.setValue('');
-    this.partyForm.get('CUST_ID')?.setValue(0);
-    this.partyForm.get('IS_GROUP_COMPANIES')?.setValue(false);
-    const add = this.partyForm.get('BRANCH_LIST') as FormArray;
-    const add1 = this.partyForm.get('BANK_LIST') as FormArray;
-    const add2 = this.partyForm.get('BANK_LIST2') as FormArray;
+    this.orgForm.reset();
+    this.orgForm.get('IS_GROUP_COMPANIES')?.setValue(false);
+    const add = this.orgForm.get('BRANCH_LIST') as FormArray;
+    const add1 = this.orgForm.get('BANK_LIST') as FormArray;
+    const add2 = this.orgForm.get('BANK_LIST2') as FormArray;
     add.clear();
     add1.clear();
     add2.clear();
   }
 
-  openModal(custID: any = 0) {
+  openModal(orgcode: any = '') {
     this.submitted = false;
     this.isUpdate = false;
     this.ClearForm();
 
-    if (custID > 0) {
+    if (orgcode != '') {
       this.isUpdate = true;
-      this.GetPartyMasterDetails(custID);
+      this.GetOrgMasterDetails(orgcode);
     }
 
     this.openModalPopup.nativeElement.click();
@@ -591,29 +550,6 @@ export class PartyComponent implements OnInit {
 
   onlyNumeric(event: any) {
     this._commonService.numericOnly(event);
-  }
-
-  getDropdown(value: any = '') {
-    this.custTypeList = [];
-    this.partyForm.get('CUST_TYPE_CODE').setValue('');
-    this._commonService
-      .getDropdownData('CUST_TYPE', '', '')
-      .subscribe((res: any) => {
-        if (res.hasOwnProperty('Data')) {
-          this.custTypeList = res.Data;
-
-          if (value != '') {
-            var x = this.partyForm.get('CUST_TYPE').value.split(',');
-            var ss: any = [];
-            x.forEach((element: any) => {
-              if (element != '') {
-                ss.push(this.custTypeList.filter((x) => x.CODE === element)[0]);
-              }
-            });
-            this.selectedItems = ss;
-          }
-        }
-      });
   }
 
   closeBranchModal() {

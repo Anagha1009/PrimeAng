@@ -292,13 +292,9 @@ export class MasterService {
     );
   }
 
-  GetOrgMasterDetails(orgcode: any, orgloccode: any) {
+  GetOrgMasterDetails(orgcode: any) {
     return this._http.get<any>(
-      this.BASE_URL +
-        'Master/GetOrgMasterDetails?ORG_CODE=' +
-        orgcode +
-        '&ORG_LOC_CODE=' +
-        orgloccode,
+      this.BASE_URL + 'Master/GetOrgMasterDetails?ORG_CODE=' + orgcode,
       this.httpOptions
     );
   }
@@ -311,13 +307,9 @@ export class MasterService {
     );
   }
 
-  DeleteOrgMasterList(orgcode: any, orgloccode: any) {
+  DeleteOrgMasterList(orgcode: any) {
     return this._http.post<any>(
-      this.BASE_URL +
-        'Master/DeleteOrgMasterList?ORG_CODE=' +
-        orgcode +
-        '&ORG_LOC_CODE=' +
-        orgloccode,
+      this.BASE_URL + 'Master/DeleteOrgMasterList?ORG_CODE=' + orgcode,
       this.httpOptions
     );
   }

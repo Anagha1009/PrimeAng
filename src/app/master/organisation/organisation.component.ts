@@ -158,14 +158,12 @@ export class OrganisationComponent implements OnInit {
   }
 
   GetOrgMasterDetails(ORG_CODE: string, ORG_LOC_CODE: string) {
-    this._masterService
-      .GetOrgMasterDetails(ORG_CODE, ORG_LOC_CODE)
-      .subscribe((res: any) => {
-        if (res.ResponseCode == 200) {
-          this.orgForm.patchValue(res.Data);
-          this.getDropdown('1');
-        }
-      });
+    this._masterService.GetOrgMasterDetails(ORG_CODE).subscribe((res: any) => {
+      if (res.ResponseCode == 200) {
+        this.orgForm.patchValue(res.Data);
+        this.getDropdown('1');
+      }
+    });
   }
 
   updateOrgMaster() {
@@ -206,7 +204,7 @@ export class OrganisationComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this._masterService
-          .DeleteOrgMasterList(ORG_CODE, ORG_LOC_CODE)
+          .DeleteOrgMasterList(ORG_CODE)
           .subscribe((res: any) => {
             if (res.ResponseCode == 200) {
               Swal.fire('Deleted!', 'Your record has been deleted.', 'success');

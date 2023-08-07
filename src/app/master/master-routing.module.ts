@@ -31,6 +31,7 @@ import { VendorComponent } from './vendor/vendor.component';
 import { HsnCodeComponent } from './hsn-code/hsn-code.component';
 import { CountryComponent } from './country/country.component';
 import { StateComponent } from './state/state.component';
+import { Organisation2Component } from './organisation2/organisation2.component';
 
 const routes: Routes = [
   {
@@ -168,6 +169,12 @@ const routes: Routes = [
   {
     path: 'organisation-master',
     component: OrganisationComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Principal, Role.Admin] },
+  },
+  {
+    path: 'organisation2-master',
+    component: Organisation2Component,
     canActivate: [AuthGuard],
     data: { roles: [Role.Principal, Role.Admin] },
   },

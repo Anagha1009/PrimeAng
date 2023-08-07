@@ -36,6 +36,7 @@ import { VendorComponent } from './vendor/vendor.component';
 import { HsnCodeComponent } from './hsn-code/hsn-code.component';
 import { CountryComponent } from './country/country.component';
 import { StateComponent } from './state/state.component';
+import { Organisation2Component } from './organisation2/organisation2.component';
 
 @NgModule({
     declarations: [
@@ -66,7 +67,8 @@ import { StateComponent } from './state/state.component';
         VendorComponent,
         HsnCodeComponent,
         CountryComponent,
-        StateComponent
+        StateComponent,
+        Organisation2Component
     ],
     imports: [
         CommonModule,
