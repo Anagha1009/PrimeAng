@@ -758,40 +758,40 @@ export class NewBlComponent implements OnInit {
     this.blForm.get('PREPAID_AT').enable();
     this.blForm.get('PAYABLE_AT').enable();
 
-    this._blService.getSRRDetails(bl).subscribe((res: any) => {
-      if (res.ResponseCode == 200) {
-        this.blForm.get('SRR_ID')?.setValue(res.Data.ID);
-        this.blForm.get('SRR_NO')?.setValue(res.Data.SRR_NO);
-        this.blForm.get('TOTAL_PREPAID')?.setValue(0.0);
-        //
-        var json = JSON.stringify(this.blForm.value);
-        json = json.replace(/\\n/g, ' ');
-        json = json.replace(/\\r/g, ' ');
+    // this._blService.getSRRDetails(bl).subscribe((res: any) => {
+    //   if (res.ResponseCode == 200) {
+    //     this.blForm.get('SRR_ID')?.setValue(res.Data.ID);
+    //     this.blForm.get('SRR_NO')?.setValue(res.Data.SRR_NO);
+    //     this.blForm.get('TOTAL_PREPAID')?.setValue(0.0);
+    //     //
+    //     var json = JSON.stringify(this.blForm.value);
+    //     json = json.replace(/\\n/g, ' ');
+    //     json = json.replace(/\\r/g, ' ');
 
-        //
-        this._blService.createBL(json).subscribe((res: any) => {
-          if (res.responseCode == 200) {
-            //this._router.navigateByUrl('/home/new-bl');
-            this._commonService.successMsg(
-              'BL is created Successfully <br> BL No : ' + blNo
-            );
-            this.getBLHistory();
-            this.tabs = '1';
-            this.isBLForm = false;
-            this.hideHistory = false;
+    //     //
+    //     this._blService.createBL(json).subscribe((res: any) => {
+    //       if (res.responseCode == 200) {
+    //         //this._router.navigateByUrl('/home/new-bl');
+    //         this._commonService.successMsg(
+    //           'BL is created Successfully <br> BL No : ' + blNo
+    //         );
+    //         this.getBLHistory();
+    //         this.tabs = '1';
+    //         this.isBLForm = false;
+    //         this.hideHistory = false;
 
-            //generate pdf on create / split
-            //this.generateBLPdf();
+    //         //generate pdf on create / split
+    //         //this.generateBLPdf();
 
-            //refresh required fields
-            const add = this.blForm.get('CONTAINER_LIST') as FormArray;
-            add.clear();
-            this.blNo = '';
-            this.onUpload = false;
-          }
-        });
-      }
-    });
+    //         //refresh required fields
+    //         const add = this.blForm.get('CONTAINER_LIST') as FormArray;
+    //         add.clear();
+    //         this.blNo = '';
+    //         this.onUpload = false;
+    //       }
+    //     });
+    //   }
+    // });
   }
 
   getBLDetailsForEdit(BLNO: any, value: any = false) {

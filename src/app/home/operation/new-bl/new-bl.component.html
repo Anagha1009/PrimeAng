@@ -162,7 +162,7 @@
                 <div class="col-md-3" *ngIf="!isManual">
                     <div class="form-group">
                         <label class="form-label2">Port of Loading<span class="text-danger">*</span></label>
-                        <input readonly formControlName="PORT_OF_LOADING" type="text" class="form-control2"
+                        <input formControlName="PORT_OF_LOADING" type="text" class="form-control2"
                             [ngClass]="{'invalid': submitted && blf.PORT_OF_LOADING.errors}" />
                         <div *ngIf="submitted && blf.PORT_OF_LOADING.errors" class="invalid-feedback">Please
                             Enter Port of Loading</div>
@@ -171,7 +171,7 @@
                 <div class="col-md-3" *ngIf="!isManual">
                     <div class="form-group">
                         <label class="form-label2">Port of Discharge<span class="text-danger">*</span></label>
-                        <input readonly formControlName="PORT_OF_DISCHARGE" type="text" class="form-control2"
+                        <input formControlName="PORT_OF_DISCHARGE" type="text" class="form-control2"
                             [ngClass]="{'invalid': submitted && blf.PORT_OF_DISCHARGE.errors}" />
                         <div *ngIf="submitted && blf.PORT_OF_DISCHARGE.errors" class="invalid-feedback">Please
                             Enter Port of Discharge</div>
