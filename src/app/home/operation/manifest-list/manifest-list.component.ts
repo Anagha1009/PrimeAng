@@ -3,7 +3,13 @@ import { CARGO_MANIFEST } from 'src/app/models/manifest';
 import { BlService } from 'src/app/services/bl.service';
 import { CommonService } from 'src/app/services/common.service';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 const pdfMake = require('pdfmake/build/pdfmake.js');
 (<any>pdfMake).vfs = pdfFonts.pdfMake.vfs;
@@ -23,6 +29,11 @@ export class ManifestListComponent implements OnInit {
   VoyageList: any[] = [];
   finalList: any[] = [];
   freightList: any[] = [];
+  blList: any[] = [];
+  dropdownSettings = {};
+  customerList: any[] = [];
+  containerList: any[] = [];
+  freightDetails: any;
 
   constructor(
     private _blService: BlService,
@@ -34,7 +45,28 @@ export class ManifestListComponent implements OnInit {
     this.manifestlistForm = this._formBuilder.group({
       VESSEL_NAME: ['', Validators.required],
       VOYAGE_NO: ['', Validators.required],
+      BL_LIST1: new FormControl(this.blList, Validators.required),
+      BL_LIST: new FormArray([]),
     });
+
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'SRNO',
+      textField: 'BL',
+      enableCheckAll: true,
+      selectAllText: 'Select All',
+      unSelectAllText: 'Unselect All',
+      allowSearchFilter: true,
+      limitSelection: -1,
+      clearSearchFilter: true,
+      maxHeight: 170,
+      itemsShowLimit: 3,
+      searchPlaceholderText: 'Select BL',
+      noDataAvailablePlaceholderText: 'No BL Present',
+      closeDropDownOnSelection: false,
+      showSelectedItemsAtTop: false,
+      defaultOpen: false,
+    };
 
     this.getDropdown();
   }
@@ -45,177 +77,166 @@ export class ManifestListComponent implements OnInit {
       return;
     }
 
-    var cargoManifest = new CARGO_MANIFEST();
-    cargoManifest.AGENT_CODE = this._commonService.getUserCode();
-    cargoManifest.VESSEL_NAME = this.manifestlistForm.get('VESSEL_NAME').value;
-    cargoManifest.VOYAGE_NO = this.manifestlistForm.get('VOYAGE_NO').value;
+    const add = this.manifestlistForm.get('BL_LIST') as FormArray;
 
-    this.isManifest = false;
-    this.isLoading = true;
-    this._blService
-      .getCargoManifestList(cargoManifest)
-      .subscribe((res: any) => {
-        this.isLoading = false;
-        if (res.ResponseCode == 200) {
-          this.cargoList = res.Data;
-          this.isManifest = true;
+    add.value.forEach((cust: any) => {
+      const blData = this.customerList
+        .filter((el1: any) => el1.BL_NO === cust.BL_NO)
+        .map((element1: any) => element1);
 
-          res.Data.CUSTOMER_LIST.forEach((cust: any) => {
-            const findEmp = res.Data.CONTAINER_LIST.filter(
-              (el2: any) => el2.BL_NO === cust.BL_NO
-            ).map((element: any) => element);
+      const findEmp = this.containerList
+        .filter((el2: any) => el2.BL_NO === cust.BL_NO)
+        .map((element2: any) => element2);
 
-            const findFreight = res.Data.FREIGHT_DETAILS.filter(
-              (el3: any) => el3.BL_NO === cust.BL_NO
-            ).map((element1: any) => element1);
+      const findFreight = this.freightDetails
+        .filter((el3: any) => el3.BL_NO === cust.BL_NO)
+        .map((element3: any) => element3);
 
-            this.finalList.push({
-              KEY1: 'BL',
-              KEY2: 'SHIPPER',
-              KEY3: 'CONSIGNEE',
-              KEY4: 'NOTIFY',
-              KEY5: 'MARKS',
-              KEY6: 'DESC',
-              KEY7: 'GWT',
-              KEY8: 'DM',
-              KEY9: 'V',
-              KEY10: '20',
-              KEY11: '40',
-            });
-            this.finalList.push(cust);
-            this.finalList.push({
-              KEY1: '**',
-              KEY2: '',
-              KEY3: '',
-              KEY4: '',
-              KEY5: '',
-              KEY6: '',
-              KEY7: '',
-              KEY8: '',
-              KEY9: '',
-              KEY10: '',
-              KEY11: '',
-            });
-            this.finalList.push({
-              KEY1: 'Container No',
-              KEY2: 'Size',
-              KEY3: 'Type',
-              KEY4: 'Seal No',
-              KEY5: 'NOPCKG',
-              KEY6: 'GWT',
-              KEY7: 'V',
-              KEY8: 'I',
-              KEY9: 'UN',
-              KEY10: 'T',
-              KEY11: 'SOC',
-            });
-            findEmp.forEach((z: any) => {
-              this.finalList.push(z);
-            });
-            this.finalList.push({
-              KEY1: '*',
-              KEY2: '',
-              KEY3: '',
-              KEY4: '',
-              KEY5: '',
-              KEY6: '',
-              KEY7: '',
-              KEY8: '',
-              KEY9: '',
-              KEY10: '',
-              KEY11: '',
-            });
-
-            this.freightList.push({
-              KEY1: 'BL',
-              KEY2: 'SHIPPER',
-              KEY3: 'CONSIGNEE',
-              KEY4: 'NOTIFY',
-              KEY5: 'MARKS',
-              KEY6: 'DESC',
-              KEY7: 'GWT',
-              KEY8: 'DM',
-              KEY9: 'V',
-              KEY10: '20',
-              KEY11: '40',
-            });
-            this.freightList.push(cust);
-            this.freightList.push({
-              KEY1: '**',
-              KEY2: '',
-              KEY3: '',
-              KEY4: '',
-              KEY5: '',
-              KEY6: '',
-              KEY7: '',
-              KEY8: '',
-              KEY9: '',
-              KEY10: '',
-              KEY11: '',
-            });
-            this.freightList.push({
-              KEY1: 'Charge',
-              KEY2: 'Rate Basis',
-              KEY3: 'Currency',
-              KEY4: 'Rate',
-              KEY5: 'Pre',
-              KEY6: 'Amount',
-              KEY7: '',
-              KEY8: '',
-              KEY9: '',
-              KEY10: '',
-              KEY11: '',
-            });
-            findFreight.forEach((z: any) => {
-              this.freightList.push(z);
-            });
-            this.freightList.push({
-              KEY1: '**',
-              KEY2: '',
-              KEY3: '',
-              KEY4: '',
-              KEY5: '',
-              KEY6: '',
-              KEY7: '',
-              KEY8: '',
-              KEY9: '',
-              KEY10: '',
-              KEY11: '',
-            });
-            this.freightList.push({
-              KEY1: 'Container No',
-              KEY2: 'Size',
-              KEY3: 'Type',
-              KEY4: 'Seal No',
-              KEY5: 'NOPCKG',
-              KEY6: 'GWT',
-              KEY7: 'V',
-              KEY8: 'I',
-              KEY9: 'UN',
-              KEY10: 'T',
-              KEY11: 'SOC',
-            });
-            findEmp.forEach((z: any) => {
-              this.freightList.push(z);
-            });
-            this.freightList.push({
-              KEY1: '*',
-              KEY2: '',
-              KEY3: '',
-              KEY4: '',
-              KEY5: '',
-              KEY6: '',
-              KEY7: '',
-              KEY8: '',
-              KEY9: '',
-              KEY10: '',
-              KEY11: '',
-            });
-          });
-        } else if (res.ResponseCode == 500) {
-          this._commonService.errorMsg('Sorry ! No Records found !');
-        }
+      this.finalList.push({
+        KEY1: 'BL',
+        KEY2: 'SHIPPER',
+        KEY3: 'CONSIGNEE',
+        KEY4: 'NOTIFY',
+        KEY5: 'MARKS',
+        KEY6: 'DESC',
+        KEY7: 'GWT',
+        KEY8: 'DM',
+        KEY9: 'V',
+        KEY10: '20',
+        KEY11: '40',
       });
+      this.finalList.push(blData[0]);
+      this.finalList.push({
+        KEY1: '**',
+        KEY2: '',
+        KEY3: '',
+        KEY4: '',
+        KEY5: '',
+        KEY6: '',
+        KEY7: '',
+        KEY8: '',
+        KEY9: '',
+        KEY10: '',
+        KEY11: '',
+      });
+      this.finalList.push({
+        KEY1: 'Container No',
+        KEY2: 'Size',
+        KEY3: 'Type',
+        KEY4: 'Seal No',
+        KEY5: 'NOPCKG',
+        KEY6: 'GWT',
+        KEY7: 'V',
+        KEY8: 'I',
+        KEY9: 'UN',
+        KEY10: 'T',
+        KEY11: 'SOC',
+      });
+      findEmp.forEach((z: any) => {
+        this.finalList.push(z);
+      });
+      this.finalList.push({
+        KEY1: '*',
+        KEY2: '',
+        KEY3: '',
+        KEY4: '',
+        KEY5: '',
+        KEY6: '',
+        KEY7: '',
+        KEY8: '',
+        KEY9: '',
+        KEY10: '',
+        KEY11: '',
+      });
+
+      this.freightList.push({
+        KEY1: 'BL',
+        KEY2: 'SHIPPER',
+        KEY3: 'CONSIGNEE',
+        KEY4: 'NOTIFY',
+        KEY5: 'MARKS',
+        KEY6: 'DESC',
+        KEY7: 'GWT',
+        KEY8: 'DM',
+        KEY9: 'V',
+        KEY10: '20',
+        KEY11: '40',
+      });
+      this.freightList.push(blData[0]);
+      this.freightList.push({
+        KEY1: '**',
+        KEY2: '',
+        KEY3: '',
+        KEY4: '',
+        KEY5: '',
+        KEY6: '',
+        KEY7: '',
+        KEY8: '',
+        KEY9: '',
+        KEY10: '',
+        KEY11: '',
+      });
+      this.freightList.push({
+        KEY1: 'Charge',
+        KEY2: 'Rate Basis',
+        KEY3: 'Currency',
+        KEY4: 'Rate',
+        KEY5: 'Pre',
+        KEY6: 'Amount',
+        KEY7: '',
+        KEY8: '',
+        KEY9: '',
+        KEY10: '',
+        KEY11: '',
+      });
+      findFreight.forEach((z: any) => {
+        this.freightList.push(z);
+      });
+      this.freightList.push({
+        KEY1: '**',
+        KEY2: '',
+        KEY3: '',
+        KEY4: '',
+        KEY5: '',
+        KEY6: '',
+        KEY7: '',
+        KEY8: '',
+        KEY9: '',
+        KEY10: '',
+        KEY11: '',
+      });
+      this.freightList.push({
+        KEY1: 'Container No',
+        KEY2: 'Size',
+        KEY3: 'Type',
+        KEY4: 'Seal No',
+        KEY5: 'NOPCKG',
+        KEY6: 'GWT',
+        KEY7: 'V',
+        KEY8: 'I',
+        KEY9: 'UN',
+        KEY10: 'T',
+        KEY11: 'SOC',
+      });
+      findEmp.forEach((z: any) => {
+        this.freightList.push(z);
+      });
+      this.freightList.push({
+        KEY1: '*',
+        KEY2: '',
+        KEY3: '',
+        KEY4: '',
+        KEY5: '',
+        KEY6: '',
+        KEY7: '',
+        KEY8: '',
+        KEY9: '',
+        KEY10: '',
+        KEY11: '',
+      });
+    });
+
+    this.isManifest = true;
   }
 
   clearManifest() {
@@ -225,6 +246,71 @@ export class ManifestListComponent implements OnInit {
 
   get f() {
     return this.manifestlistForm.controls;
+  }
+
+  onChangeVoyage() {
+    var cargoManifest = new CARGO_MANIFEST();
+    cargoManifest.AGENT_CODE = this._commonService.getUserCode();
+    cargoManifest.VESSEL_NAME = this.manifestlistForm.get('VESSEL_NAME').value;
+    cargoManifest.VOYAGE_NO = this.manifestlistForm.get('VOYAGE_NO').value;
+
+    this._blService
+      .getCargoManifestList(cargoManifest)
+      .subscribe((res: any) => {
+        if (res.ResponseCode == 200) {
+          this.blList = [];
+          this.cargoList = [];
+          this.customerList = [];
+          this.containerList = [];
+          this.freightDetails = [];
+          res.Data.CUSTOMER_LIST.forEach((custList: any, e: any) => {
+            this.blList.push({ BL: custList.BL_NO, SRNO: e });
+          });
+
+          this.cargoList = res.Data;
+          this.customerList = res.Data.CUSTOMER_LIST;
+          this.containerList = res.Data.CONTAINER_LIST;
+          this.freightDetails = res.Data.FREIGHT_DETAILS;
+        } else if (res.ResponseCode == 500) {
+          this._commonService.errorMsg('Sorry ! No Records found !');
+          this.manifestlistForm.get('BL_LIST1').setValue('');
+          this.blList = [];
+          this.cargoList = [];
+          this.customerList = [];
+          this.containerList = [];
+          this.freightDetails = [];
+        }
+      });
+  }
+
+  saveBL(event: any, value = 0) {
+    var billList = this.manifestlistForm.get('BL_LIST1')?.value;
+    const add = this.manifestlistForm.get('BL_LIST') as FormArray;
+    if (value == 1) {
+      add.clear();
+      event.forEach((element: any) => {
+        add.push(
+          this._formBuilder.group({
+            BL_NO: [element.BL],
+          })
+        );
+      });
+    } else if (value == 2) {
+      add.clear();
+    } else {
+      var i = billList.findIndex((x: any) => x.SRNO === event.SRNO);
+      if (i == -1) {
+        add.removeAt(
+          add.value.findIndex((m: { SRNO: any }) => m.SRNO === event.SRNO)
+        );
+      } else {
+        add.push(
+          this._formBuilder.group({
+            BL_NO: [event.BL],
+          })
+        );
+      }
+    }
   }
 
   getVoyageList(event: any) {

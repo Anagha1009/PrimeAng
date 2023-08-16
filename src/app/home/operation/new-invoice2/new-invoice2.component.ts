@@ -196,11 +196,11 @@ export class NewInvoice2Component implements OnInit {
               if (
                 i === 0 ||
                 i === node.table.body.length ||
-                i === 2 ||
                 i === 3 ||
                 i === 4 ||
-                i === 8 ||
-                i === 15
+                i === 5 ||
+                i === 9 ||
+                i === 16
               ) {
                 return 1;
               }
@@ -243,6 +243,16 @@ export class NewInvoice2Component implements OnInit {
               [
                 {
                   text: this.invoiceDetails?.ORG_ADDRESS1,
+                  bold: false,
+                  fontSize: 10,
+                  alignment: 'center',
+                  colSpan: 2,
+                },
+                {},
+              ],
+              [
+                {
+                  text: 'GST No: ' + this.invoiceDetails?.TAX_NO,
                   bold: false,
                   fontSize: 10,
                   alignment: 'center',

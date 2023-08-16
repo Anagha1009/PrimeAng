@@ -85,11 +85,11 @@ export class NewCreditNoteComponent implements OnInit {
         if (res.ResponseCode == 200) {
           this.invoiceDetails = res.Data;
 
-          const add = this.creditNote.get('CREDIT_NOTES') as FormArray;
+          // const add = this.creditNote.get('CREDIT_NOTES') as FormArray;
           const add1 = this.creditNote.get('CREDIT_NOTES1') as FormArray;
 
           res.Data.BL_LIST.forEach((element: any) => {
-            add.push(this._formBuilder.group(element));
+            //add.push(this._formBuilder.group(element));
             add1.push(this._formBuilder.group(element));
           });
         }

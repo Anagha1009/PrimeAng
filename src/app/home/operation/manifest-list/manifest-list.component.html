@@ -22,14 +22,24 @@
                         <div class="form-group mt-5">
                             <label class="form-label-ddl">Voyage No <span class="text-danger">
                                     *</span></label>
-                            <ng-select [ngClass]="{'invalid':submitted && f.VOYAGE_NO.errors}"
-                                formControlName="VOYAGE_NO">
+                            <ng-select (change)="onChangeVoyage()"
+                                [ngClass]="{'invalid':submitted && f.VOYAGE_NO.errors}" formControlName="VOYAGE_NO">
                                 <ng-option value="" selected="true" disabled>--Select--</ng-option>
                                 <ng-option *ngFor="let item of VoyageList" value="{{item.CODE_DESC}}">{{item.CODE_DESC}}
                                 </ng-option>
                             </ng-select>
                             <div *ngIf="submitted && f.VOYAGE_NO.errors" class="invalid-feedback">Please Enter Voyage no
                             </div>
+                        </div>
+                        <div class="form-group mt-5">
+                            <ng-multiselect-dropdown (onSelectAll)="saveBL($event,1)" (onDeSelectAll)="saveBL($event,2)"
+                                (onSelect)="saveBL($event)" (onDeSelect)="saveBL($event)" #multiSelect
+                                [placeholder]="'Select BL'" [settings]="dropdownSettings" [formControl]="f.BL_LIST1"
+                                [data]="blList">
+                            </ng-multiselect-dropdown>
+                            <label class="form-label-ddl">BL No<span class="text-danger"> *</span></label>
+                            <small *ngIf="submitted && f.BL_LIST1.errors" class="text-danger">Please select
+                                BL No</small>
                         </div>
                     </div>
                 </form>
