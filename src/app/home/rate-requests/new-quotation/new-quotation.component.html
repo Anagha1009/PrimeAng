@@ -151,10 +151,10 @@
                             <div class="form-group">
                                 <ng-select [ngClass]="{'invalid': submitted && f.CUSTOMER_NAME.errors}"
                                     formControlName="CUSTOMER_NAME">
-                                    <ng-option value="M" disabled>
+                                    <!-- <ng-option value="M" disabled>
                                         <button class="form-btn rounded-pill btn-sm" #openBtn5 data-bs-toggle="modal"
                                             href="#custModal"><i class="fa fa-plus me-1"></i> Customer</button>
-                                    </ng-option>
+                                    </ng-option> -->
                                     <ng-option value="" selected="true" disabled>--Select--</ng-option>
                                     <ng-option *ngFor="let item of customerList"
                                         value="{{item.CODE}}">{{item.CODE_DESC}}
