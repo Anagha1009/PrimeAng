@@ -152,6 +152,7 @@ export class NewBlComponent implements OnInit {
       CREATED_DATE: [new Date()],
       CONTAINER_LIST: new FormArray([]),
       CONTAINER_LIST2: new FormArray([]),
+      ISGROSSCOMBINED: [false],
     });
   }
 
@@ -2324,7 +2325,8 @@ export class NewBlComponent implements OnInit {
                       this.ContainerList1.length > 5
                         ? 5
                         : this.ContainerList1.length,
-                    text: p.NO_OF_CONTPKG,
+                    text:
+                      p.NO_OF_CONTPKG + '\n' + p.PKG_COUNT + ' ' + p.PKG_DESC,
                     fontSize: 7,
                   },
                   {
@@ -2335,7 +2337,17 @@ export class NewBlComponent implements OnInit {
                     text: p.KIND_OF_GOODS,
                     fontSize: 7,
                   },
-                  { text: p.GROSS_WEIGHT, fontSize: 7 },
+                  {
+                    rowSpan: !this.blForm.get('ISGROSSCOMBINED').value
+                      ? ''
+                      : this.ContainerList1.length > 5
+                      ? 5
+                      : this.ContainerList1.length,
+                    text: !this.blForm.get('ISGROSSCOMBINED').value
+                      ? p.GROSS_WEIGHT
+                      : this.ContainerList1[0].GROSS_WEIGHT,
+                    fontSize: 7,
+                  },
                   { text: p.MEASUREMENT, fontSize: 7 },
                 ]),
               ],
@@ -2652,7 +2664,7 @@ export class NewBlComponent implements OnInit {
                                 bold: true,
                               },
                               {
-                                text: 'Marks and Numbers3',
+                                text: 'Marks and Numbers',
                                 fontSize: 8,
                                 bold: true,
                               },
@@ -2737,7 +2749,7 @@ export class NewBlComponent implements OnInit {
                                 bold: true,
                               },
                               {
-                                text: 'Marks and Numbers4',
+                                text: 'Marks and Numbers',
                                 fontSize: 8,
                                 bold: true,
                               },
@@ -2785,7 +2797,10 @@ export class NewBlComponent implements OnInit {
                                 text: p.KIND_OF_GOODS,
                                 fontSize: 7,
                               },
-                              { text: p.GROSS_WEIGHT, fontSize: 7 },
+                              {
+                                text: '  -',
+                                fontSize: 7,
+                              },
                               { text: p.MEASUREMENT, fontSize: 7 },
                             ]),
                             [
@@ -3605,7 +3620,8 @@ export class NewBlComponent implements OnInit {
                       this.ContainerList1.length > 5
                         ? 5
                         : this.ContainerList1.length,
-                    text: p.NO_OF_CONTPKG,
+                    text:
+                      p.NO_OF_CONTPKG + '\n' + p.PKG_COUNT + ' ' + p.PKG_DESC,
                     fontSize: 7,
                   },
                   {
@@ -3616,7 +3632,17 @@ export class NewBlComponent implements OnInit {
                     text: p.KIND_OF_GOODS,
                     fontSize: 7,
                   },
-                  { text: p.GROSS_WEIGHT, fontSize: 7 },
+                  {
+                    rowSpan: !this.blForm.get('ISGROSSCOMBINED').value
+                      ? ''
+                      : this.ContainerList1.length > 5
+                      ? 5
+                      : this.ContainerList1.length,
+                    text: !this.blForm.get('ISGROSSCOMBINED').value
+                      ? p.GROSS_WEIGHT
+                      : this.ContainerList1[0].GROSS_WEIGHT,
+                    fontSize: 7,
+                  },
                   { text: p.MEASUREMENT, fontSize: 7 },
                 ]),
               ],
@@ -3923,7 +3949,7 @@ export class NewBlComponent implements OnInit {
                                 bold: true,
                               },
                               {
-                                text: 'Marks and Numbers7',
+                                text: 'Marks and Numbers',
                                 fontSize: 8,
                                 bold: true,
                               },
@@ -4008,7 +4034,7 @@ export class NewBlComponent implements OnInit {
                                 bold: true,
                               },
                               {
-                                text: 'Marks and Numbers1',
+                                text: 'Marks and Numbers',
                                 fontSize: 8,
                                 bold: true,
                               },
@@ -4056,7 +4082,10 @@ export class NewBlComponent implements OnInit {
                                 text: p.KIND_OF_GOODS,
                                 fontSize: 7,
                               },
-                              { text: p.GROSS_WEIGHT, fontSize: 7 },
+                              {
+                                text: '  -',
+                                fontSize: 7,
+                              },
                               { text: p.MEASUREMENT, fontSize: 7 },
                             ]),
                             [
