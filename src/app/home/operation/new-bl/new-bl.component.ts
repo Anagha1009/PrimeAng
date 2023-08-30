@@ -2236,7 +2236,7 @@ export class NewBlComponent implements OnInit {
                     text: 'Container No.\nSeal No.',
                     fontSize: 8,
                     bold: true,
-                    heights: 3,
+                    //heights: 3,
                   },
                   {
                     text: 'Marks and Numbers',
@@ -2365,7 +2365,7 @@ export class NewBlComponent implements OnInit {
               ' Containers )',
             bold: true,
             fontSize: 8,
-            margin: [0, 20, 0, 3],
+            margin: [0, 5, 0, 3],
           },
           {
             canvas: [
@@ -2375,7 +2375,7 @@ export class NewBlComponent implements OnInit {
           },
           {
             table: {
-              heights: [20],
+              heights: [5],
               headerRows: 1,
               widths: [140, '*', 95, '*', '*'],
               body: [
@@ -2652,7 +2652,7 @@ export class NewBlComponent implements OnInit {
                                 bold: true,
                               },
                               {
-                                text: 'Marks and Numbers',
+                                text: 'Marks and Numbers3',
                                 fontSize: 8,
                                 bold: true,
                               },
@@ -2737,7 +2737,7 @@ export class NewBlComponent implements OnInit {
                                 bold: true,
                               },
                               {
-                                text: 'Marks and Numbers',
+                                text: 'Marks and Numbers4',
                                 fontSize: 8,
                                 bold: true,
                               },
@@ -3645,7 +3645,7 @@ export class NewBlComponent implements OnInit {
               ' Containers )',
             bold: true,
             fontSize: 8,
-            margin: [0, 20, 0, 3],
+            margin: [0, 5, 0, 3],
           },
           {
             canvas: [
@@ -3655,7 +3655,7 @@ export class NewBlComponent implements OnInit {
           },
           {
             table: {
-              heights: [20],
+              heights: [5],
               headerRows: 1,
               widths: [140, '*', 95, '*', '*'],
               body: [
@@ -3923,7 +3923,7 @@ export class NewBlComponent implements OnInit {
                                 bold: true,
                               },
                               {
-                                text: 'Marks and Numbers',
+                                text: 'Marks and Numbers7',
                                 fontSize: 8,
                                 bold: true,
                               },
@@ -4008,7 +4008,7 @@ export class NewBlComponent implements OnInit {
                                 bold: true,
                               },
                               {
-                                text: 'Marks and Numbers',
+                                text: 'Marks and Numbers1',
                                 fontSize: 8,
                                 bold: true,
                               },

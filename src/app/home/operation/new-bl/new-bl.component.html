@@ -270,6 +270,10 @@
                             Enter Description of Goods</div>
                     </div>
                 </div>
+                <div class="col-md-6 mt-4">
+                    <input type="checkbox" />
+                    Apply Gross Wt & Net Wt combined
+                </div>
             </div>
             <div class="row" *ngIf="editBL || isSplit">
                 <div class="col-md-3">
@@ -290,6 +294,10 @@
                         <div *ngIf="submitted && blf.DESC_OF_GOODS.errors" class="invalid-feedback">Please
                             Enter Description of Goods</div>
                     </div>
+                </div>
+                <div class="col-md-6 mt-4">
+                    <input type="checkbox" />
+                    Apply Gross Wt & Net Wt combined
                 </div>
             </div>
             <div class="table-responsive" *ngIf="isSplit && !isManual">
@@ -546,7 +554,7 @@
                         <label class="form-label2">Issue Date<span class="text-danger">*</span></label>
                         <input [readonly]="isSwitch" type="date" onkeypress="return false"
                             formControlName="BL_ISSUE_DATE" class="form-control2"
-                            [ngClass]="{'invalid': submitted && blf.BL_ISSUE_DATE.errors}" min="{{minDate}}" />
+                            [ngClass]="{'invalid': submitted && blf.BL_ISSUE_DATE.errors}" />
                         <div *ngIf="submitted && blf.BL_ISSUE_DATE.errors" class="invalid-feedback">Please
                             Enter BL Issue Date</div>
                     </div>
