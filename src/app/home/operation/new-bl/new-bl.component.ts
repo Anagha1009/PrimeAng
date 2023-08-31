@@ -1193,6 +1193,14 @@ export class NewBlComponent implements OnInit {
     }
   }
 
+  getTotalGrossWt(value: any) {
+    var gwt: any = 0;
+    value.forEach((element: any) => {
+      gwt += element.GROSS_WEIGHT;
+    });
+    return gwt;
+  }
+
   containsObject(obj: any, list: any) {
     var i;
     for (i = 0; i < list.length; i++) {
@@ -2345,7 +2353,7 @@ export class NewBlComponent implements OnInit {
                       : this.ContainerList1.length,
                     text: !this.blForm.get('ISGROSSCOMBINED').value
                       ? p.GROSS_WEIGHT
-                      : this.ContainerList1[0].GROSS_WEIGHT,
+                      : this.getTotalGrossWt(this.ContainerList1),
                     fontSize: 7,
                   },
                   { text: p.MEASUREMENT, fontSize: 7 },
