@@ -7,7 +7,7 @@ export class PARTY {
   GSTIN: string = '';
   AGENT_CODE: any = 0;
   OPERATION: string = '';
-  STATUS: string = '';
+  STATUS: boolean = true;
   FROM_DATE: string = '';
   TO_DATE: string = '';
   IS_VENDOR: boolean = false;

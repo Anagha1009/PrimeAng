@@ -310,4 +310,19 @@ export class BlService {
       this.httpOptions
     );
   }
+
+  getreceiptList(BL: Bl) {
+    return this._http.get<any>(
+      this.BASE_URL +
+        'Receipt/GetReceiptList?FROM_DATE=' +
+        BL.FROM_DATE +
+        '&TO_DATE=' +
+        BL.TO_DATE +
+        '&PORT=' +
+        BL.PORT +
+        '&ORG_CODE=' +
+        BL.ORG_CODE,
+      this.httpOptions
+    );
+  }
 }

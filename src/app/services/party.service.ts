@@ -32,7 +32,8 @@ export class PartyService {
         partymaster.TO_DATE +
         '&IS_VENDOR=' +
         partymaster.IS_VENDOR +
-        (partymaster.STATUS != '' ? '&STATUS=' + partymaster.STATUS : ''),
+        '&STATUS=' +
+        partymaster.STATUS,
       this.httpOptions
     );
   }

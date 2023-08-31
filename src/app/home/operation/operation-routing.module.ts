@@ -26,6 +26,7 @@ import { ReceiptListComponent } from './receipt-list/receipt-list.component';
 import { NewReceiptComponent } from './new-receipt/new-receipt.component';
 import { VendorBillsComponent } from './vendor-bills/vendor-bills.component';
 import { NewVendorBillComponent } from './new-vendor-bill/new-vendor-bill.component';
+import { ReceiptsComponent } from './receipts/receipts.component';
 
 const routes: Routes = [
   {
@@ -145,6 +146,12 @@ const routes: Routes = [
   {
     path: 'receipt-list',
     component: ReceiptListComponent,
+    canActivate: [AuthGuard],
+    data: { roles: [Role.Agent] },
+  },
+  {
+    path: 'receipts',
+    component: ReceiptsComponent,
     canActivate: [AuthGuard],
     data: { roles: [Role.Agent] },
   },

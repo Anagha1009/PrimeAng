@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BlService } from 'src/app/services/bl.service';
 import { CommonService } from 'src/app/services/common.service';
 import { ReceiptService } from 'src/app/services/receipt.service';
@@ -25,7 +25,8 @@ export class NewReceiptComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _blService: BlService,
     private _commonService: CommonService,
-    private _receiptService: ReceiptService
+    private _receiptService: ReceiptService,
+    private _router: Router
   ) {}
 
   ngOnInit(): void {
@@ -134,8 +135,6 @@ export class NewReceiptComponent implements OnInit {
       element.get('AGENT_CODE').setValue(agentCode);
     });
 
-    console.log(JSON.stringify(this.receiptForm.value));
-
     this._receiptService
       .InsertReceipt(this.receiptForm.value)
       .subscribe((res: any) => {
@@ -143,6 +142,7 @@ export class NewReceiptComponent implements OnInit {
           this._commonService.successMsg(
             'Receipt created successfully !<br> Receipt No is : ' + receiptNo
           );
+          this._router.navigateByUrl('/home/operations/receipts');
         }
       });
   }

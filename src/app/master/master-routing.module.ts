@@ -166,14 +166,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: [Role.Principal, Role.Admin] },
   },
+  // {
+  //   path: 'organisation-master',
+  //   component: OrganisationComponent,
+  //   canActivate: [AuthGuard],
+  //   data: { roles: [Role.Principal, Role.Admin] },
+  // },
   {
     path: 'organisation-master',
-    component: OrganisationComponent,
-    canActivate: [AuthGuard],
-    data: { roles: [Role.Principal, Role.Admin] },
-  },
-  {
-    path: 'organisation2-master',
     component: Organisation2Component,
     canActivate: [AuthGuard],
     data: { roles: [Role.Principal, Role.Admin] },

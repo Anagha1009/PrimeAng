@@ -385,6 +385,7 @@ export class PartyComponent implements OnInit {
   GetPartyMasterList() {
     this.customer.AGENT_CODE = '';
     this.customer.IS_VENDOR = false;
+
     this._commonService.destroyDT();
     this._partyService.getPartyList(this.customer).subscribe((res: any) => {
       this.isLoading = false;

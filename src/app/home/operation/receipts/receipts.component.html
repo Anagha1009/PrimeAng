@@ -1,0 +1,49 @@
+<div class="section-title">
+    <h2>Receipts</h2>
+</div>
+<div class="container mt-4">
+    <form class="mx-5" [formGroup]="filterForm">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label2">From Date</label>
+                    <input onkeypress="return false" (change)="filterForm.get('TO_DATE')?.setValue('')"
+                        formControlName="FROM_DATE" type="date" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="form-label2">To Date</label>
+                    <input onkeypress="return false" [min]="filterForm.get('FROM_DATE')?.value"
+                        formControlName="TO_DATE" type="date" class="form-control2">
+                </div>
+            </div>
+            <div class="col-md-3 mt-4">
+                <button class="form-btn me-2" (click)="Search()">Search</button>
+                <button class="form-btn-light" (click)="Clear()">Clear</button>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table class="ratetable" id="data-table-config">
+            <thead>
+                <tr>
+                    <th>Receipt No</th>
+                    <th>Invoice No</th>
+                    <th>Invoice Amnt</th>
+                    <th>Outstanding Amnt</th>
+                    <th>Received Amnt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of receiptList;let i = index;">
+                    <td>{{item.RECEIPT_NO}}</td>
+                    <td>{{item.INVOICE_NO}}</td>
+                    <td>{{item.INVOICE_AMOUNT}}</td>
+                    <td>{{item.OUTSTANDING_AMOUNT}}</td>
+                    <td>{{item.RECEIVED_AMOUNT}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
